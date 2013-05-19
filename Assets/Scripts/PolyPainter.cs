@@ -18,7 +18,7 @@ public class PolyPainter
 	
 	void Update ()
 	{
-		// TODO Polygon-Quad-based painting
+		// TODO Polygon-Stripper
 		//lastFramePosition = new Vector2(transform.position.x, transform.position.y);
 	}
 	

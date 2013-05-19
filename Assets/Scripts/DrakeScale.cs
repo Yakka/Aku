@@ -16,6 +16,7 @@ public class DrakeScale : MonoBehaviour
 	private float xRotationDeg = 0; // Rotation around the body
 	private float xRotationDegVar;
 	private float spawnShine;
+	public GameObject glowRef;
 	
 	private bool isUnderwater;
 
@@ -107,9 +108,14 @@ public class DrakeScale : MonoBehaviour
 		
 		//=================== Shine ========================
 		
+		if(glowRef != null)
+		{			
+			glowRef.transform.position = 
+				new Vector3(boneRef.pos.x, boneRef.pos.y, boneRef.pos.z + 1);
+		}
+		
 		// Note: This is just a fancy thing, but it currently increases draw calls by ~20.
 		// So if we didn't referenced the scale material to avoid this, just do nothing.
-		
 		if(materialRef != null && spawnShine > 0)
 		{
 			spawnShine -= 2f * Time.deltaTime;

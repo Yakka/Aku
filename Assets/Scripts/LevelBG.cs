@@ -3,9 +3,22 @@ using System.Collections;
 
 public class LevelBG : MonoBehaviour
 {
+	public Material glowMaterial;
+	public AnimationCurve mixCurve;
 	private Mesh mesh;
 	private Color[] vcolors;
-	public AnimationCurve mixCurve;
+	
+	private static LevelBG globalInstance;
+	
+	void Awake()
+	{
+		globalInstance = this;
+	}
+	
+	public static LevelBG Instance
+	{
+		get { return globalInstance; }
+	}
 	
 	void Start ()
 	{
@@ -20,6 +33,9 @@ public class LevelBG : MonoBehaviour
 		Vector2 s = new Vector2(level.widthTiles, level.heightTiles);
 		mat.SetTextureScale("_MainTex", s);
 		mat.SetTextureScale("_Texture2", s);
+		
+		if(glowMaterial == null)
+			Debug.LogError("glowMaterial not defined in LevelBG !");
 	}
 	
 	void Update ()
@@ -54,6 +70,16 @@ public class LevelBG : MonoBehaviour
 		}
 		
 		mesh.colors = vcolors;
+		
+		//
+		// Update glows
+		//
+		
+		if(glowMaterial != null)
+		{
+			float k = 0.6f * (1f - t);
+			glowMaterial.SetColor("_TintColor", new Color(k,k,k,1f));
+		}
 		
 		//Debug.Log(mixCurve.Evaluate(0.01f));
 	}

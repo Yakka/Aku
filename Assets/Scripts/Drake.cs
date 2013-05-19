@@ -40,6 +40,7 @@ public class Drake : MonoBehaviour
 	public GameObject[] scalePrefabs; // Which prefabs are used to make the scales
 	public GameObject tailPrefab;
 	public Material scaleMaterial;
+	public GameObject glowPrefab;
 	
 	#endregion
 	#region "Position, speed and rotation"
@@ -169,14 +170,18 @@ public class Drake : MonoBehaviour
 			scaleObject.AddComponent("DrakeScale");
 			scaleObject.AddComponent("PainterBehavior");
 			
+			// Add glow
+			GameObject glowObj = Instantiate(glowPrefab) as GameObject;
+			
 			// Get scale script and init some of its variables
 			DrakeScale scaleScript = scaleObject.GetComponent<DrakeScale> ();
 			scaleScript.boneRef = bone;
 			scaleScript.drakeRef = this;
+			scaleScript.glowRef = glowObj;
 			scaleScript.parametricPosition = t;
 			scaleScript.indexedPosition = i;
 			//scaleScript.materialRef = scaleMaterial;
-			scales [i] = scaleScript;
+			scales[i] = scaleScript;
 			
 			// Fix scale size
 			const float scaleFix = 1.15f;
@@ -500,13 +505,14 @@ public class Drake : MonoBehaviour
 		#endregion
 		
 		// Debug
-//		if(Settings.debugMode)
-//		{
-//			Vector3 b = GetBarycenter();
+		if(Settings.debugMode)
+		{
+			Vector3 b = GetBarycenter();
+			TmpDebug.Instance.transform.position = b;
 //			Debug.DrawLine(
 //				new Vector3(b.x-3, b.y-3, transform.position.z), 
 //				new Vector3(b.x-3, b.y-3, transform.position.z), Color.red, 0.5f);
-//		}
+		}		
 	}
 	
 	/// <summary>

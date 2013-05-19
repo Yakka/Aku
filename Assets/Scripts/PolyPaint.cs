@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// This controls the lifetime of a painting using polygons.
+/// This controls the lifetime of a ponctual painting using polygons.
 /// </summary>
 public class PolyPaint 
 {
