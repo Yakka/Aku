@@ -14,7 +14,7 @@ public class Drake : MonoBehaviour
 	private const int BONE_COUNT_MIN = 50; // Just to have a minimum
 	private const float DASH_ADDSPEED = 15;
 	private const float GRAB_ROTATION_RANDOM = 30f;
-	private const float SPLASH_TRIGGER_ANGSPEED_DEG = 240;
+	private const float SPLASH_TRIGGER_ANGSPEED_DEG = 140;
 	private const float SPLASH_TRIGGER_DELAY_S = 1.0f;
 	
 	#endregion

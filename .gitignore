@@ -12,8 +12,10 @@ README
 Assets/Materials
 Assets/Models
 Assets/Prefabs
+Temp/
 Assets/Textures
 Assets/Editor
 Assets/PhysicMaterials
 Assets/Plugins
 *.unity
+*.unitypackage
