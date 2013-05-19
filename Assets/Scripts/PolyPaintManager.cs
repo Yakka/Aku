@@ -12,6 +12,7 @@ public class PolyPaintManager : MonoBehaviour
 	public GameObject[] projectionPrefab;
 	public GameObject[] dripPrefab;
 	public GameObject[] splashPrefab;
+	public Material pixelPaintMaterial;
 	public AnimationCurve decreaseCurve;
 	private List<PolyPaint> animatedPaints = new List<PolyPaint>();
 	// TODO 3 indexed colors here for the second level

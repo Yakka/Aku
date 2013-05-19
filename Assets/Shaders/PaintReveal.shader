@@ -53,11 +53,13 @@ Shader "Custom/PaintReveal" {
 				half4 mask = tex2D(_HiddenPaint, screenPos01); // Mask from hidden ink
 				
 				// Spread effect
-				half s = clamp(_Spread, 0, 1); // TODO remove it on final prod
-				o.a = clamp(_Coeff * (o.a - s) - s, 0, 1);
+				// TODO : this makes pixelpaint disappear, need to investigate
+//				half s = clamp(_Spread, 0, 1); // TODO remove it on final prod
+//				o.a = clamp(_Coeff * (o.a - s) - s, 0, 1);
 				
 				// Reveal effect
-				o.a = o.a * (1f - max(o.r * mask.r, max(o.g * mask.g, o.b * mask.b)));
+				o.a = o.a * (1f - max(mask.r, max(mask.g, mask.b)));
+				//o.a = o.a * (1f - max(o.r * mask.r, max(o.g * mask.g, o.b * mask.b)));
 
 				return o;
 			}

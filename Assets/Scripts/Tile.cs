@@ -159,9 +159,11 @@ public class Tile : MonoBehaviour
 		// Initialize to alpha
 		paintTexture.SetPixels(alphaPaintBuffer);
 		
-		Material mat = new Material(Shader.Find("Mobile/Particles/Alpha Blended"));
-		mat.mainTexture = paintTexture;
+		//Material mat = new Material(Shader.Find("Mobile/Particles/Alpha Blended"));
+		Material mat = new Material(PolyPaintManager.Instance.pixelPaintMaterial);
+		mat.SetTexture("_MainTex", paintTexture);
 		paintLayer.gameObject.renderer.material = mat;
+		//Helper.SetQuadMeshColors(paintLayer.gameObject, Color.white);
 		
 		paintLayer.gameObject.active = true;
 	}

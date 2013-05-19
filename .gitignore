@@ -1,6 +1,7 @@
 Library/
 ProjectSettings/
 Old/
+Temp/
 *.userprefs
 *.pidb
 *.sln

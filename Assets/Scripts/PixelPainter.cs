@@ -71,6 +71,8 @@ public class PixelPainter
 					
 					if(hiddenPaintingRef != null)
 					{
+						tile.SetPaintPixelNoFade(pcolor, texX, texY);
+						/* // Fading is no longer useful here, use shader instead
 						channel = hiddenPaintingRef.GetMatchingChannelFromWorldCoords(x, y, pcolor);
 						if(channel != -1)
 						{
@@ -82,11 +84,14 @@ public class PixelPainter
 							// Standard painting
 							tile.SetPaintPixelNoFade(pcolor, texX, texY);
 						}
-						//hiddenPaintingRef.CheckPixel(texX, texY, (sbyte)channel);
+						hiddenPaintingRef.CheckPixel(texX, texY, (sbyte)channel);
+						*/
 					}
 					else if(moonPaint)
 					{
 						// Moon painting
+						// Note : legacy software fading is used 
+						// because shaders doesn't support it yet
 						tile.SetPaintPixel(pcolor, texX, texY, 
 							MOON_PAINT_FADE_DELAY, 
 							MOON_PAINT_FADE_SPEED);
