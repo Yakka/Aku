@@ -145,6 +145,13 @@ public class HiddenPainting : MonoBehaviour
 		}
 	}
 	
+	void Update()
+	{
+		// Hotfix : pos didn't updates when level wrapping happens, and so bugs occur.
+		// (pos is a shortcut to avoid computing hierarchy in intensive reveal computations)
+		pos = transform.position;
+	}
+	
 	public void CheckReveal(float worldX, float worldY, int channel)
 	{
 		if(countPixels)
@@ -342,7 +349,7 @@ public class HiddenPainting : MonoBehaviour
 //				int tb = divCount[1];
 //				int tc = divCount[2];
 				
-				GUI.Label(new Rect(16, 380, 256, 332), 
+				GUI.Label(new Rect(16, 300, 256, 332), 
 					"Reveal : " 
 					+ a + "/" + ta + ", "
 					+ b + "/" + tb + ", "

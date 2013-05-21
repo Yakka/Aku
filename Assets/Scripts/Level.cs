@@ -283,7 +283,7 @@ public class Level : MonoBehaviour
 			heightTiles * Tile.SIZE
 		);
 	}
-	
+		
 	public bool Finished
 	{
 		get { return finished; }
