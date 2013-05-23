@@ -21,18 +21,33 @@ public class MoverLevelWrapper : MonoBehaviour
 	private void Check()
 	{
 		// Level wrapping
+		
 		Vector3 camPos = Camera.mainCamera.transform.position;
 		Vector3 pos = transform.position;
+		
+		float lw = Level.Get.Width;
+		float lh = Level.Get.Height;
+		
 		float dx = camPos.x - pos.x;
 		float dy = camPos.y - pos.y;
-		if(Mathf.Abs(dx) >= 0.5f*Level.Get.Width)
+		
+		if(dx >= 0.5f*lw)
 		{
-			pos.x += 2f * dx;
+			pos.x += lw * (int)(Mathf.Abs(dx) / lw + 0.5f);
 		}
-		if(Mathf.Abs(dy) >= 0.5f*Level.Get.Height)
+		else if(dx <= 0.5f*lw)
 		{
-			pos.y += 2f * dy;
+			pos.x -= lw * (int)(Mathf.Abs(dx) / lw + 0.5f);
 		}
+		if(dy >= 0.5f*lh)
+		{
+			pos.y += lh * (int)(Mathf.Abs(dy) / lh + 0.5f);
+		}
+		else if(dy <= 0.5f*lh)
+		{
+			pos.y -= lh * (int)(Mathf.Abs(dy) / lh + 0.5f);
+		}
+		
 		transform.position = pos;
 	}
 
