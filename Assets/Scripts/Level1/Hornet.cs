@@ -59,6 +59,7 @@ public class Hornet : MonoBehaviour
 	{
 		if(!grabbingTarget)
 		{
+			SoundLevel1.Instance.HornetOnHead();
 			Drake drake = target.GetComponent<Drake>();
 			if(drake != null)
 				drake.GrabbedByHornet();
@@ -75,6 +76,7 @@ public class Hornet : MonoBehaviour
 	{
 		if(grabbingTarget)
 		{
+			SoundLevel1.Instance.DrakeFree();
 			Drake drake = target.GetComponent<Drake>();
 			if(drake != null)
 				drake.UngrabbedByHornet();
@@ -224,6 +226,7 @@ public class Hornet : MonoBehaviour
 			}
 			Hurt();
 			crossedClouds.Add(cloud);
+			SoundLevel1.Instance.SizeHornet(life);
 		}
 	}
 	

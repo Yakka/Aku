@@ -80,6 +80,7 @@ public class SwappableStar : MonoBehaviour
 					{
 						drake.LastTouchedStar = null;
 						Swap(star, true);
+						SoundLevel2.Instance.SwapStar();
 					}
 				}
 			}

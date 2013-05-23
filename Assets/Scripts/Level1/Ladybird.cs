@@ -76,7 +76,7 @@ public class Ladybird : MonoBehaviour
 			{
 				state = STATE_WAITING;
 				nextSearch = Time.time + MAX_WAITING;
-				//SoundLevel1.Instance.LadybirdStoping();
+				SoundLevel1.Instance.LadybirdStoping();
 				animation.Play("land");
 				
 			}
@@ -89,7 +89,7 @@ public class Ladybird : MonoBehaviour
 			{
 				state = STATE_SEARCHING;
 				animation.Play ("takeOff");
-				//SoundLevel1.Instance.LadybirdMoving();
+				SoundLevel1.Instance.LadybirdMoving();
 			}
 			else if(!animation.isPlaying)
 			{
@@ -169,7 +169,7 @@ public class Ladybird : MonoBehaviour
 				index = 0;
 			animation.Play("takeOff");
 			state = STATE_MOVING;
-			//SoundLevel1.Instance.LadybirdMoving();
+			SoundLevel1.Instance.LadybirdMoving();
 		}
 	}
 	

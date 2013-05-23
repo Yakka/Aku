@@ -46,6 +46,7 @@ public class PowerableStar : MonoBehaviour
 		++poweredCount;
 		Debug.Log("Powered " + poweredCount + " / " + stars.Count);
 		// TODO feedback
+		SoundLevel1.Instance.HitStar(gameObject); //michèle
 	}
 	
 	void OnTriggerEnter (Collider other)

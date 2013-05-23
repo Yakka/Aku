@@ -268,6 +268,7 @@ public class Drake : MonoBehaviour
 	{
 		ChangeBoneCount(BONE_COUNT_MAX);
 		// TODO audio feedback
+		SoundLevel1.Instance.EnlargeDrake(); //michèle
 	}
 	
 	/// <summary>
@@ -434,6 +435,8 @@ public class Drake : MonoBehaviour
 		//speed = (targetSpeed - speed) * acceleration * Time.deltaTime;
 		speed = Mathf.Lerp (speed, targetSpeed, acceleration * Time.deltaTime);
 		speed = speedLimit.Clamp(speed);
+		if(Settings.trailerMode)
+			speed = 0f;
 		
 		// Update head rotation from target angle
 		lastFrameHeadRotationDeg = headRotationDeg; // memorize last rotation
@@ -462,6 +465,7 @@ public class Drake : MonoBehaviour
 			{
 				DoPaintSplash();
 				splashTriggerTime = Time.time;
+				CommonSounds.Instance.playSplash(); //michèle
 			}
 		}
 		else
@@ -505,14 +509,14 @@ public class Drake : MonoBehaviour
 		#endregion
 		
 		// Debug
-		if(Settings.debugMode)
+		/*if(Settings.debugMode)
 		{
 			Vector3 b = GetBarycenter();
 			TmpDebug.Instance.transform.position = b;
 //			Debug.DrawLine(
 //				new Vector3(b.x-3, b.y-3, transform.position.z), 
 //				new Vector3(b.x-3, b.y-3, transform.position.z), Color.red, 0.5f);
-		}		
+		}*/	
 	}
 	
 	/// <summary>
@@ -610,13 +614,39 @@ public class Drake : MonoBehaviour
 	
 	void OnTriggerEnter (Collider other)
 	{
-		if (other.GetComponent<Cloud>() != null)
+		if (other.GetComponent<Cloud>() != null) {
 			OnCloudEnter ();
+			switch(Level.Get.levelID)
+			{
+			case 1:
+				break;
+			case 2:
+				SoundLevel2.Instance.CloudEnter();
+				break;
+			}
+		}
 		if(other.name == "PetrolBall")
 		{
 			BounceAgainst(new Vector2(other.transform.position.x, other.transform.position.y));
 			Stun(STUN_DURATION);
 			OnHitPetrol();
+			SoundLevel2.Instance.HitPetrol();
+		}
+		if(other.name == "Moon")
+		{
+			CommonSounds.Instance.MoonEnter();
+		}
+		if(other.GetComponent<SwappableStar>() != null)
+		{
+			SoundLevel2.Instance.HitStar(other.GetComponent<SwappableStar>().gameObject);// michèle changer
+		}
+		/*if(other.GetComponent<PowerableStar>() != null)
+		{
+			SoundLevel1.Instance.HitStar(other.gameObject);
+		}*/
+		if(other.GetComponent<SwappableStar>() != null)
+		{
+			SoundLevel1.Instance.HitStar(other.gameObject);
 		}
 	}
 	
@@ -631,6 +661,19 @@ public class Drake : MonoBehaviour
 				transform.position.x, 
 				transform.position.y, 
 				headRotationDeg);
+			switch(Level.Get.levelID)
+			{
+			case 1:
+				SoundLevel1.Instance.CloudExit(cloud.gameObject);
+				break;
+			case 2:
+				SoundLevel2.Instance.CloudExit();
+				break;
+			}
+		}
+		if(other.name == "Moon")
+		{
+			CommonSounds.Instance.MoonExit();
 		}
 	}
 	

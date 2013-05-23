@@ -8,7 +8,7 @@ public class CameraHandler : MonoBehaviour
 	private const float FOLLOW_SPEED_SPACE = 1.5f;
 	private const float FOLLOW_SPEED_SEA = 1f;
 	private const float SPEED_AIR_TO_SEA = 0.5f; // Used for slowing the camera when entering into the sea
-	private const float AIR_SIZE = 50; // Field of view in the air
+	private const float AIR_SIZE = 50f; // Field of view in the air
 	private const float SEA_SIZE = 40f; // Filed of view in the sea
 	private const float SIZE_TRANSITION = 0.002f;
 	

@@ -10,6 +10,9 @@ public class Settings : MonoBehaviour
 	/// </summary>
 	public static bool onTablet = false;
 	
+	// Enable the trailer mode
+	public static bool trailerMode = true;
+	
 	/// <summary>
 	/// Enables debug extra-functionnalities that should not be visible in the end-user game.
 	/// </summary>
@@ -32,7 +35,7 @@ public class Settings : MonoBehaviour
 	
 	void OnGUI()
 	{
-		if(GUI.Button(new Rect(10, 10, 100, 24), debugMode ? "Debug[ON]" : "Debug[OFF]"))
+		if(GUI.Button(new Rect(10, 10, 100, 24), debugMode ? "Debug[ON]" : "Debug[OFF]") && !trailerMode)
 		{
 			Debug.Log("Debug mode toggle");
 			debugMode = !debugMode;

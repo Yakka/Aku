@@ -25,6 +25,7 @@ public class Level : MonoBehaviour
 	public int centerYTiles = 8;
 	public int seaLevel = 1; // 0 means no sea
 	public int spaceLevel = 12;
+	public int levelID = 0;
 	
 	// Generic patterns
 	public GameObject skyTilePrefab;
