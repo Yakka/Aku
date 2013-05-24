@@ -35,10 +35,13 @@ public class Settings : MonoBehaviour
 	
 	void OnGUI()
 	{
-		if(GUI.Button(new Rect(10, 10, 100, 24), debugMode ? "Debug[ON]" : "Debug[OFF]") && !trailerMode)
+		if(!trailerMode)
 		{
-			Debug.Log("Debug mode toggle");
-			debugMode = !debugMode;
+			if(GUI.Button(new Rect(10, 10, 100, 24), debugMode ? "Debug[ON]" : "Debug[OFF]"))
+			{
+				Debug.Log("Debug mode toggle");
+				debugMode = !debugMode;
+			}
 		}
 	}
 	

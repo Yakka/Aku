@@ -55,6 +55,8 @@ public class Drake : MonoBehaviour
 	private float wavingPhaseSpeed; // Speed of the wave
 	public float seaCoef = 0.9f; // Speed coef when the drake is in the sea
 	
+	private bool moving;
+	
 	#endregion	
 	#region "Gameplay and interactions"
 	
@@ -104,6 +106,11 @@ public class Drake : MonoBehaviour
 		// Default parameters
 		if (currentBoneCount <= BONE_COUNT_MIN)
 			currentBoneCount = BONE_COUNT_MIN;
+		
+		if(Settings.trailerMode)
+			moving = false;
+		else
+			moving = true;
 		
 		#endregion
 		#region "Create bones"
@@ -354,6 +361,8 @@ public class Drake : MonoBehaviour
 			// This is just for debug. It enlarges the dragon (for free)
 			if(Input.GetKeyDown(KeyCode.Space))
 				ChangeBoneCount(BONE_COUNT_MAX);
+			if(Input.GetKeyDown(KeyCode.M))
+				moving = !moving;
 		}
 
 		#region "Head update"
@@ -435,7 +444,7 @@ public class Drake : MonoBehaviour
 		//speed = (targetSpeed - speed) * acceleration * Time.deltaTime;
 		speed = Mathf.Lerp (speed, targetSpeed, acceleration * Time.deltaTime);
 		speed = speedLimit.Clamp(speed);
-		if(Settings.trailerMode)
+		if(!moving)
 			speed = 0f;
 		
 		// Update head rotation from target angle
@@ -465,7 +474,8 @@ public class Drake : MonoBehaviour
 			{
 				DoPaintSplash();
 				splashTriggerTime = Time.time;
-				CommonSounds.Instance.playSplash(); //michèle
+				if(!Settings.trailerMode)
+					CommonSounds.Instance.playSplash(); //michèle
 			}
 		}
 		else

@@ -20,6 +20,8 @@ public class PowerableStar : MonoBehaviour
 		color = material.GetColor("_TintColor");		
 		material.SetColor("_TintColor", color * 0.3f);
 		stars.Add(this);
+		if(Settings.trailerMode)
+			powered = true;
 	}
 	
 	void Update ()

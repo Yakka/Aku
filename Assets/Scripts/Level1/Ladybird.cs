@@ -23,6 +23,9 @@ public class Ladybird : MonoBehaviour
 	private int index = 0; // Between nextIndex and nextIndex-1 
 	public const float SPEED = 30f; // Bug speed is constant. Because it's a bug.
 	private bool triggered = false;
+	private float pauseTrailer;
+	
+	protected Quaternion originalRotation;
 
 	// Use this for initialization
 	void Start ()
@@ -40,6 +43,13 @@ public class Ladybird : MonoBehaviour
 				renderer.enabled = false;
 			}
 		}
+		if(Settings.trailerMode)
+		{
+			state = STATE_WAITING;
+			Disturb ();
+		}
+		
+		originalRotation = transform.rotation;
 	}
 	
 	// Update is called once per frame
@@ -76,16 +86,23 @@ public class Ladybird : MonoBehaviour
 			{
 				state = STATE_WAITING;
 				nextSearch = Time.time + MAX_WAITING;
-				SoundLevel1.Instance.LadybirdStoping();
+				pauseTrailer = Time.time + 1;
+				if(!Settings.trailerMode)
+					SoundLevel1.Instance.LadybirdStoping();
 				animation.Play("land");
-				
+				Debug.Log("STOP");
 			}
 		
 		break;
 		case STATE_WAITING:
-			if(triggered)
+			if(Time.time > pauseTrailer && Settings.trailerMode)
+			{
+				animation.Play ("takeOff");
 				Disturb();
-			else if(Time.time > nextSearch)
+			}
+			else if(triggered)
+				Disturb();
+			else if(Time.time > nextSearch && !Settings.trailerMode)
 			{
 				state = STATE_SEARCHING;
 				animation.Play ("takeOff");
@@ -137,7 +154,7 @@ public class Ladybird : MonoBehaviour
 			transform.rotation = 
 				Quaternion.Lerp(
 					transform.rotation, 
-					Quaternion.Euler (0f, 0f, targetAngle), 
+					Quaternion.Euler (0f, 0f, targetAngle) * originalRotation, 
 					ANGULAR_LERP_COEF);
 			
 			transform.position += direction3 * SPEED * Time.deltaTime;
@@ -169,7 +186,8 @@ public class Ladybird : MonoBehaviour
 				index = 0;
 			animation.Play("takeOff");
 			state = STATE_MOVING;
-			SoundLevel1.Instance.LadybirdMoving();
+			if(!Settings.trailerMode)
+				SoundLevel1.Instance.LadybirdMoving();
 		}
 	}
 	
