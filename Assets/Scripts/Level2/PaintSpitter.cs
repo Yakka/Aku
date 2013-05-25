@@ -14,6 +14,7 @@ public class PaintSpitter : MonoBehaviour
 	private HiddenPainting hiddenPaintingRef;
 	private sbyte spitChannel;
 	private float nextSpitTime;
+	private bool neverSpitted = false;
 	
 	// Use this for initialization
 	void Start () 
@@ -36,6 +37,12 @@ public class PaintSpitter : MonoBehaviour
 			{
 				newSpitChannel = chnl;
 				break;
+				if(!neverSpitted)
+				{
+					// GO MICHELE GO!!!
+				}
+				
+				neverSpitted = true;
 			}
 		}
 		spitChannel = newSpitChannel;

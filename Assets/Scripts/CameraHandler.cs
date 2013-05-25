@@ -30,17 +30,14 @@ public class CameraHandler : MonoBehaviour
 	private float shakeDuration;
 	private float currentSpeed;
 	private float currentSize;
-	private bool following;
 	
 	private Level level;
+	
+	
 
 	// Use this for initialization
 	void Start () 
 	{
-		if(Settings.trailerMode)
-			following = false;
-		else
-			following = true;
 		//startZ = this.transform.position.z;
 		
 		// Get level script
@@ -49,15 +46,14 @@ public class CameraHandler : MonoBehaviour
 		drakeRef = target.GetComponent<Drake>();
 		
 		// Look at the target
-		if(!Settings.trailerMode)
-			transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
+		transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);
 		currentSize = SEA_SIZE;
+		currentSpeed = FOLLOW_SPEED_SEA;
 
 		// Init tile position
 		UpdateTilePos();
 		lastFrameTilePosX = tilePosX;
 		lastFrameTilePosY = tilePosY;
-		currentSpeed = FOLLOW_SPEED_SEA;
 		isFirstUpdate = true;
 	}
 	
@@ -71,20 +67,13 @@ public class CameraHandler : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		if(!Settings.onTablet)
-		{
-			// This is just for debug. It enlarges the dragon (for free)
-			if(Input.GetKeyDown(KeyCode.F))
-				following = !following;
-		}
 		//
 		// Update the camera behaviour
 		//
-		
 		bool shifting = false;
-			
 		float transition;
 		Vector3 targetPosition = target.transform.position;
+
 		// in water
 		if(level.IsWater(targetPosition.x, targetPosition.y))
 		{
@@ -99,6 +88,7 @@ public class CameraHandler : MonoBehaviour
 			float sizeMax = AIR_SIZE;
 			// If the dragon is on painted tiles, the camera unzoom
 			// Painted tiles counting
+			
 			int nbPaintedTiles = 0;
 			int[] dxy = {-1, 0, 1};
 			for(int i = 0; i < 9; i++) {
@@ -114,7 +104,6 @@ public class CameraHandler : MonoBehaviour
 				shifting = true;
 			}
 		}
-		
 
 		//
 		// Follow the target with inertia
@@ -122,11 +111,14 @@ public class CameraHandler : MonoBehaviour
 		
 		camera.orthographicSize = currentSize;
 		Vector3 pos = transform.position;
-		if(!following)
-			currentSpeed /= 2;
 		float t = currentSpeed * Time.deltaTime;
-		float x = targetPosition.x; 
-		float y = targetPosition.y; 
+		float x;
+		float y;
+		
+		x = targetPosition.x; 
+		y = targetPosition.y;
+
+		 
 		if(shifting)
 		{
 			x += airShift * target.transform.right.x;

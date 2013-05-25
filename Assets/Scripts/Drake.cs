@@ -55,7 +55,6 @@ public class Drake : MonoBehaviour
 	private float wavingPhaseSpeed; // Speed of the wave
 	public float seaCoef = 0.9f; // Speed coef when the drake is in the sea
 	
-	private bool moving;
 	
 	#endregion	
 	#region "Gameplay and interactions"
@@ -106,11 +105,6 @@ public class Drake : MonoBehaviour
 		// Default parameters
 		if (currentBoneCount <= BONE_COUNT_MIN)
 			currentBoneCount = BONE_COUNT_MIN;
-		
-		if(Settings.trailerMode)
-			moving = false;
-		else
-			moving = true;
 		
 		#endregion
 		#region "Create bones"
@@ -195,6 +189,7 @@ public class Drake : MonoBehaviour
 			scaleObject.transform.localScale = new Vector3 (scaleFix, scaleFix, scaleFix);
 			
 			// Set scale as child of the drake : not useful for now	
+			
 		}
 		
 		// Disable first scale because it overlaps on the head
@@ -221,6 +216,9 @@ public class Drake : MonoBehaviour
 		ChangeBoneCount(currentBoneCount);
 		startBoneCount = currentBoneCount;
 		//startScaleCount = currentScaleCount;
+		
+		if(Settings.trailerMode)
+			ChangeBoneCount(BONE_COUNT_MAX);
 	}
 	
 	/// <summary>
@@ -361,8 +359,6 @@ public class Drake : MonoBehaviour
 			// This is just for debug. It enlarges the dragon (for free)
 			if(Input.GetKeyDown(KeyCode.Space))
 				ChangeBoneCount(BONE_COUNT_MAX);
-			if(Input.GetKeyDown(KeyCode.M))
-				moving = !moving;
 		}
 
 		#region "Head update"
@@ -444,8 +440,6 @@ public class Drake : MonoBehaviour
 		//speed = (targetSpeed - speed) * acceleration * Time.deltaTime;
 		speed = Mathf.Lerp (speed, targetSpeed, acceleration * Time.deltaTime);
 		speed = speedLimit.Clamp(speed);
-		if(!moving)
-			speed = 0f;
 		
 		// Update head rotation from target angle
 		lastFrameHeadRotationDeg = headRotationDeg; // memorize last rotation
