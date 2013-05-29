@@ -53,7 +53,7 @@ public class Drake : MonoBehaviour
 	
 	private float wavingPhase; // Current phase of waving
 	private float wavingPhaseSpeed; // Speed of the wave
-	public float seaCoef = 0.9f; // Speed coef when the drake is in the sea
+	public float seaCoef = 0.1f; // Speed coef when the drake is in the sea
 	
 	
 	#endregion	
@@ -273,7 +273,7 @@ public class Drake : MonoBehaviour
 	{
 		ChangeBoneCount(BONE_COUNT_MAX);
 		// TODO audio feedback
-		SoundLevel1.Instance.EnlargeDrake(); //michèle
+		SoundLevel1.Instance.EnlargeDrake(); 
 	}
 	
 	/// <summary>
@@ -368,11 +368,11 @@ public class Drake : MonoBehaviour
 		// Gravity :
 		// The drake has more difficulty to go up,
 		// and is helped by gravity when going down
-		float gravityModifier = Vector3.Dot(Vector3.down, transform.right);
+		/*float gravityModifier = Vector3.Dot(Vector3.down, transform.right);
 		if(gravityModifier > 0)
 		{
 			targetSpeed += gravityModifier * drakeGravity * Time.deltaTime;
-		}
+		}*/
 		
 		// Speed addition with drake ondulations 
 		float wavingSpeedAddition = 
@@ -383,18 +383,21 @@ public class Drake : MonoBehaviour
 		// Speed reduction by air friction
 		targetSpeed -= linearSpeedReduction * Time.deltaTime;
 		targetSpeed -= quadraticSpeedReduction * targetSpeed * targetSpeed * Time.deltaTime;
-		
+		bool diving = false;
 		// Effects of the sea
 		if(Level.Get.IsWater(transform.position.x, transform.position.y))
 		{
 			// Speed is slowing
 			// TODO maybe put this in friction code?
-			targetSpeed *= seaCoef;
+			//
 			
 			if(!lastFrameUnderwater)
 			{
 				if(transform.right.y < 0)
+				{
 					OnSeaDive();
+					diving = true;
+				}
 				lastFrameUnderwater = true;
 			}
 		}
@@ -438,7 +441,13 @@ public class Drake : MonoBehaviour
 		
 		// Compute instant speed
 		//speed = (targetSpeed - speed) * acceleration * Time.deltaTime;
+
 		speed = Mathf.Lerp (speed, targetSpeed, acceleration * Time.deltaTime);
+		if(diving)
+		{
+			speed *= seaCoef;
+			targetSpeed = 0f;
+		}
 		speed = speedLimit.Clamp(speed);
 		
 		// Update head rotation from target angle
@@ -468,8 +477,8 @@ public class Drake : MonoBehaviour
 			{
 				DoPaintSplash();
 				splashTriggerTime = Time.time;
-				if(!Settings.trailerMode)
-					CommonSounds.Instance.playSplash(); //michèle
+				/*if(!Settings.trailerMode)
+					CommonSounds.Instance.playSplash();*/ //michele
 			}
 		}
 		else

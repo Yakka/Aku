@@ -136,7 +136,7 @@ public class Ladybird : MonoBehaviour
 		float distanceToTarget = Vector2.Distance(target, transform.position);
 		if(distanceToTarget <= SPEED * Time.deltaTime)
 		{
-			transform.position = new Vector3(target.x, target.y, 0);
+			transform.position = new Vector3(target.x, target.y, transform.position.z);
 		}
 		else
 		{
@@ -168,20 +168,18 @@ public class Ladybird : MonoBehaviour
 		
 	}
 	
-	public void NextTarget()
-	{
-		if(index < targets.Length - 1)
-		{
-			index ++;
-		}
-	}
+
 	
 	public void Disturb()
 	{
 		if(state == STATE_WAITING)
 		{
 			if(index < targets.Length - 1)
+			{
 				index ++;
+				if(index == 2)
+					transform.position = new Vector3 (transform.position.x, transform.position.y, -11);
+			}
 			else
 				index = 0;
 			animation.Play("takeOff");
