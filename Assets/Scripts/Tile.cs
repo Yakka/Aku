@@ -12,8 +12,8 @@ using System.Collections.Generic;
 public class Tile : MonoBehaviour
 {
 	public const int SIZE = 64; // This is the scale of each tile in world units (not pixels !)
-	public const int PAINT_TEXTURE_WIDTH = 256; // Must be a power of two, indeed
-	public const int PAINT_TEXTURE_HEIGHT = 256;
+	public const int PAINT_TEXTURE_WIDTH = 128; // Must be a power of two, indeed
+	public const int PAINT_TEXTURE_HEIGHT = 128;
 	private static Color whiteAlpha = new Color(1f, 1f, 1f, 0f);
 	
 	private static Color[] alphaPaintBuffer; // pre-computed buffer for constructing the paintTexture

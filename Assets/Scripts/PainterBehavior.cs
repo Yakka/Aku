@@ -122,7 +122,8 @@ public class PainterBehavior : MonoBehaviour
 	public void SetColor(Color mixColor, bool charge, bool isMoonPaint)
 	{
 		color = mixColor;
-		color.g *= 0.75f; // Because green is a bright color for the human eye
+		if(!isMoonPaint)
+			color.g *= 0.75f; // Because green is a bright color for the human eye
 		
 		if(pixelPainter != null)
 		{
