@@ -56,6 +56,11 @@ public class Helper
 		}
 		mf.mesh.colors32 = colors;
 	}
+	
+	public static GameObject Random(GameObject[] arr)
+	{
+		return arr[UnityEngine.Random.Range(0, arr.Length-1)];
+	}
 
 }
 

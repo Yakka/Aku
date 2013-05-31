@@ -8,12 +8,13 @@ public class PaintSpit : MonoBehaviour
 	
 	private Vector3 vel;
 	private Vector3 pos;
-	private PainterBehavior ppb;
+	private PainterBehavior pb;
 	private sbyte channel = -1; // Optionnal parameter for level 2
 	
 	void Start ()
 	{
-		ppb = GetComponent<PainterBehavior>();
+		pb = GetComponent<PainterBehavior>();
+		pb.affectedByClouds = false;
 		
 		// Scale variations
 		float r = Random.Range(0.6f, 1.4f);
@@ -31,28 +32,27 @@ public class PaintSpit : MonoBehaviour
 		pos.y += vel.y * dt;
 		transform.position = pos;
 		
-		if(ppb.ColorLevel < 0.001f || Level.Get.IsWater(pos.x, pos.y))
+		if(pb.ColorLevel < 0.001f || Level.Get.IsWater(pos.x, pos.y))
 		{
 			//Debug.Log("PaintSpit ended : " + ppb.ColorLevel + ", " + Level.Get.IsWater(pos.x, pos.y));
 			gameObject.active = false;
 		}
 	}
 	
-	public void Reset(Vector3 newPos, Vector3 newVel, Color newColor)
+	public void Reset(Vector3 newPos, Vector3 newVel, sbyte channel)
 	{
-		//Debug.Log("Activate PaintSpit");
-		if(ppb == null)
+		//Debug.Log("Activate PaintSpit (channel=" + channel + ")");
+		if(pb == null)
 		{
-			ppb = GetComponent<PainterBehavior>();
+			pb = GetComponent<PainterBehavior>();
 		}
 		
-		ppb.SetColor(newColor, true);
-		ppb.ColorLevel = 1;
+		pb.SetColor(channel, true);
+		pb.ColorLevel = 1;
 		//ppb.distanceAutonomy = DISTANCE_AUTONOMY;
 		vel = newVel;
 		pos = newPos;
 		transform.position = pos;
-		
 	}
 	
 	void OnTriggerEnter(Collider other)
@@ -73,7 +73,7 @@ public class PaintSpit : MonoBehaviour
 	public sbyte Channel
 	{
 		get { return channel; }
-		set { channel = (sbyte)Mathf.Clamp(value, -1, 2); }
+		//set { channel = (sbyte)Mathf.Clamp(value, -1, 2); }
 	}
 
 }

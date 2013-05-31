@@ -18,6 +18,8 @@ public class Settings : MonoBehaviour
 	/// </summary>
 	public static bool debugMode = false;
 	
+	public static bool releaseMode = false;
+	
 	public static GUIStyle debugGuiStyle;
 	
 	void Start () 
@@ -35,14 +37,14 @@ public class Settings : MonoBehaviour
 	
 	void OnGUI()
 	{
-		/*if(!trailerMode)
+		if(!trailerMode || releaseMode)
 		{
 			if(GUI.Button(new Rect(10, 10, 100, 24), debugMode ? "Debug[ON]" : "Debug[OFF]"))
 			{
 				Debug.Log("Debug mode toggle");
 				debugMode = !debugMode;
 			}
-		}*/
+		}
 	}
 	
 }

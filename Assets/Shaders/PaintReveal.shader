@@ -2,7 +2,7 @@
 Shader "Custom/PaintReveal" {
 	Properties {
 		_MainTex ("Base (RGBA)", 2D) = "white" {}
-		_Color ("Tint color (_Color)", Color) = (1.0, 1.0, 1.0, 1.0)
+		//_Color ("Tint color (_Color)", Color) = (1.0, 1.0, 1.0, 1.0)
 		_Spread ("Spread effect (_Spread, 0=max, 1=min)", float) = 1.0
 		_Coeff ("Spread coeff (_Coeff, 1=disabled, usually 4)", float) = 4.0
 	}
@@ -23,7 +23,7 @@ Shader "Custom/PaintReveal" {
 	
 			sampler2D _MainTex;
 			sampler2D _HiddenPaint;
-			half4 _Color;
+			//half4 _Color;
 			half _Spread;
 			half _Coeff;
 			
@@ -41,7 +41,7 @@ Shader "Custom/PaintReveal" {
 				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.texcoord;
 				o.screenPos = o.pos;
-				o.vcolor = v.color * _Color;
+				o.vcolor = v.color;// * _Color;
 				return o;
 			}
 			

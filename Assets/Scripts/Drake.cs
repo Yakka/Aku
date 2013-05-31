@@ -55,7 +55,6 @@ public class Drake : MonoBehaviour
 	private float wavingPhaseSpeed; // Speed of the wave
 	public float seaCoef = 0.1f; // Speed coef when the drake is in the sea
 	
-	
 	#endregion	
 	#region "Gameplay and interactions"
 	
@@ -137,8 +136,6 @@ public class Drake : MonoBehaviour
 		#endregion
 		#region "Create scales"
 		
-		// Create scales
-		
 		// Pre-allocate the maximum number of scales
 		// (only a subset of them will be active)
 		scales = new DrakeScale[SCALE_COUNT_MAX];
@@ -172,7 +169,10 @@ public class Drake : MonoBehaviour
 			scaleObject.AddComponent("PainterBehavior");
 			
 			// Add glow
-			GameObject glowObj = Instantiate(glowPrefab) as GameObject;
+			GameObject glowObj = null;
+			if(i != 0) { // because the first scale is... well, not used (See below).
+				glowObj = Instantiate(glowPrefab) as GameObject;
+			}
 			
 			// Get scale script and init some of its variables
 			DrakeScale scaleScript = scaleObject.GetComponent<DrakeScale> ();
@@ -245,6 +245,8 @@ public class Drake : MonoBehaviour
 				if(!scales[i].gameObject.active)
 				{
 					scales[i].gameObject.active = true;
+					if(scales[i].glowRef != null)
+						scales[i].glowRef.active = true;
 					s.Shine();
 					// Note : they will be updated in their Start() method
 					//s.UpdateColorDistanceAutonomy();
@@ -256,6 +258,8 @@ public class Drake : MonoBehaviour
 			else
 			{
 				scales[i].gameObject.active = false;
+				if(scales[i].glowRef != null)
+					scales[i].glowRef.active = false;
 			}
 		}
 		
@@ -469,7 +473,7 @@ public class Drake : MonoBehaviour
 		// Note from gamers point-of-view:
 		// doing zig-zags shouldn't work because the angular speed 
 		// slightly crosses 0, and then resets splashTriggerTime.
-		// The only way is to keep a constant angular speed.
+		// The only way is to keep a constant angular speed, so make circles.
 		
 		if(Mathf.Abs(AngularSpeed) >= SPLASH_TRIGGER_ANGSPEED_DEG)
 		{
@@ -522,6 +526,7 @@ public class Drake : MonoBehaviour
 		#endregion
 		
 		// Debug
+		// Displays the barycenter of the dragon
 		/*if(Settings.debugMode)
 		{
 			Vector3 b = GetBarycenter();
@@ -552,16 +557,16 @@ public class Drake : MonoBehaviour
 	{
 		if(!HasColor)
 			return; // Can't do this, I have no paint !
-		
-		//Debug.Log("SPLASH");
-		
+				
 		// Spawn the splash
-		Color splashColor = scales[1].Color;
-		Vector3 splashPos = GetBarycenter();
+		Vector3 splashPos = transform.position;//GetBarycenter();
 		// It will increase during the level, when the dragon grows.
 		float splashSizeMultiplier = 1f + GetGrowthRatio();
+		
 		PolyPaintManager.Instance.SpawnSplash(
-			splashColor, splashPos.x, splashPos.y, splashSizeMultiplier);
+			scales[1].ColorIndex, scales[1].Color, 
+			splashPos.x, splashPos.y, 
+			splashSizeMultiplier);
 		
 		// Clear paint level
 		for(int i = 0; i < currentScaleCount; ++i)
@@ -577,7 +582,11 @@ public class Drake : MonoBehaviour
 	
 	public float AngularSpeed // in degrees
 	{
-		get { return Mathf.DeltaAngle (lastFrameHeadRotationDeg, headRotationDeg) / Time.deltaTime; }
+		get { 
+			return Mathf.DeltaAngle(
+				lastFrameHeadRotationDeg, 
+				headRotationDeg) / Time.deltaTime; 
+		}
 	}
 	
 	/// <summary>
@@ -627,16 +636,9 @@ public class Drake : MonoBehaviour
 	
 	void OnTriggerEnter (Collider other)
 	{
-		if (other.GetComponent<Cloud>() != null) {
+		if (other.GetComponent<Cloud>() != null) 
+		{
 			OnCloudEnter ();
-			switch(Level.Get.levelID)
-			{
-			case 1:
-				break;
-			case 2:
-				SoundLevel2.Instance.CloudEnter();
-				break;
-			}
 		}
 		if(other.name == "PetrolBall")
 		{
@@ -649,17 +651,13 @@ public class Drake : MonoBehaviour
 		{
 			CommonSounds.Instance.MoonEnter();
 		}
-		if(other.GetComponent<SwappableStar>() != null)
+		if(other.GetComponent<PowerableStar>() != null)
 		{
-			SoundLevel2.Instance.HitStar(other.GetComponent<SwappableStar>().gameObject);// michèle changer
+			SoundLevel1.Instance.HitStar(other.gameObject);
 		}
-		/*if(other.GetComponent<PowerableStar>() != null)
-		{
-			SoundLevel1.Instance.HitStar(other.gameObject);
-		}*/
 		if(other.GetComponent<SwappableStar>() != null)
 		{
-			SoundLevel1.Instance.HitStar(other.gameObject);
+			SoundLevel2.Instance.HitStar(other.gameObject);// michèle changer
 		}
 	}
 	
@@ -668,21 +666,7 @@ public class Drake : MonoBehaviour
 		Cloud cloud = other.GetComponent<Cloud>();
 		if (cloud != null)
 		{
-			OnCloudExit ();
-			PolyPaintManager.Instance.SpawnCloudProjection(
-				cloud.CurrentColor, 
-				transform.position.x, 
-				transform.position.y, 
-				headRotationDeg);
-			switch(Level.Get.levelID)
-			{
-			case 1:
-				SoundLevel1.Instance.CloudExit(cloud.gameObject);
-				break;
-			case 2:
-				SoundLevel2.Instance.CloudExit();
-				break;
-			}
+			OnCloudExit (cloud);
 		}
 		if(other.name == "Moon")
 		{
@@ -690,14 +674,49 @@ public class Drake : MonoBehaviour
 		}
 	}
 	
-	void OnCloudEnter ()
+	void OnCloudEnter()
 	{
 		//Debug.Log ("Cloud enter");
+		switch(Level.Get.levelID)
+		{
+		case 2:
+			SoundLevel2.Instance.CloudEnter();
+			break;
+		default:
+			break;
+		}
 	}
 	
-	void OnCloudExit ()
+	void OnCloudExit(Cloud cloud)
 	{
 		//Debug.Log ("Cloud exit");
+		if(Level.Get.levelID == 2)
+		{
+			PolyPaintManager.Instance.SpawnCloudProjection(
+				cloud.colorIndex, 
+				transform.position.x, 
+				transform.position.y, 
+				headRotationDeg);
+		}
+		else
+		{
+			PolyPaintManager.Instance.SpawnCloudProjection(
+				cloud.CurrentColor, 
+				transform.position.x, 
+				transform.position.y, 
+				headRotationDeg);
+		}
+		switch(Level.Get.levelID)
+		{
+		case 1:
+			SoundLevel1.Instance.CloudExit(cloud.gameObject);
+			break;
+		case 2:
+			SoundLevel2.Instance.CloudExit();
+			break;
+		default:
+			break;
+		}
 	}
 	
 	/// <summary>

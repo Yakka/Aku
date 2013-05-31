@@ -119,7 +119,7 @@ public class HiddenPainting : MonoBehaviour
 					revealMatrix[divX, divY] = -2; // Not revealable
 				}
 				else
-					revealMatrix[divX, divY] = -1; // Not revealed
+					revealMatrix[divX, divY] = -1; // Revealable but not revealed yet
 			}
 		}
 		

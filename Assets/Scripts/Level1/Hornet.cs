@@ -220,9 +220,18 @@ public class Hornet : MonoBehaviour
 			float s = transform.localScale.x / 2f;
 			for(int i = 0; i < 3; ++i)
 			{
-				PolyPaintManager.Instance.SpawnDrip(cloud.CurrentColor, 
-					Random.Range(pos.x - s, pos.x + s),
-					Random.Range(pos.y - s, pos.y + s));
+				if(Level.Get.levelID == 2)
+				{
+					PolyPaintManager.Instance.SpawnDrip(cloud.colorIndex, 
+						Random.Range(pos.x - s, pos.x + s),
+						Random.Range(pos.y - s, pos.y + s));
+				}
+				else
+				{
+					PolyPaintManager.Instance.SpawnDrip(cloud.CurrentColor, 
+						Random.Range(pos.x - s, pos.x + s),
+						Random.Range(pos.y - s, pos.y + s));
+				}
 			}
 			Hurt();
 			crossedClouds.Add(cloud);

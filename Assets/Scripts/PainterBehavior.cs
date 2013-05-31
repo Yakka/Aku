@@ -10,11 +10,12 @@ public class PainterBehavior : MonoBehaviour
 	public Material materialRef;
 	
 	public float distanceAutonomy = 200;
+	public bool affectedByClouds = true; // Color recharge when touching a cloud or the moon
 	
 	private Color color;
 	private float colorLevel; // in [0f,1f]
 	private float crossedDistanceSinceColorCharge;
-	private int colorIndex; // TODO use this in level 2
+	private int colorIndex;
 	
 	private HiddenPainting hiddenPaintingRef;
 	
@@ -89,7 +90,9 @@ public class PainterBehavior : MonoBehaviour
 	
 	void OnTriggerEnter(Collider other)
 	{
-		HiddenPainting hiddenPainting = null;		
+		HiddenPainting hiddenPainting = null;
+		Cloud cloud = null;
+		
 		if((hiddenPainting = other.GetComponent<HiddenPainting>()) != null)
 		{
 			// Enter in a hidden painting zone
@@ -97,6 +100,22 @@ public class PainterBehavior : MonoBehaviour
 			{
 				hiddenPaintingRef = hiddenPainting;
 				pixelPainter.hiddenPaintingRef = hiddenPainting;
+			}
+		}
+		else if(affectedByClouds)
+		{
+			if((cloud = other.GetComponent<Cloud>()) != null)
+			{
+				// Set color but not charged yet
+				if(Level.Get.levelID == 2)
+					SetColor(cloud.colorIndex, false);
+				else
+					SetColor(cloud.CurrentColor, false, false);
+			}
+			else if(other.name == "Moon")
+			{
+				// Set moon color but not charged yet
+				SetColor(Color.white, false, true);
 			}
 		}
 	}
@@ -112,6 +131,48 @@ public class PainterBehavior : MonoBehaviour
 				pixelPainter.hiddenPaintingRef = null;
 			}
 		}
+		else if(affectedByClouds)
+		{
+			if(other.GetComponent<Cloud>() != null || other.name == "Moon")
+			{
+				ColorLevel = 1f; // Set color as charged
+			}
+		}
+	}
+	
+	/// <summary>
+	/// Sets the color of the painter by using a color index.
+	/// Color indexes must be defined in the global paint manager.
+	/// In levels involving tricolor paint reveal, 0, 1 and 2
+	/// will be converted into red, blue and green because the final
+	/// color may be computed in a shader. Other indexes will create moon paint.
+	/// </summary>
+	/// <param name='index'>Color index.</param>
+	/// <param name='charge'>Does the painter have to recharge paint load too?</param>
+	public void SetColor(int index, bool charge)
+	{
+		colorIndex = index;
+		if(Level.Get.levelID == 2)
+		{
+			// In level 2, the final color comes into the reveal shader.
+			// So we use the three components as the only 3 allowed pseudo-colors.
+			// Moon paint is still available but for use in space only.
+			switch(colorIndex)
+			{
+			case 0: SetColor(Color.red, charge); break;
+			case 1: SetColor(Color.green, charge); break;
+			case 2: SetColor(Color.blue, charge); break;
+			default: SetColor(Color.white, charge, true); break;
+			}
+		}
+		else
+		{
+			// In other levels, standard color indexing can be used (if specified).
+			if(index >= 0 || index < PolyPaintManager.Instance.indexedColors.Length)
+				SetColor(PolyPaintManager.Instance.indexedColors[index], charge);
+			else
+				SetColor(Color.white, charge, true);
+		}
 	}
 	
 	public void SetColor(Color mixColor, bool charge)
@@ -123,7 +184,11 @@ public class PainterBehavior : MonoBehaviour
 	{
 		color = mixColor;
 		if(!isMoonPaint)
-			color.g *= 0.75f; // Because green is a bright color for the human eye
+		{
+			// Reduces brightness a bit, looks more "painty" (especially for yellow),
+			// and also Because green is a bright color for the human eye
+			color.g *= 0.75f;
+		}
 		
 		if(pixelPainter != null)
 		{
@@ -134,8 +199,6 @@ public class PainterBehavior : MonoBehaviour
 		
 		if(materialRef != null)
 			materialRef.color = color;
-
-		// TODO subtractive color mix
 
 		if(charge)
 		{
@@ -150,11 +213,16 @@ public class PainterBehavior : MonoBehaviour
 		get { return color; }
 	}
 	
+	public int ColorIndex
+	{
+		get { return colorIndex; }
+	}
+	
 	public float ColorLevel
 	{
 		get { return colorLevel; }
 		set 
-		{ 
+		{
 			colorLevel = Mathf.Clamp(value, 0f, 1f); 
 			crossedDistanceSinceColorCharge = distanceAutonomy*(1f-colorLevel);
 			positionLastFrame = transform.position;
