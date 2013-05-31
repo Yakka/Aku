@@ -689,7 +689,6 @@ public class Drake : MonoBehaviour
 	
 	void OnCloudExit(Cloud cloud)
 	{
-		//Debug.Log ("Cloud exit");
 		if(Level.Get.levelID == 2)
 		{
 			PolyPaintManager.Instance.SpawnCloudProjection(
