@@ -90,7 +90,6 @@ public class Ladybird : MonoBehaviour
 				if(!Settings.trailerMode)
 					SoundLevel1.Instance.LadybirdStoping();
 				animation.Play("land");
-				Debug.Log("STOP");
 			}
 		
 		break;
@@ -101,7 +100,10 @@ public class Ladybird : MonoBehaviour
 				Disturb();
 			}
 			else if(triggered)
+			{
 				Disturb();
+				Debug.Log ("I'm fucking triggered");
+			}
 			else if(Time.time > nextSearch && !Settings.trailerMode)
 			{
 				state = STATE_SEARCHING;
@@ -174,6 +176,7 @@ public class Ladybird : MonoBehaviour
 	{
 		if(state == STATE_WAITING)
 		{
+			Debug.Log ("I'm fucking disturbed");
 			if(index < targets.Length - 1)
 			{
 				index ++;
@@ -194,6 +197,7 @@ public class Ladybird : MonoBehaviour
 		if(other.name == "Drake")
 		{
 			triggered = true;
+			
 		}
 	}
 	
