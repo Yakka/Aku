@@ -18,11 +18,11 @@ public class HiddenPaintingCompleteTrigger : MonoBehaviour
 		hiddenPaintingRef = gameObject.GetComponent<HiddenPainting>();
 		if(hiddenPaintingRef == null)
 		{
-			Debug.Log("HiddenPaintingCompleteTrigger must be attached to a HiddenPainting !");
+			Debug.LogError("HiddenPaintingCompleteTrigger must be attached to a HiddenPainting !");
 		}
 		if(objectToEnable == null)
 		{
-			Debug.Log("You must set a target to HiddenPaintingCompleteTrigger !");
+			Debug.LogError("You must set a target to HiddenPaintingCompleteTrigger !");
 		}
 	}
 	

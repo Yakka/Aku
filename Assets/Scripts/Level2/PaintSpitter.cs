@@ -14,7 +14,7 @@ public class PaintSpitter : MonoBehaviour
 	private HiddenPainting hiddenPaintingRef;
 	private sbyte spitChannel;
 	private float nextSpitTime;
-	private bool neverSpitted = false;
+	private bool neverSpitted = true;
 	
 	// Use this for initialization
 	void Start () 
@@ -37,12 +37,6 @@ public class PaintSpitter : MonoBehaviour
 			{
 				newSpitChannel = chnl;
 				break;
-				if(!neverSpitted)
-				{
-					// GO MICHELE GO!!!
-				}
-				
-				neverSpitted = true;
 			}
 		}
 		spitChannel = newSpitChannel;
@@ -56,7 +50,13 @@ public class PaintSpitter : MonoBehaviour
 				// Spawn it
 				//Debug.Log("Spit " + spitChannel);
 				nextSpitTime = t + spawnIntervalSeconds.Rand();
-				Pool.Instance.SpawnPaintSpit(transform.position, configs[spitChannel], spitChannel);
+				PaintSpitManager.Instance.SpawnPaintSpit(
+					transform.position, configs[spitChannel], spitChannel);
+				if(neverSpitted)
+				{
+					// TODO GO MICHELE GO!!!
+					neverSpitted = false;
+				}
 			}
 		}
 		

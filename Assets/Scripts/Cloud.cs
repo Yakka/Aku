@@ -1,11 +1,17 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// A paint ball.
+/// </summary>
 public class Cloud : MonoBehaviour
 {
+	// In level 2, colors are only display stuff and are not 
+	// linked to the actually painted color.
 	public Color color;
 	public Color enlightColor;
-	//public Material baseMaterial;
+	
+	public int colorIndex; // For use in level 2.
 	
 	private Transform sprite;
 	private bool enlighted = false;
@@ -13,7 +19,7 @@ public class Cloud : MonoBehaviour
 	void Start ()
 	{
 		// Set appropriate color to the cloud
-		sprite = transform.GetChild(0);
+		sprite = transform.GetChild(0);		
 		UpdateSpriteColor();
 	}
 	
@@ -26,7 +32,10 @@ public class Cloud : MonoBehaviour
 	
 	public Color CurrentColor
 	{
-		get { return enlighted ? enlightColor : color; }
+		get 
+		{ 
+			return enlighted ? enlightColor : color;
+		}
 	}
 	
 	public void SwapColors(Cloud other)
@@ -41,6 +50,10 @@ public class Cloud : MonoBehaviour
 		temp = enlightColor;
 		enlightColor = other.enlightColor;
 		other.enlightColor = temp;
+		
+		int temp2 = colorIndex;
+		colorIndex = other.colorIndex;
+		other.colorIndex = temp2;
 
 		UpdateSpriteColor();
 		other.UpdateSpriteColor();

@@ -75,8 +75,16 @@ public class DrakeScale : MonoBehaviour
 			if(Random.Range(0f, 1f) < 0.01f)
 			{
 				//Debug.Log("DRIP");
-				PolyPaintManager.Instance.SpawnDrip(
-					Color, transform.position.x, transform.position.y);
+				if(Level.Get.levelID == 2)
+				{
+					PolyPaintManager.Instance.SpawnDrip(
+						pb.ColorIndex, transform.position.x, transform.position.y);
+				}
+				else
+				{
+					PolyPaintManager.Instance.SpawnDrip(
+						Color, transform.position.x, transform.position.y);
+				}
 			}
 		}
 		
@@ -109,7 +117,7 @@ public class DrakeScale : MonoBehaviour
 		//=================== Shine ========================
 		
 		if(glowRef != null)
-		{			
+		{
 			glowRef.transform.position = 
 				new Vector3(boneRef.pos.x, boneRef.pos.y, boneRef.pos.z + 1);
 		}
@@ -131,11 +139,7 @@ public class DrakeScale : MonoBehaviour
 	{
 		SwappableStar swappableStar = null;
 		
-		if(other.GetComponent<Cloud>() != null || other.name == "Moon")
-		{
-			SetColor(other.gameObject, false); // Set color but not charged yet
-		}
-		else if((swappableStar = other.GetComponent<SwappableStar>()) != null)
+		if((swappableStar = other.GetComponent<SwappableStar>()) != null)
 		{
 			if(!swappableStar.IsSwapping)
 				drakeRef.OnTouchedStar(other.gameObject);
@@ -146,29 +150,18 @@ public class DrakeScale : MonoBehaviour
 	{
 		if(other.GetComponent<Cloud>() != null || other.name == "Moon")
 		{
-			SetColor(other.gameObject, true); // Set color as charged
-		}
-	}
-	
-	private void SetColor(GameObject obj, bool charge)
-	{
-		Cloud cloudScript = obj.gameObject.GetComponent<Cloud>();
-		if(cloudScript != null)
-		{
-			if(cloudScript != null)
-				pb.SetColor(cloudScript.CurrentColor, charge, false);
-			else
-				Debug.LogError("CLOUD IS NOT A CLOUD");
-		}
-		else if(obj.name == "Moon")
-		{
-			pb.SetColor(Color.white, charge, true);
+			pb.ColorLevel = 1f; // Set color as charged
 		}
 	}
 
 	public Color Color
 	{
 		get { return pb.Color; }
+	}
+	
+	public int ColorIndex
+	{
+		get { return pb.ColorIndex; }
 	}
 	
 	public float ColorLevel

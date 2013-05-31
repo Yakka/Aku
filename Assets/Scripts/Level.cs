@@ -119,7 +119,7 @@ public class Level : MonoBehaviour
 		foreach(GameObject obj in nonTileChildren)
 		{
 			Attach(obj);
-		}
+		}		
 	}
 	
 	public void Detach(GameObject obj)

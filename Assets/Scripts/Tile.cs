@@ -14,8 +14,8 @@ public class Tile : MonoBehaviour
 	public const int SIZE = 64; // This is the scale of each tile in world units (not pixels !)
 	public const int PAINT_TEXTURE_WIDTH = 128; // Must be a power of two, indeed
 	public const int PAINT_TEXTURE_HEIGHT = 128;
-	private static Color whiteAlpha = new Color(1f, 1f, 1f, 0f);
 	
+	private static Color whiteAlpha = new Color(1f, 1f, 1f, 0f);
 	private static Color[] alphaPaintBuffer; // pre-computed buffer for constructing the paintTexture
 	
 	// Config
@@ -160,7 +160,7 @@ public class Tile : MonoBehaviour
 		paintTexture.SetPixels(alphaPaintBuffer);
 		
 		//Material mat = new Material(Shader.Find("Mobile/Particles/Alpha Blended"));
-		Material mat = new Material(PolyPaintManager.Instance.pixelPaintMaterial);
+		Material mat = new Material(PolyPaintManager.Instance.PixelPaintMaterial);
 		mat.SetTexture("_MainTex", paintTexture);
 		paintLayer.gameObject.renderer.material = mat;
 		//Helper.SetQuadMeshColors(paintLayer.gameObject, Color.white);

@@ -5,9 +5,9 @@ using System.Collections;
 /// This is a global pool of pre-instancied objects.
 /// Use it to spawn PaintSpits or other dynamic objects.
 /// </summary>
-public class Pool : MonoBehaviour
+public class PaintSpitManager : MonoBehaviour
 {
-	private static Pool globalInstance;
+	private static PaintSpitManager globalInstance;
 	
 	public int poolSize = 64;
 	
@@ -31,7 +31,7 @@ public class Pool : MonoBehaviour
 		}
 	}
 	
-	public static Pool Instance
+	public static PaintSpitManager Instance
 	{
 		get { return globalInstance; }
 	}
@@ -53,12 +53,12 @@ public class Pool : MonoBehaviour
 				{
 					float angleDeg = cfg.angleDeg;
 					float speed = cfg.speed;
-					Color color = cfg.color;
+					//Color color = cfg.color;
 					
 					// A bit of random
 					angleDeg += Random.Range(-8, 8);
 					speed *= Random.Range(0.8f, 1.2f);
-					color.a = Mathf.Clamp(color.a * Random.Range(0.8f, 1.2f), 0, 1);
+					//color.a = Mathf.Clamp(color.a * Random.Range(0.8f, 1.2f), 0, 1);
 					
 					tempPos.x = pos.x + cfg.offset.x;
 					tempPos.y = pos.y + cfg.offset.y;
@@ -71,8 +71,7 @@ public class Pool : MonoBehaviour
 					tempPos.x += Random.Range(-5, 5);
 					tempPos.y += Random.Range(-5, 5);
 					
-					ps.Reset(tempPos, tempVel, color);
-					ps.Channel = channel;
+					ps.Reset(tempPos, tempVel, channel);
 				}
 				else
 					Debug.LogError("Pool: PaintSpit is not a PaintSpit !");
@@ -80,11 +79,6 @@ public class Pool : MonoBehaviour
 				break;
 			}
 		}
-	}
-	
-	void Update ()
-	{
-		// NADA
 	}
 	
 	void OnGUI()
