@@ -6,6 +6,8 @@ public class SwappableStar : MonoBehaviour
 	private const float SWAP_SPEED = 0.5f;
 	
 	public GameObject cloudObj; // The associated paint ball
+	public int targetedPositionID; // Needed position to finish the level
+	public int positionID;
 	private Cloud cloud;
 	
 	private Material material;
@@ -22,7 +24,6 @@ public class SwappableStar : MonoBehaviour
 		// Note : the material is expected to have an additive shader
 		material = this.GetComponent<MeshRenderer>().material;
 		color = material.GetColor("_TintColor");
-		
 		SetCloud(cloudObj);
 		
 		Transform child = transform.GetChild(0);
@@ -114,6 +115,9 @@ public class SwappableStar : MonoBehaviour
 		// Change paint balls
 		if(!swapBack)
 		{
+			int tmp = other.GetPositionID();
+			other.SetPositionID(positionID);
+			positionID = tmp;
 			// Swap colors
 			cloud.SwapColors(other.cloud);
 			// Swap objects
@@ -134,11 +138,28 @@ public class SwappableStar : MonoBehaviour
 		
 		// Detach the star during the animation
 		Level.Get.Detach(gameObject);
+		
+		// Check if the new position is good
 	}
 	
 	public bool IsSwapping
 	{
 		get { return swapping; }
+	}
+	
+	public bool IsAtGoodPosition()
+	{
+		return positionID == targetedPositionID;
+	}
+	
+	public void SetPositionID(int id)
+	{
+		positionID = id;
+	}
+	
+	public int GetPositionID()
+	{
+		return positionID;
 	}
 
 }

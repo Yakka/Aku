@@ -6,9 +6,12 @@ using System.Collections;
 /// </summary>
 public class Ladybird : MonoBehaviour 
 {
-	public Transform[] targets;
+	public LadybirdTrigger[] targets;
 	public LadybirdTrigger[] initialPositions;
 	public Transform drake;
+	
+	//Exception code for the faces-level
+	public SwappableStar[] stars;
 	
 	private int state;
 	private const int STATE_MOVING = 0;
@@ -50,6 +53,9 @@ public class Ladybird : MonoBehaviour
 		}
 		
 		originalRotation = transform.rotation;
+		
+		//DEBUG
+		index = 10;
 	}
 	
 	// Update is called once per frame
@@ -73,7 +79,7 @@ public class Ladybird : MonoBehaviour
 			break;
 		case STATE_MOVING:
 			
-			Vector3 target = targets[index].position;
+			Vector3 target = targets[index].transform.position;
 			float distanceToTarget = Vector2.Distance(target, transform.position);
 			
 			// If I'm not on my current target
@@ -87,8 +93,8 @@ public class Ladybird : MonoBehaviour
 				state = STATE_WAITING;
 				nextSearch = Time.time + MAX_WAITING;
 				pauseTrailer = Time.time + 1;
-				if(!Settings.trailerMode)
-					SoundLevel1.Instance.LadybirdStoping();
+				//if(!Settings.trailerMode)
+					//SoundLevel1.Instance.LadybirdStoping();
 				animation.Play("land");
 			}
 		
@@ -102,13 +108,12 @@ public class Ladybird : MonoBehaviour
 			else if(triggered)
 			{
 				Disturb();
-				Debug.Log ("I'm fucking triggered");
 			}
 			else if(Time.time > nextSearch && !Settings.trailerMode)
 			{
 				state = STATE_SEARCHING;
 				animation.Play ("takeOff");
-				SoundLevel1.Instance.LadybirdMoving();
+				//SoundLevel1.Instance.LadybirdMoving();
 			}
 			else if(!animation.isPlaying)
 			{
@@ -176,19 +181,113 @@ public class Ladybird : MonoBehaviour
 	{
 		if(state == STATE_WAITING)
 		{
-			Debug.Log ("I'm fucking disturbed");
-			if(index < targets.Length - 1)
+			bool next = false;
+			bool exception = false;
+			
+			// Check if we need to wait a star at the good place
+			if(Level.Get.levelID == 2)
 			{
-				index ++;
-				if(index == 2)
-					transform.position = new Vector3 (transform.position.x, transform.position.y, -11);
+				if(targets[index].name == "LadyBirdTriggerBlueStar" ||
+					targets[index].name == "LadyBirdTriggerRedStar" ||
+					targets[index].name == "LadyBirdTriggerYellowStar")
+				{
+					int nextIndex = 0;
+					string nextName = "";
+					exception = true;
+					foreach(SwappableStar star in stars)
+					{
+						if(star.IsAtGoodPosition())
+						{
+							switch(targets[index].name)
+							{
+							case "LadyBirdTriggerBlueStar":
+								nextName = "LadyBirdTriggerOldmanGood";
+								break;
+							case "LadyBirdTriggerRedStar":
+								nextName = "LadybirdTriggerWomanGood";
+								break;
+							case "LadyBirdTriggerYellowStar":
+								nextName = "LadyBirdTriggerBabyGood";
+								break;
+							}
+							next = true;
+							Debug.Log ("Next position:"+nextName);
+							for(int i = 0; i < targets.Length; i++)
+							{
+								if(targets[i].name == nextName)
+								{
+									index = i;
+									Debug.Log("Next Index : "+i);
+								}
+							}
+							break;
+						}
+					}
+					if(next)
+					{
+						index = nextIndex;
+					}
+					else
+					{
+						for(int i = 0; i < targets.Length; i++)
+						{
+							if(targets[i].name == "LadyBirdTriggerMoon")
+							{
+								index = i;
+							}
+						}
+					}
+				}
 			}
-			else
-				index = 0;
+			
+			// Get to a random star !
+			if(Level.Get.levelID == 2)
+			{
+				if(!exception && targets[index].name == "LadyBirdTriggerMoon")
+				{
+					exception = true;
+					index += Random.Range(1, 3);
+					if(index > targets.Length - 1)
+					{
+						Debug.Log ("Error, too small array! Or maybe the index is to big.");
+						index = 0;
+					}
+				}
+			}
+			
+			// Check if we need to wait a hidden painting
+			if(!exception)
+			{
+				if(!targets[index].IsHiddenPaintingTrigger())
+				{
+					next = true;
+				}
+				if(next)
+				{
+					if(index < targets.Length - 1)
+					{
+						index ++;
+						if(index == 2)
+							transform.position = new Vector3 (transform.position.x, transform.position.y, -11);
+					}
+					else
+						index = 0;
+				}
+				else
+				{
+					if(index > 0)
+					{
+						index --;
+					}
+					else
+						index = targets.Length - 1;
+				}
+				
+			}
 			animation.Play("takeOff");
 			state = STATE_MOVING;
-			if(!Settings.trailerMode)
-				SoundLevel1.Instance.LadybirdMoving();
+			//if(!Settings.trailerMode)
+				//SoundLevel1.Instance.LadybirdMoving();
 		}
 	}
 	

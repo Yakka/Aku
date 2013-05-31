@@ -3,17 +3,12 @@ using System.Collections;
 
 public class LadybirdTrigger : MonoBehaviour {
 	
+	public HiddenPainting hiddenPainting = null;
+	public float threshold = 0;
+	public int checkedChannel = 0;
+	
 	private bool isActivated = false;
-	
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 	
 	void OnTriggerEnter(Collider other)
 	{
@@ -26,5 +21,20 @@ public class LadybirdTrigger : MonoBehaviour {
 	public bool IsActivated()
 	{
 		return isActivated;
+	}
+	
+	public bool IsHiddenPaintingTrigger()
+	{
+		if(hiddenPainting == null)
+		{
+			return false;
+		}
+		else
+		{
+			if(hiddenPainting.GetRevealRatio(checkedChannel) > threshold)
+				return false;
+			else
+				return true;
+		}
 	}
 }
