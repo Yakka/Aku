@@ -207,7 +207,6 @@ public class PolyPaintManager : MonoBehaviour
 		PolyPaint pp = new PolyPaint(obj, color, 0.25f);
 		animatedPaints.Add(pp);
 		
-		// TODO Use colorIndexes
 		// Check revealed parts on hidden paintings
 		// Note : scaling is reduced a bit because the splash doesn't spread much paint on its edges
 		CheckHiddenPaintings(pos, 0.8f*scaling, colorIndex);
