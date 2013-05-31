@@ -26,6 +26,7 @@ public class Level : MonoBehaviour
 	public int seaLevel = 1; // 0 means no sea
 	public int spaceLevel = 12;
 	public int levelID = 0;
+	//public float timer;
 	
 	// Generic patterns
 	public GameObject skyTilePrefab;
@@ -56,7 +57,6 @@ public class Level : MonoBehaviour
 	void Start ()
 	{
 		finished = false;
-		
 		//
 		// Get children before creating tiles
 		//
@@ -139,10 +139,11 @@ public class Level : MonoBehaviour
 	}
 	
 //	// Update is called once per frame
-//	void Update ()
-//	{
-//		// NOTHINGHAHAHAHAH
-//	}
+	/*void Update ()
+	{
+		//if(Time.time > timer)
+			//Application.LoadLevel("Scene1");
+	}*/
 	
 	// Get tile corresponding to the given world position
 	public Tile GetTileFromWorldCoords(float x, float y)

@@ -57,7 +57,7 @@ public class DrakeScale : MonoBehaviour
 	{
 		spawnShine = 1;
 	}
-	
+
 	// Update is called once per frame
 	void Update ()
 	{
@@ -99,7 +99,7 @@ public class DrakeScale : MonoBehaviour
 //		}
 		
 		//================ Movement and animation ==============
-		
+
 		transform.position = boneRef.pos;
 		
 		if(isXRotative)
