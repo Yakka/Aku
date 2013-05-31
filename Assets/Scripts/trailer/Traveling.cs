@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+// TODO @Yakka rename this (an 'l' is missing)
 public class Traveling : MonoBehaviour {
 	
 	public CameraTrigger[] triggers;

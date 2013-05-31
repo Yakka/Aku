@@ -12,6 +12,7 @@ public class PowerableStar : MonoBehaviour
 	private Material material;
 	private Color color;
 	private bool powered;
+	private HaloBehaviour halo;
 
 	void Start ()
 	{
@@ -22,6 +23,10 @@ public class PowerableStar : MonoBehaviour
 		stars.Add(this);
 		if(Settings.trailerMode)
 			powered = true;
+		
+		Transform child = transform.GetChild(0);
+		if(child != null)
+			halo = child.GetComponent<HaloBehaviour>();
 	}
 	
 	void Update ()
@@ -47,7 +52,10 @@ public class PowerableStar : MonoBehaviour
 		powered = true;
 		++poweredCount;
 		Debug.Log("Powered " + poweredCount + " / " + stars.Count);
-		// TODO feedback
+
+		if(halo != null)
+			halo.SetON(true);
+
 		SoundLevel1.Instance.HitStar(gameObject); //michèle
 	}
 	

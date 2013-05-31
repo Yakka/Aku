@@ -212,6 +212,7 @@ public class HiddenPainting : MonoBehaviour
 		}
 	}
 	
+	// OUTDATED
 	/*public void CheckPixel(int texX, int texY, int channel)
 	{
 		if(countPixels)
@@ -232,6 +233,7 @@ public class HiddenPainting : MonoBehaviour
 	/// Computes the reveal ratio of a given channel of the hidden painting.
 	/// For example, 0.7f means that the hidden painting located on the given 
 	/// channel has been revealated by 70%.
+	/// If you want a total reveal ratio, you may sum each channel you're using.
 	/// </summary>
 	/// <returns>The reveal ratio in [0,1]. 0 if pixel count is disabled.</returns>
 	/// <param name='channel'>

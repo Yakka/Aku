@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+// TODO @Yakka Rename this, it's not relevant at all
 public class CameraTrigger : MonoBehaviour {
 	
 	public float size = 30f;

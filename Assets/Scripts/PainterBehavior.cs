@@ -239,9 +239,9 @@ public class PainterBehavior : MonoBehaviour
 		get 
 		{
 			if(pixelPainter != null)
-				return pixelPainter.moonPaint;
+				return pixelPainter.moonPaint && HasColor;
 			else if(polyPainter != null)
-				return polyPainter.MoonPaint;
+				return polyPainter.MoonPaint && HasColor;
 			else
 				return false;
 		}
