@@ -31,6 +31,9 @@ public class HiddenCameraHandler : MonoBehaviour
 		camera.depth = Camera.mainCamera.depth - 1;
 		camera.targetTexture = renderTarget;
 		camera.backgroundColor = Color.black;
+		
+		// Global texture of the screen containing only hidden paintings
+		Shader.SetGlobalTexture("_HiddenPaint", camera.targetTexture);
 	}
 	
 	void Update () 
@@ -40,11 +43,9 @@ public class HiddenCameraHandler : MonoBehaviour
 		camera.orthographicSize = Camera.mainCamera.orthographicSize;
 	}
 
-	void OnPostRender()
-	{
-		// Global texture of the screen containing only hidden paintings
-		Shader.SetGlobalTexture("_HiddenPaint", camera.targetTexture);
-	}
+//	void OnPostRender()
+//	{
+//	}
 
 }
 
