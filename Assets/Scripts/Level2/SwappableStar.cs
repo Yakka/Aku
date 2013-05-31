@@ -15,6 +15,7 @@ public class SwappableStar : MonoBehaviour
 	private Vector3 srcPos;
 	private Vector3 dstPos;
 	private float swapProgress;
+	private HaloBehaviour halo;
 
 	void Start ()
 	{
@@ -23,6 +24,12 @@ public class SwappableStar : MonoBehaviour
 		color = material.GetColor("_TintColor");
 		
 		SetCloud(cloudObj);
+		
+		Transform child = transform.GetChild(0);
+		if(child != null)
+		{
+			halo = child.GetComponent<HaloBehaviour>();
+		}
 		
 		// TODO random rotation
 	}
@@ -65,21 +72,30 @@ public class SwappableStar : MonoBehaviour
 	{
 		if(!swapping)
 		{
-			if(other.name.Contains("drake_scale"))
+			DrakeScale drakeScale = other.GetComponent<DrakeScale>();
+			if(drakeScale != null && drakeScale.HasMoonPaint)
 			{
-				DrakeScale drakeScale = other.GetComponent<DrakeScale>();
 				Drake drake = drakeScale.drakeRef;
 				
-				if(drake.LastTouchedStar != null)
+				if(drake.LastTouchedStar == null)
 				{
-					SwappableStar star = 
+					// First star selected !
+					if(halo != null)
+						halo.SetON(true);
+					drake.LastTouchedStar = gameObject;
+				}
+				else
+				{
+					SwappableStar otherStar = 
 						drake.LastTouchedStar.GetComponent<SwappableStar>();
 
 					// If the star exist and is different
-					if(star != null && star != this)
+					if(otherStar != null && otherStar != this)
 					{
 						drake.LastTouchedStar = null;
-						Swap(star, true);
+						
+						// Second star selected, swapping !						
+						Swap(otherStar, true);
 						SoundLevel2.Instance.SwapStar();
 					}
 				}
@@ -91,6 +107,10 @@ public class SwappableStar : MonoBehaviour
 	
 	protected void Swap(SwappableStar other, bool swapBack)
 	{
+		// Disable halo
+		if(halo != null)
+			halo.SetON(false);
+	
 		// Change paint balls
 		if(!swapBack)
 		{

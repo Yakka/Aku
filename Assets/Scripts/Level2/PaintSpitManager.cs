@@ -21,7 +21,7 @@ public class PaintSpitManager : MonoBehaviour
 	
 	void Start ()
 	{
-		// Pre-build bleed objects
+		// Pre-build spit objects
 		paintSpitPool = new GameObject[poolSize];
 		for(uint i = 0; i < paintSpitPool.Length; i++)
 		{
@@ -49,7 +49,7 @@ public class PaintSpitManager : MonoBehaviour
 				obj.active = true;
 				
 				PaintSpit ps = obj.GetComponent<PaintSpit>();
-				if(ps != null)
+				if(ps != null) // Should always work
 				{
 					float angleDeg = cfg.angleDeg;
 					float speed = cfg.speed;

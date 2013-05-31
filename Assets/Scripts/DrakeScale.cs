@@ -135,16 +135,16 @@ public class DrakeScale : MonoBehaviour
 		}
 	}
 	
-	void OnTriggerEnter(Collider other)
-	{
-		SwappableStar swappableStar = null;
+//	void OnTriggerEnter(Collider other)
+//	{
+//		SwappableStar swappableStar = null;
 		
-		if((swappableStar = other.GetComponent<SwappableStar>()) != null)
-		{
-			if(!swappableStar.IsSwapping)
-				drakeRef.OnTouchedStar(other.gameObject);
-		}
-	}
+//		if((swappableStar = other.GetComponent<SwappableStar>()) != null)
+//		{
+//			if(!swappableStar.IsSwapping)
+//				drakeRef.OnTouchedStar(other.gameObject);
+//		}
+//	}
 	
 	void OnTriggerExit(Collider other)
 	{

@@ -477,7 +477,7 @@ public class Drake : MonoBehaviour
 		
 		if(Mathf.Abs(AngularSpeed) >= SPLASH_TRIGGER_ANGSPEED_DEG)
 		{
-			if(Time.time - splashTriggerTime >= SPLASH_TRIGGER_DELAY_S)
+			if(Time.time - splashTriggerTime >= SPLASH_TRIGGER_DELAY_S && !HasMoonPaint)
 			{
 				DoPaintSplash();
 				splashTriggerTime = Time.time;
@@ -557,7 +557,7 @@ public class Drake : MonoBehaviour
 	{
 		if(!HasColor)
 			return; // Can't do this, I have no paint !
-				
+		
 		// Spawn the splash
 		Vector3 splashPos = transform.position;//GetBarycenter();
 		// It will increase during the level, when the dragon grows.
@@ -569,7 +569,7 @@ public class Drake : MonoBehaviour
 			splashSizeMultiplier);
 		
 		// Clear paint level
-		for(int i = 0; i < currentScaleCount; ++i)
+		for(int i = 0; i < scales.Length; ++i)
 		{
 			scales[i].ColorLevel = 0;
 		}
@@ -743,15 +743,18 @@ public class Drake : MonoBehaviour
 	/// Called when a part of the dragon touches a star
 	/// </summary>
 	/// <param name='starObj'>Star object.</param>
-	public void OnTouchedStar(GameObject starObj)
-	{
-		lastTouchedStar = starObj;
-	}
+//	public void OnTouchedStar(GameObject starObj)
+//	{
+//		lastTouchedStar = starObj;
+//	}
 	
 	public GameObject LastTouchedStar
 	{
 		get { return lastTouchedStar; }
-		set { lastTouchedStar = value; }
+		set
+		{
+			lastTouchedStar = value;
+		}
 	}
 	
 	/// <summary>
@@ -767,6 +770,19 @@ public class Drake : MonoBehaviour
 			for(int i = 0; i < currentScaleCount; ++i)
 			{
 				if(scales[i].HasColor)
+					return true;
+			}
+			return false;
+		}
+	}
+	
+	public bool HasMoonPaint
+	{
+		get
+		{
+			for(int i = 0; i < currentScaleCount; ++i)
+			{
+				if(scales[i].HasMoonPaint)
 					return true;
 			}
 			return false;
