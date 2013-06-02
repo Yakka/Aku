@@ -7,7 +7,7 @@ using System;
 public class Helper
 {
 	/// <summary>
-	/// Returns the sign of x, and 0 if is 0.
+	/// Returns the sign of x (-1 or 1), and 0 if x == 0.
 	/// </summary>
 	/// <param name='x'>
 	/// 1 if x > 0,
@@ -17,6 +17,23 @@ public class Helper
 	public static int Sign0(int x)
 	{
 		return x>0? 1 : x<0? -1 : 0;
+	}
+	
+	/// <summary>
+	/// Returns the sign of x (-1 or 1), and 0 if x == 0.
+	/// </summary>
+	/// <param name='x'>
+	/// 1 if x > 0,
+	/// -1 if x < 0,
+	/// 0 if x == 0.
+	/// </param>
+	public static float Sign0(float x)
+	{
+		if(x > 0)
+			return 1;
+		if(x < 0)
+			return -1;
+		return 0;
 	}
 	
 	public static float Sq(float x)
@@ -60,6 +77,22 @@ public class Helper
 	public static GameObject Random(GameObject[] arr)
 	{
 		return arr[UnityEngine.Random.Range(0, arr.Length-1)];
+	}
+	
+	/// <summary>
+	/// Centralized function to recursively set the active flag of an object
+	/// (Because depending on the version of Unity, activate an object is done a different way).
+	/// </summary>
+	/// <param name='obj'></param>
+	/// <param name='a'></param>
+	public static void SetActive(GameObject obj, bool a)
+	{
+		obj.active = a; // Use this on Unity 3.5.6-
+		//obj.SetActive(a);
+		//obj.activeSelf = a; // Use this on Unity 3.5.7+
+		
+		for(int i = 0; i < obj.transform.childCount; ++i)
+			SetActive(obj.transform.GetChild(i).gameObject, a);
 	}
 
 }

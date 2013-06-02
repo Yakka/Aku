@@ -32,9 +32,7 @@ public class MoveToTarget : MonoBehaviour
 	{
 		if(progress < 0)
 			return;
-		
-		Vector3 targetPos = target.position;
-		
+				
 		if(progress < 1f)
 		{
 			progress += Time.deltaTime * (1f / DURATION);
@@ -44,7 +42,7 @@ public class MoveToTarget : MonoBehaviour
 			if(progress > 1f || Vector3.Distance(
 				transform.position, target.position) > 5*Tile.SIZE)
 			{
-				progress = 1f;
+				progress = -1;
 				Level.Get.Attach(gameObject);
 			}
 		}

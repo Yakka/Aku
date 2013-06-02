@@ -813,7 +813,11 @@ public class Drake : MonoBehaviour
 			
 			GUI.Label(new Rect(16, 80, 256, 32), 
 				"Wrapped altitude : " + Level.Get.GetWrappedAltitude(transform.position.y),
-				Settings.debugGuiStyle);			
+				Settings.debugGuiStyle);
+			
+			GUI.Label(new Rect(16, 100, 256, 32), 
+				"UPS : " + (int)(1f / (Time.deltaTime == 0f ? 1 : Time.deltaTime)),
+				Settings.debugGuiStyle);
 		}
 	}
 

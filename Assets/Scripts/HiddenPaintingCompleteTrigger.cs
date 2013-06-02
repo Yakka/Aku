@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class HiddenPaintingCompleteTrigger : MonoBehaviour 
 {
-	public float completeThreshold = 0.8f;
+	public float completeThreshold = 0.9f;
 	public int channel = 0;
 	public GameObject objectToEnable;
 	
@@ -33,7 +33,8 @@ public class HiddenPaintingCompleteTrigger : MonoBehaviour
 
 		if(hiddenPaintingRef.GetRevealRatio(channel) > completeThreshold)
 		{
-			objectToEnable.active = true;
+			Helper.SetActive(objectToEnable, true);
+
 			triggered = true;
 			switch(Level.Get.levelID)
 			{

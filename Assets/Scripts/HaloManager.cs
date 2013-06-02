@@ -9,8 +9,10 @@ public class HaloManager : MonoBehaviour // YETANOTHERMANAGER
 	public AnimationCurve startCurve; // Start size animation
 	public AnimationCurve idleCurve; // Periodic size animation
 	public AnimationCurve endCurve; // End size animation
+	//public AnimationCurve blinkCurve;
 	
 	private static HaloManager globalInstance;
+	//private GameObject[] blinkPool;
 	
 	public static HaloManager Instance
 	{
@@ -25,7 +27,7 @@ public class HaloManager : MonoBehaviour // YETANOTHERMANAGER
 	void Start()
 	{
 		// If curves are not defined from editor, 
-		// default curves are generated.
+		// default curves (not as fancy) are generated.
 		if(startCurve == null)
 		{
 			startCurve = new AnimationCurve();
@@ -47,7 +49,24 @@ public class HaloManager : MonoBehaviour // YETANOTHERMANAGER
 			endCurve.AddKey(0f, 1f);
 			endCurve.AddKey(0f, 0f);
 		}
+//		if(blinkCurve == null)
+//		{
+//			blinkCurve = new AnimationCurve();
+//			blinkCurve.AddKey(0f, 0f);
+//			blinkCurve.AddKey(0.5f, 1f);
+//			blinkCurve.AddKey(1f, 0f);
+//		}
+		
+//		blinkPool = new GameObject[4];
+//		for(int i = 0; i < blinkPool.Length; ++i)
+//		{
+//		}
 	}
+	
+//	void SpawnBlink(float x, float y)
+//	{
+//		
+//	}
 	
 }
 

@@ -17,7 +17,9 @@ public class HaloBehaviour : MonoBehaviour
 		
 		if(HaloManager.Instance == null)
 		{
-			Debug.LogError(name + ": I need HaloManager !");
+			Debug.LogError(name + ": I need HaloManager ! "
+				+ "Just add an empty game object to the scene "
+				+ "with HaloManager script on it.");
 		}
 	}
 	
