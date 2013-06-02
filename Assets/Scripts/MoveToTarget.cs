@@ -32,19 +32,21 @@ public class MoveToTarget : MonoBehaviour
 	{
 		if(progress < 0)
 			return;
-				
+
 		if(progress < 1f)
 		{
 			progress += Time.deltaTime * (1f / DURATION);
-			transform.position = Vector3.Lerp(
-				startPos, target.transform.position, progress);
 			
+			Debug.Log(progress);
 			if(progress > 1f || Vector3.Distance(
-				transform.position, target.position) > 5*Tile.SIZE)
+				transform.position, Camera.mainCamera.transform.position) > 5*Tile.SIZE)
 			{
 				progress = -1;
 				Level.Get.Attach(gameObject);
 			}
+			
+			transform.position = Vector3.Lerp(
+				startPos, target.transform.position, progress);
 		}
 	}
 

@@ -19,3 +19,11 @@ Assets/PhysicMaterials
 Assets/Plugins
 *.unity
 *.unitypackage
+.DS_Store
+Assets/AK
+Assets/StreamingAssets
+CommonSounds.cs
+SoundLevel0.cs
+SoundLevel1.cs
+SoundLevel2.cs
+Mute.cs

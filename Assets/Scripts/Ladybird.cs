@@ -53,9 +53,10 @@ public class Ladybird : MonoBehaviour
 		}
 		
 		originalRotation = transform.rotation;
+		//index = 15;
 		
 		//DEBUG
-		index = 10;
+		//index = 10;
 	}
 	
 	// Update is called once per frame
@@ -210,13 +211,15 @@ public class Ladybird : MonoBehaviour
 								nextName = "LadyBirdTriggerBabyGood";
 								break;
 							}
+							//TOFIX
+							renderer.enabled = false;
 							next = true;
-							Debug.Log ("Next position:"+nextName);
 							for(int i = 0; i < targets.Length; i++)
 							{
 								if(targets[i].name == nextName)
 								{
-									index = i;
+									//index = i; TOFIX
+									//index = 16;
 									Debug.Log("Next Index : "+i);
 								}
 							}
@@ -271,7 +274,8 @@ public class Ladybird : MonoBehaviour
 							transform.position = new Vector3 (transform.position.x, transform.position.y, -11);
 					}
 					else
-						index = 0;
+						if(Level.Get.levelID != 2)
+							index = 0;
 				}
 				else
 				{
@@ -279,11 +283,14 @@ public class Ladybird : MonoBehaviour
 					{
 						index --;
 					}
-					else
+					else 
 						index = targets.Length - 1;
 				}
 				
 			}
+			// TOFIX DIRTY CODE
+			if(index == 16)
+				renderer.enabled = false;
 			animation.Play("takeOff");
 			state = STATE_MOVING;
 			//if(!Settings.trailerMode)
