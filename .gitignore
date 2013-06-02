@@ -22,8 +22,8 @@ Assets/Plugins
 .DS_Store
 Assets/AK
 Assets/StreamingAssets
-CommonSounds.cs
-SoundLevel0.cs
-SoundLevel1.cs
-SoundLevel2.cs
-Mute.cs
+*CommonSounds.cs
+*SoundLevel0.cs
+*SoundLevel1.cs
+*SoundLevel2.cs
+*Mute.cs
