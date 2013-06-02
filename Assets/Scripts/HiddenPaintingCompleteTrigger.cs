@@ -24,6 +24,12 @@ public class HiddenPaintingCompleteTrigger : MonoBehaviour
 		{
 			Debug.LogError("You must set a target to HiddenPaintingCompleteTrigger !");
 		}
+		
+		// If a PaintSpitter is attached to the game object,
+		// make thresholds match
+		PaintSpitter ps = GetComponent<PaintSpitter>();
+		if(ps != null)
+			completeThreshold = ps.startThreshold;
 	}
 	
 	void Update ()

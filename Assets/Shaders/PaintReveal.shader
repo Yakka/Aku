@@ -59,7 +59,6 @@ Shader "Custom/PaintReveal" {
 				
 				// Reveal effect
 				o.a = o.a * (1f - max(mask.r, max(mask.g, mask.b)));
-				//o.a = o.a * (1f - max(o.r * mask.r, max(o.g * mask.g, o.b * mask.b)));
 
 				return o;
 			}
