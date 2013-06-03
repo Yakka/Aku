@@ -21,6 +21,9 @@ public class Settings : MonoBehaviour
 	public static bool releaseMode = false;
 	
 	public static GUIStyle debugGuiStyle;
+	public Texture2D fingerTexture;
+	public int fingerX = 0;
+	public int fingerY = 0;
 	
 	void Start () 
 	{
@@ -35,6 +38,7 @@ public class Settings : MonoBehaviour
 		}
 	}
 	
+	
 	void OnGUI()
 	{
 		if(!trailerMode || releaseMode)
@@ -45,6 +49,11 @@ public class Settings : MonoBehaviour
 				debugMode = !debugMode;
 			}
 		}
+
+		//GUI.Label(new Rect (fingerX, fingerY, fingerSize, fingerSize), fingerTexture);
+		
 	}
+	
+	
 	
 }
