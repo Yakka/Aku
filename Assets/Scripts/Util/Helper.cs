@@ -41,6 +41,11 @@ public class Helper
 		return x*x;
 	}
 	
+	public static float Pow4(float x)
+	{
+		return x*x*x*x;
+	}
+	
 	public static float Match(float a, float b, float tolerance)
 	{
 		if(tolerance == 0)
@@ -93,6 +98,12 @@ public class Helper
 		
 		for(int i = 0; i < obj.transform.childCount; ++i)
 			SetActive(obj.transform.GetChild(i).gameObject, a);
+	}
+	
+	public static bool IsActive(GameObject obj)
+	{
+		return obj.active;
+		//return obj.activeSelf;
 	}
 
 }
