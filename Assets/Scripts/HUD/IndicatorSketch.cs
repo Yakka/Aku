@@ -26,7 +26,7 @@ public class IndicatorSketch : MonoBehaviour
 			lineRenderer = GetComponent<LineRenderer>();
 			lineRenderer.material = material;
 			lineRenderer.SetColors(color, color);
-			lineRenderer.SetWidth (0.5f*THICKNESS, THICKNESS);
+			lineRenderer.SetWidth(0.5f*THICKNESS, THICKNESS);
 			lineRenderer.castShadows = false;
 		}
 		
@@ -78,6 +78,11 @@ public class IndicatorSketch : MonoBehaviour
 		}
 		
 		Helper.SetActive(gameObject, true);
+	}
+	
+	public Vector3 CurrentPos
+	{
+		get { return points[endIndex]; }
 	}
 	
 	void Update ()

@@ -26,7 +26,7 @@ public class PaintSpitManager : MonoBehaviour
 		for(uint i = 0; i < paintSpitPool.Length; i++)
 		{
 			GameObject obj = Instantiate(paintSpitPrefab) as GameObject;
-			obj.active = false;
+			Helper.SetActive(obj, false);
 			paintSpitPool[i] = obj;
 		}
 	}
@@ -40,13 +40,13 @@ public class PaintSpitManager : MonoBehaviour
 	public void SpawnPaintSpit(Vector3 pos, PaintSpitConfig cfg, sbyte channel)
 	{
 		// Search for an inactive object
-		for(uint i = 0; i < paintSpitPool.Length; i++)
+		for(uint i = 0; i < paintSpitPool.Length; ++i)
 		{
 			GameObject obj = paintSpitPool[i];
 			
 			if(!Helper.IsActive(obj)) // Is this one inactive?
 			{
-				Helper.SetActive(obj, true);
+				Helper.SetActive(obj, true); // Activate
 				
 				PaintSpit ps = obj.GetComponent<PaintSpit>();
 				if(ps != null) // Should always work
