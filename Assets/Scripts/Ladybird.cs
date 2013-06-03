@@ -19,6 +19,7 @@ public class Ladybird : MonoBehaviour
 	private const int STATE_WAITING = 2;
 	private const int STATE_SLEEPING = 3;
 	private const int STATE_SEARCHING = 4; // The bug is searching for the drake
+	private const int STATE_JOY = 5; //The player did a good thing
 	private const int MAX_WAITING = 15; // Time in seconds of waiting if the player doesn't follow the ladybird
 	private float nextSearch;
 	
@@ -110,6 +111,7 @@ public class Ladybird : MonoBehaviour
 			}
 			else if(triggered)
 			{
+				nextSearch = Time.time + MAX_WAITING;
 				Disturb();
 			}
 			else if(Time.time > nextSearch && !Settings.trailerMode)
@@ -136,10 +138,23 @@ public class Ladybird : MonoBehaviour
 			}
 			else
 			{
+				// MICHELE : SON DE COCCINELLE QUI APPELLE LE JOUEUR
 				state = STATE_MOVING;
 			}
 			break;
+		case STATE_JOY:
+			transform.rotation = 
+				Quaternion.Lerp(
+					transform.rotation, 
+					Quaternion.Euler (0f, 0f, 360) * originalRotation, 
+					ANGULAR_LERP_COEF);
+			if(!animation.isPlaying) // Play the animation
+			{	
+				animation.Play("fly");
+			}
+			break;
 		}
+		
 	}
 	
 	public void MoveTo(Vector3 target)
@@ -178,7 +193,6 @@ public class Ladybird : MonoBehaviour
 		}
 		
 	}
-	
 
 	
 	public void Disturb()
@@ -186,111 +200,111 @@ public class Ladybird : MonoBehaviour
 		if(state == STATE_WAITING)
 		{
 			bool next = false;
-			bool exception = false;
 			
 			// Check if we need to wait a star at the good place
-			if(Level.Get.levelID == 2)
+			switch(targets[index].name)
 			{
-				if(targets[index].name == "LadyBirdTriggerBlueStar" ||
-					targets[index].name == "LadyBirdTriggerRedStar" ||
-					targets[index].name == "LadyBirdTriggerYellowStar")
-				{
-					int nextIndex = 0;
-					string nextName = "";
-					exception = true;
-					foreach(SwappableStar star in stars)
-					{
-						if(star.IsAtGoodPosition())
-						{
-							switch(targets[index].name)
-							{
-							case "LadyBirdTriggerBlueStar":
-								nextName = "LadyBirdTriggerOldmanGood";
-								break;
-							case "LadyBirdTriggerRedStar":
-								nextName = "LadybirdTriggerWomanGood";
-								break;
-							case "LadyBirdTriggerYellowStar":
-								nextName = "LadyBirdTriggerBabyGood";
-								break;
-							}
-							//TOFIX
-							renderer.enabled = false;
-							next = true;
-							for(int i = 0; i < targets.Length; i++)
-							{
-								if(targets[i].name == nextName)
-								{
-									//index = i; TOFIX
-									//index = 16;
-									Debug.Log("Next Index : "+i);
-								}
-							}
-							break;
-						}
-					}
-					if(next)
-					{
-						index = nextIndex;
-					}
-					else
-					{
-						for(int i = 0; i < targets.Length; i++)
-						{
-							if(targets[i].name == "LadyBirdTriggerMoon")
-							{
-								index = i;
-							}
-						}
-					}
-				}
-			}
-			
-			// Get to a random star !
-			if(Level.Get.levelID == 2)
-			{
-				if(!exception && targets[index].name == "LadyBirdTriggerMoon")
-				{
-					exception = true;
-					index += Random.Range(1, 3);
-					if(index > targets.Length - 1)
-					{
-						Debug.Log ("Error, too small array! Or maybe the index is to big.");
-						index = 0;
-					}
-				}
-			}
-			
-			// Check if we need to wait a hidden painting
-			if(!exception)
-			{
+			//
+			// The ladybird stays on the face until it's painted
+			//
+			case "LadyBirdTriggerBabyFace1":
+			case "LadyBirdTriggerWomanFace1":
+			case "LadyBirdTriggerOldmanFace1":
 				if(!targets[index].IsHiddenPaintingTrigger())
 				{
 					next = true;
 				}
-				if(next)
+				break;
+			//
+			// The ladybird comes back to the moon if stars are not at the right position
+			// If a star is at the right position, the ladybird goes to the hidden face which is matching
+			//
+			case "LadyBirdTriggerBlueStar":
+			case "LadyBirdTriggerRedStar":
+			case "LadyBirdTriggerYellowStar":
+				string nextName = "";
+				bool wrongPosition = true;
+				foreach(SwappableStar star in stars)
 				{
-					if(index < targets.Length - 1)
+					if(star.IsAtGoodPosition())
 					{
-						index ++;
-						if(index == 2)
-							transform.position = new Vector3 (transform.position.x, transform.position.y, -11);
+						wrongPosition = false;
+						switch(targets[index].name)
+						{
+						case "LadyBirdTriggerBlueStar":
+							nextName = "LadyBirdTriggerOldmanFace2";
+							break;
+						case "LadyBirdTriggerRedStar":
+							nextName = "LadyBirdTriggerWomanFace2";
+							break;
+						case "LadyBirdTriggerYellowStar":
+							nextName = "LadyBirdTriggerBabyFace2";
+							break;
+						}
+						for(int i = 0; i < targets.Length; i++)
+						{
+							if(targets[i].name == nextName)
+							{
+								index = i;
+								animation.Play("takeOff");
+								state = STATE_MOVING;
+								break;
+							}
+						}
+						break;
 					}
-					else
-						if(Level.Get.levelID != 2)
-							index = 0;
 				}
-				else
+				if(wrongPosition)
 				{
-					if(index > 0)
+					for(int i = 0; i < targets.Length; i++)
 					{
-						index --;
+						if(targets[i].name == "LadyBirdTriggerMoon")
+						{
+							index = i;
+							animation.Play("takeOff");
+							state = STATE_MOVING;
+							break;
+						}
 					}
-					else 
-						index = targets.Length - 1;
 				}
+				break;
+			//
+			// The ladybird goes to a random star
+			//
+			case "LadyBirdTriggerMoon":
+				int[] indexStars = new int[3];
 				
+				for(int i = 0; i < targets.Length; i++)
+				{
+					if(targets[i].name == "LadyBirdTriggerBlueStar")
+						indexStars[0] = i;
+					if(targets[i].name == "LadyBirdTriggerRedStar")
+						indexStars[1] = i;
+					if(targets[i].name == "LadyBirdTriggerYellowStar")
+						indexStars[2] = i;
+				}
+				index = indexStars[Random.Range(0, 2)];
+				animation.Play("takeOff");
+				state = STATE_MOVING;
+				break;
+			default:
+				next = true;
+				break;
 			}
+			
+			if(next)
+			{
+				animation.Play("takeOff");
+				state = STATE_MOVING;
+				index ++;
+			}
+			
+			if(index > targets.Length - 1)
+			{
+				index = 0;
+				Debug.Log ("Error, end of triggers");
+			}
+			
 			// TOFIX DIRTY CODE
 			if(index == 16)
 				renderer.enabled = false;
