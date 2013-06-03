@@ -44,9 +44,9 @@ public class PaintSpitManager : MonoBehaviour
 		{
 			GameObject obj = paintSpitPool[i];
 			
-			if(!obj.active) // Is this one inactive?
+			if(!Helper.IsActive(obj)) // Is this one inactive?
 			{
-				obj.active = true;
+				Helper.SetActive(obj, true);
 				
 				PaintSpit ps = obj.GetComponent<PaintSpit>();
 				if(ps != null) // Should always work
