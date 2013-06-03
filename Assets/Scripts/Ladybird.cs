@@ -94,8 +94,8 @@ public class Ladybird : MonoBehaviour
 				state = STATE_WAITING;
 				nextSearch = Time.time + MAX_WAITING;
 				pauseTrailer = Time.time + 1;
-				//if(!Settings.trailerMode)
-					//SoundLevel1.Instance.LadybirdStoping();
+				if(!Settings.trailerMode)
+					CommonSounds.Instance.LadybirdStoping();
 				animation.Play("land");
 			}
 		
@@ -105,6 +105,8 @@ public class Ladybird : MonoBehaviour
 			{
 				animation.Play ("takeOff");
 				Disturb();
+				if(!Settings.trailerMode)
+					CommonSounds.Instance.LadybirdMoving();
 			}
 			else if(triggered)
 			{
@@ -114,7 +116,8 @@ public class Ladybird : MonoBehaviour
 			{
 				state = STATE_SEARCHING;
 				animation.Play ("takeOff");
-				//SoundLevel1.Instance.LadybirdMoving();
+				if(!Settings.trailerMode)
+					CommonSounds.Instance.LadybirdMoving();
 			}
 			else if(!animation.isPlaying)
 			{
@@ -293,8 +296,8 @@ public class Ladybird : MonoBehaviour
 				renderer.enabled = false;
 			animation.Play("takeOff");
 			state = STATE_MOVING;
-			//if(!Settings.trailerMode)
-				//SoundLevel1.Instance.LadybirdMoving();
+			if(!Settings.trailerMode)
+				CommonSounds.Instance.LadybirdMoving();
 		}
 	}
 	

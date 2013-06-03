@@ -14,7 +14,7 @@ public class PaintSpitter : MonoBehaviour
 	private HiddenPainting hiddenPaintingRef;
 	private sbyte spitChannel;
 	private float nextSpitTime;
-	private bool neverSpitted = true;
+	//private bool neverSpitted = true;
 	
 	// Use this for initialization
 	void Start () 
@@ -36,6 +36,11 @@ public class PaintSpitter : MonoBehaviour
 			if(hiddenPaintingRef.GetRevealRatio(chnl) > startThreshold)
 			{
 				newSpitChannel = chnl;
+				if (newSpitChannel != spitChannel) {
+					//sound
+					SoundLevel2.Instance.FeedbackVisages(gameObject, newSpitChannel);
+				}
+				
 				break;
 			}
 		}
@@ -52,11 +57,11 @@ public class PaintSpitter : MonoBehaviour
 				nextSpitTime = t + spawnIntervalSeconds.Rand();
 				PaintSpitManager.Instance.SpawnPaintSpit(
 					transform.position, configs[spitChannel], spitChannel);
-				if(neverSpitted)
+				/*if(neverSpitted)
 				{
 					// TODO GO MICHELE GO!!!
 					neverSpitted = false;
-				}
+				}*/
 			}
 		}
 		

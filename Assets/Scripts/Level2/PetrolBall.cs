@@ -56,6 +56,7 @@ public class PetrolBall : MonoBehaviour
 			if(ps.Channel != -1)
 			{
 				lastHitTime[ps.Channel] = Time.time;
+				SoundLevel2.Instance.SizePetrol(0);
 			}
 		}
 	}
