@@ -34,6 +34,7 @@ public class PetrolBall : MonoBehaviour
 			// Each of the hits have occurred in the last HIT_TIME_DELAY seconds.
 			// The PetrolBall must die.
 			Debug.Log("The PetrolBall died :D");
+			SoundLevel2.Instance.SizePetrol(3);
 			Helper.SetActive(gameObject, false);
 			// TODO PetrolBall : fancier explode animation
 			Level.Get.Finished = true;
@@ -56,7 +57,7 @@ public class PetrolBall : MonoBehaviour
 			if(ps.Channel != -1)
 			{
 				lastHitTime[ps.Channel] = Time.time;
-				SoundLevel2.Instance.SizePetrol(0);
+				SoundLevel2.Instance.SizePetrol(ps.Channel);
 				Debug.Log("Hit ! " + ps.Channel);
 			}
 			else
