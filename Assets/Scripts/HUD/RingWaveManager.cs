@@ -17,7 +17,7 @@ public class RingWaveManager : MonoBehaviour
 		{
 			GameObject obj = new GameObject();
 			obj.AddComponent<RingWave>();
-			obj = Instantiate(obj) as GameObject;
+			//obj = Instantiate(obj) as GameObject;
 			obj.transform.parent = this.gameObject.transform;
 			//obj.transform.position = new Vector3(0,0,0);
 			Helper.SetActive(obj, false);

@@ -9,23 +9,42 @@ public class HUD : MonoBehaviour
 	//public Transform handPrefab;
 	
 	private RingWaveManager ringWaveManager;
+	private GameObject indicatorSketch;
 
 	void Awake() { globalInstance = this; }
 	public static HUD Instance { get { return globalInstance; } }
-	
+
 	void Start ()
 	{
-		/*Vector3 pos = transform.localPosition;
-		pos.z += 1f;
-		transform.localPosition = pos;*/
-		
 		ringWaveManager = GetComponent<RingWaveManager>();
+		
+		GameObject obj = new GameObject();
+		obj.AddComponent<IndicatorSketch>();
+		obj.transform.parent = this.transform;
+		indicatorSketch = obj;
+		Helper.SetActive(indicatorSketch, false);
 	}
 	
 	void Update ()
 	{
 		if(Input.GetKeyDown(KeyCode.W))
+		{
 			ringWaveManager.SpawnSeries(0,0,2);
+		}
+		if(Input.GetKeyDown(KeyCode.I))
+		{
+			indicatorSketch.GetComponent<IndicatorSketch>().Spawn(
+				new Vector3(0,-30,0), new Vector3(90,30,0), -12);
+		}
 	}
 
 }
+
+
+
+
+
+
+
+
+

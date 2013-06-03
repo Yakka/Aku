@@ -21,7 +21,7 @@ public class RingWave : MonoBehaviour
 	
 	void Start ()
 	{
-		color = new Color(0.4f,0.4f,0.4f,0);
+		color = new Color(0.3f,0.3f,0.3f,0);
 	}
 	
 	void UpdateVertices(float k)
@@ -42,6 +42,7 @@ public class RingWave : MonoBehaviour
 		float t = 0;
 		float t_step = 2f * Mathf.PI / (float)(NB_VERTICES);
 		
+		// Note : there is actually one more vertice in order to loop the line
 		for (int i = 0; i <= NB_VERTICES; ++i)
 		{
 			pos.x = center.x + r * Mathf.Cos(t);
