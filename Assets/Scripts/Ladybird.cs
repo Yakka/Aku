@@ -55,7 +55,6 @@ public class Ladybird : MonoBehaviour
 		
 		originalRotation = transform.rotation;
 		//index = 15;
-		
 		//DEBUG
 		//index = 10;
 	}
@@ -207,10 +206,39 @@ public class Ladybird : MonoBehaviour
 			case "LadyBirdTriggerBabyFace1":
 			case "LadyBirdTriggerWomanFace1":
 			case "LadyBirdTriggerOldmanFace1":
+				transform.position = new Vector3
+					(transform.position.x,
+					transform.position.y,
+					-11);
 				if(!targets[index].IsHiddenPaintingTrigger())
 				{
 					next = true;
 				}
+				break;
+			//
+			// The ladybird stays on the face until it's painted 
+			// 
+			case "LadyBirdTriggerBabyFace2":
+			case "LadyBirdTriggerWomanFace2":
+			case "LadyBirdTriggerOldmanFace2":
+				if(!targets[index].IsHiddenPaintingTrigger())
+				{
+					for(int i = 0; i < targets.Length; i++)
+					{
+						if(targets[i].name == "LadyBirdTriggerPetrol")
+						{
+							index = i;
+							animation.Play("takeOff");
+							state = STATE_MOVING;
+							break;
+						}
+					}
+				}
+				break;
+			//
+			// The ladybird is kidnapeed by hornets
+			//
+			case "LadyBirdTriggerPetrol":
 				break;
 			//
 			// The ladybird comes back to the moon if stars are not at the right position
@@ -219,35 +247,39 @@ public class Ladybird : MonoBehaviour
 			case "LadyBirdTriggerBlueStar":
 			case "LadyBirdTriggerRedStar":
 			case "LadyBirdTriggerYellowStar":
-				string nextName = "";
+				//string nextName = "";
 				bool wrongPosition = true;
 				foreach(SwappableStar star in stars)
 				{
-					if(star.IsAtGoodPosition())
+					if(star.IsAtGoodPosition() && wrongPosition)
 					{
 						wrongPosition = false;
-						switch(targets[index].name)
+						switch(star.positionID)
 						{
-						case "LadyBirdTriggerBlueStar":
-							nextName = "LadyBirdTriggerOldmanFace2";
+							// TOFIX DIRTY CODE
+						case 0:
+							//nextName = "LadybirdTriggerFaceWoman2";
+							index = 14; // DIRTY
 							break;
-						case "LadyBirdTriggerRedStar":
-							nextName = "LadyBirdTriggerWomanFace2";
+						case 1:
+							//nextName = "LadyBirdTriggerFaceOldman2";
+							index = 15; // DIRTY
 							break;
-						case "LadyBirdTriggerYellowStar":
-							nextName = "LadyBirdTriggerBabyFace2";
+						case 2:
+							//nextName = "LadyBirdTriggerFaceBaby2";
+							index = 13; // DIRTY
 							break;
 						}
-						for(int i = 0; i < targets.Length; i++)
+						/*for(int i = 0; i < targets.Length; i++)
 						{
-							if(targets[i].name == nextName)
+							if(targets[i].name.Equals(nextName))
 							{
 								index = i;
 								animation.Play("takeOff");
 								state = STATE_MOVING;
 								break;
 							}
-						}
+						}*/
 						break;
 					}
 				}
