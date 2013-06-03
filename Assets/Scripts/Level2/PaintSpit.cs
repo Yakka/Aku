@@ -9,11 +9,14 @@ public class PaintSpit : MonoBehaviour
 	private Vector3 vel;
 	private Vector3 pos;
 	private PainterBehavior pb;
-	private sbyte channel = -1; // Optionnal parameter for level 2
 	
 	void Start ()
 	{
 		pb = GetComponent<PainterBehavior>();
+		if(pb == null)
+		{
+			Debug.LogError(name + ": I need PainterBehavior.cs !");
+		}
 		pb.affectedByClouds = false;
 		
 		// Scale variations
@@ -65,14 +68,14 @@ public class PaintSpit : MonoBehaviour
 	
 	/// <summary>
 	/// Specific to the 2nd level of Aku.
-	/// Gets or sets the associated channel of the paint, in order to 
+	/// Gets the associated channel of the paint, in order to 
 	/// know to which character the color is associated to.
 	/// Its value is in [-1, 2], where -1 means no channel
 	/// </summary>
 	/// <value>The channel index in [-1, 2], where -1 means no channel</value>
-	public sbyte Channel
+	public int Channel
 	{
-		get { return channel; }
+		get { return pb.ColorIndex; }
 		//set { channel = (sbyte)Mathf.Clamp(value, -1, 2); }
 	}
 

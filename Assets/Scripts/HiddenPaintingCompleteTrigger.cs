@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class HiddenPaintingCompleteTrigger : MonoBehaviour 
 {
-	public float completeThreshold = 0.8f;
+	public float completeThreshold = 0.9f;
 	public int channel = 0;
 	public GameObject objectToEnable;
 	
@@ -24,6 +24,12 @@ public class HiddenPaintingCompleteTrigger : MonoBehaviour
 		{
 			Debug.LogError("You must set a target to HiddenPaintingCompleteTrigger !");
 		}
+		
+		// If a PaintSpitter is attached to the game object,
+		// make thresholds match
+		PaintSpitter ps = GetComponent<PaintSpitter>();
+		if(ps != null)
+			completeThreshold = ps.startThreshold;
 	}
 	
 	void Update ()
@@ -33,7 +39,8 @@ public class HiddenPaintingCompleteTrigger : MonoBehaviour
 
 		if(hiddenPaintingRef.GetRevealRatio(channel) > completeThreshold)
 		{
-			objectToEnable.active = true;
+			Helper.SetActive(objectToEnable, true);
+
 			triggered = true;
 			switch(Level.Get.levelID)
 			{

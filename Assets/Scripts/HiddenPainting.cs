@@ -24,10 +24,12 @@ public class HiddenPainting : MonoBehaviour
 	public bool countPixels; // If set to true, enables pixel counting
 	public int divSize = 4; // In pixels / division
 	
-	// To remind which divisions have been revealed :
-	// -2 : the division is not relevant,
-	// -1 : can be revealed but is not,
-	// >0 : revealed, and matches the corresponding channel index
+	// To remind which divisions have been revealed.
+	// 8 lowest bits of a reveal cell :
+	// 0aaabccc
+	// a: can be revealed (b, g, r)
+	// c: 1 if not revealed at all
+	// b: revealed channel [0,7]
 	private int[,] revealMatrix;
 	private int revealMatrixW;
 	private int revealMatrixH;
@@ -35,6 +37,10 @@ public class HiddenPainting : MonoBehaviour
 	private int[] divCount; // Count of relevant divisions in the texture, per channel
 	private int[] checkedDivsCount; // How many divisions have been revealed
 	
+	// Debug
+	private Texture2D debugRevealViz = null;
+	private bool debugRevealVizModified = false;
+
 	#endregion
 	
 	//=========================================
@@ -62,7 +68,12 @@ public class HiddenPainting : MonoBehaviour
 		divX = texX / divSize;
 		divY = texY / divSize;
 	}
-	
+		
+	private static bool DecodeRevealable(int code, int channel)
+	{
+		return (code & (16 << channel)) != 0;
+	}
+		
 	private void BuildRevealMatrix()
 	{
 		Debug.Log("Building reveal matrix for " + gameObject.name);
@@ -88,8 +99,9 @@ public class HiddenPainting : MonoBehaviour
 			{
 				// Count relevant pixels in the division
 				
-				for(int i = 0; i < divRelevantPixels.Length; ++i)
-					divRelevantPixels[i] = 0;
+				divRelevantPixels[0] = 0;
+				divRelevantPixels[1] = 0;
+				divRelevantPixels[2] = 0;
 				
 				x0 = divX * divSize;
 				y0 = divY * divSize;
@@ -101,25 +113,33 @@ public class HiddenPainting : MonoBehaviour
 					{
 						// Count relevant pixels from the 3 channels :
 						Color pix = texture.GetPixel(x0+x, y0+y);
-						divRelevantPixels[0] += pix.r > tolerance ? 1 : 0;
-						divRelevantPixels[1] += pix.g > tolerance ? 1 : 0;
-						divRelevantPixels[2] += pix.b > tolerance ? 1 : 0;
-					} 
+						if(pix.r > tolerance)
+							++divRelevantPixels[0];
+						if(pix.g > tolerance)
+							++divRelevantPixels[1];
+						if(pix.b > tolerance)
+							++divRelevantPixels[2];
+					}
 				}
 				
 				// If at least 1 pixel is relevant in the div, the div will be counted
-				divCount[0] += divRelevantPixels[0] >= relevanceThreshold ? 1 : 0;
-				divCount[1] += divRelevantPixels[1] >= relevanceThreshold ? 1 : 0;
-				divCount[2] += divRelevantPixels[2] >= relevanceThreshold ? 1 : 0;
-				
-				if(divRelevantPixels[0] < relevanceThreshold 
-					&& divRelevantPixels[1] < relevanceThreshold 
-					&& divRelevantPixels[2] < relevanceThreshold)
+				int code = 8; // (0b1000)
+				if(divRelevantPixels[0] >= relevanceThreshold)
 				{
-					revealMatrix[divX, divY] = -2; // Not revealable
+					code |= 16; // R channel is revealable
+					++divCount[0];
 				}
-				else
-					revealMatrix[divX, divY] = -1; // Revealable but not revealed yet
+				if(divRelevantPixels[1] >= relevanceThreshold)
+				{
+					code |= 32; // G channel is revealable
+					++divCount[1];
+				}
+				if(divRelevantPixels[2] >= relevanceThreshold)
+				{
+					code |= 64; // B channel is revealable
+					++divCount[2];
+				}
+				revealMatrix[divX, divY] = code;
 			}
 		}
 		
@@ -168,46 +188,104 @@ public class HiddenPainting : MonoBehaviour
 	}
 	
 	private void CheckRevealDivCoords(int divX, int divY, int channel)
-	{
-		int oldChannel = revealMatrix[divX, divY];
+	{	
+		int code = revealMatrix[divX, divY];
+		bool revealable = true;
+		if(channel == 2)
+			revealable = (code & 64) != 0; // B
+		else if(channel == 1)
+			revealable = (code & 32) != 0; // G
+		else
+			revealable = (code & 16) != 0; // R
+		int oldChannel = (code & 8)!=0 ? -1 : code & 7;
 		
-		// If the division can be revealed and has a different channel
-		if(oldChannel != -2 && oldChannel != channel)
+		// If the division can be revealed and has not been revealed in this channel
+		if(revealable && oldChannel != channel)
 		{
-			if(oldChannel != -1) 
+			if(oldChannel != -1) // If another channel was already revealed
 			{
+				// Decrease reveal count in it
 				--checkedDivsCount[oldChannel];
 			}
-			if(channel != -1)
+			
+			// Assign new channel
+			code = code & (~15); // Clear 4 lower bits
+			if(channel >= 0) // If the new channel is a reveal
 			{
+				// Increase reveal in it
 				++checkedDivsCount[channel];
+				code |= channel; // Set channel index
 			}
-			revealMatrix[divX, divY] = channel;
+			
+			revealMatrix[divX,divY] = code;
+			
+			#region "Debug"
+			
+			if(debug && Settings.debugMode)
+			{
+				if(debugRevealViz == null)
+				{
+					debugRevealViz = new Texture2D(revealMatrixW, revealMatrixH);
+					for(int y = 0; y < debugRevealViz.height; ++y)
+					{
+						for(int x = 0; x < debugRevealViz.width; ++x)
+						{
+							debugRevealViz.SetPixel(x, y, 
+								(revealMatrix[x,y] & (7<<4)) != 0 ? 
+									Color.black : Color.grey);
+						}
+					}
+				}
+				debugRevealVizModified = true;
+				Color clr = debugRevealViz.GetPixel(divX, divY);
+				if(channel >= 0)
+				{
+					if(channel == 2)
+						clr.b = 1f;
+					else if(channel == 1)
+						clr.g = 1f;
+					else
+						clr.r = 1f;
+					debugRevealViz.SetPixel(divX, divY, clr);
+				}
+				else
+				{
+					if(channel == 2)
+						clr.b = 0;
+					else if(channel == 1)
+						clr.g = 0;
+					else
+						clr.r = 0;
+					debugRevealViz.SetPixel(divX, divY, clr);
+				}
+			}
+			
+			#endregion
 		}
 	}
 	
 	public void CheckRevealZone(float centerWorldX, float centerWorldY, float radius, int channel)
 	{
-		if(countPixels)
+		if(!countPixels)
+			return;
+		
+		int minDivX, minDivY, maxDivX, maxDivY;
+		float f = 0.75f; // A square is used instead of a circle. It's faster and easier.
+		WorldToDivCoords(centerWorldX-f*radius, centerWorldY-f*radius, out minDivX, out minDivY);
+		WorldToDivCoords(centerWorldX+f*radius, centerWorldY+f*radius, out maxDivX, out maxDivY);
+		//Debug.Log("CheckRevealZone " + minDivX + ", " + minDivY + ", " + maxDivX + ", " + maxDivY);
+		
+		minDivX = Mathf.Clamp(minDivX, 0, revealMatrixW-1);
+		minDivY = Mathf.Clamp(minDivY, 0, revealMatrixH-1);
+		maxDivX = Mathf.Clamp(maxDivX, 0, revealMatrixW-1);
+		maxDivY = Mathf.Clamp(maxDivY, 0, revealMatrixH-1);
+		
+		// Check everything that is in the square
+		for(int y = minDivY; y <= maxDivY; ++y)
 		{
-			int minDivX, minDivY, maxDivX, maxDivY;
-			float f = 0.75f; // A square is used instead of a circle. It's faster and easier.
-			WorldToDivCoords(centerWorldX-f*radius, centerWorldY-f*radius, out minDivX, out minDivY);
-			WorldToDivCoords(centerWorldX+f*radius, centerWorldY+f*radius, out maxDivX, out maxDivY);
-			//Debug.Log("CheckRevealZone " + minDivX + ", " + minDivY + ", " + maxDivX + ", " + maxDivY);
-			
-			minDivX = Mathf.Clamp(minDivX, 0, revealMatrixW-1);
-			minDivY = Mathf.Clamp(minDivY, 0, revealMatrixH-1);
-			maxDivX = Mathf.Clamp(maxDivX, 0, revealMatrixW-1);
-			maxDivY = Mathf.Clamp(maxDivY, 0, revealMatrixH-1);
-			
-			// Check everything that is in the square
-			for(int y = minDivY; y <= maxDivY; ++y)
+			for(int x = minDivX; x <= maxDivX; ++x)
 			{
-				for(int x = minDivX; x <= maxDivX; ++x)
-				{
-					CheckRevealDivCoords(x, y, channel);
-				}
+				CheckRevealDivCoords(x, y, channel);
 			}
 		}
 	}
@@ -357,6 +435,20 @@ public class HiddenPainting : MonoBehaviour
 					+ b + "/" + tb + ", "
 					+ c + "/" + tc, 
 					Settings.debugGuiStyle);
+				
+				if(debugRevealViz != null)
+				{
+					if(debugRevealVizModified)
+					{
+						debugRevealViz.Apply();
+						debugRevealVizModified = false;
+					}
+					GUI.DrawTexture(
+						new Rect(200, 0, 
+							debugRevealViz.width,
+							debugRevealViz.height),
+						debugRevealViz);
+				}
 			}
 		}
 	}

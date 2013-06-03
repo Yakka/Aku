@@ -60,12 +60,14 @@ Shader "Custom/TriPaintReveal" {
 				// Get difference between hidden and visible world colors
 				// Note : src may exclusively be composed of R xor G xor B.
 				half4 tmp = src - mask;
+				//half4 tmp = mask - src;
 				
 				// Map final color
 				half4 o = _Color1*src.r + _Color2*src.g + _Color3*src.b;
 				
 				// Hide stuff
 				o.a = src.a * max(tmp.r, max(tmp.g, tmp.b));
+				//o.a = 0.5*src.a*(1.0 + max(tmp.r, max(tmp.g, tmp.b)));
 				
 				return o;
 			}

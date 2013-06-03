@@ -62,11 +62,11 @@ public class Level : MonoBehaviour
 		//
 		
 		ArrayList nonTileChildren = new ArrayList();
-		for(int i = 0; i < transform.childCount; i++)
+		for(int i = 0; i < transform.childCount; ++i)
 		{
 			GameObject obj = transform.GetChild(i).gameObject;
-			if(obj.active)
-				nonTileChildren.Add(obj);
+			//if(obj.active)
+			nonTileChildren.Add(obj);
 		}
 		
 		//

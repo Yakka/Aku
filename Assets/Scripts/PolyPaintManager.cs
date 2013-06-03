@@ -11,11 +11,8 @@ public class PolyPaintManager : MonoBehaviour
 	private static PolyPaintManager globalInstance;
 	
 	public GameObject[] projectionPrefab;
-//	public GameObject[] projectionPrefabLV2;
 	public GameObject[] dripPrefab;
-//	public GameObject[] dripPrefabLV2;
 	public GameObject[] splashPrefab;
-//	public GameObject[] splashPrefabLV2;
 	public Material monoPixelPaintMaterial;
 	public Material triPixelPaintMaterial; // Reveal material used in level 2
 	public AnimationCurve decreaseCurve; // Paint intensity from its charge
@@ -241,16 +238,6 @@ public class PolyPaintManager : MonoBehaviour
 			Debug.LogError(name + ": drip prefab(s) are not defined !");
 		if(splashPrefab.Length == 0 || splashPrefab[0] == null)
 			Debug.LogError(name + ": splash prefab(s) are not defined !");
-		
-//		if(Level.Get.levelID == 2)
-//		{
-//			if(projectionPrefabLV2.Length == 0 || projectionPrefabLV2[0] == null)
-//				Debug.LogError(name + ": projection prefab(s) are not defined !");
-//			if(dripPrefabLV2.Length == 0 || dripPrefabLV2[0] == null)
-//				Debug.LogError(name + ": drip prefab(s) are not defined !");
-//			if(splashPrefabLV2.Length == 0 || splashPrefabLV2[0] == null)
-//				Debug.LogError(name + ": splash prefab(s) are not defined !");
-//		}
 
 		if(monoPixelPaintMaterial == null)
 			Debug.LogError(name + ": pixelPaintMaterial is not defined !");
