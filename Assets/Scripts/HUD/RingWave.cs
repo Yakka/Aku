@@ -8,7 +8,7 @@ public class RingWave : MonoBehaviour
 	private const float DURATION = 1f;
 	private const float RADIUS_MIN = 10f;
 	private const float RADIUS_MAX = 40f;
-	private const float THICKNESS = 4f;
+	private const float THICKNESS = 3f;
 	
 	private LineRenderer lineRenderer;
 	private float startTime = -1;
@@ -57,6 +57,11 @@ public class RingWave : MonoBehaviour
 	
 	public void Spawn(float x, float y)
 	{
+		Vector3 pos = transform.localPosition;
+		pos.x = x;
+		pos.y = y;
+		transform.localPosition = pos;
+		
 		Helper.SetActive(gameObject, true);
 		startTime = Time.time;
 		UpdateVertices(0);

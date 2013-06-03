@@ -9,7 +9,10 @@ public class HUD : MonoBehaviour
 	//public Transform handPrefab;
 	
 	private RingWaveManager ringWaveManager;
-	private GameObject indicatorSketch;
+	private GameObject indicatorSketchObj;
+	private IndicatorSketch indicatorSketch;	
+	private TouchController touchControllerRef;
+	private float assistTouchTime;
 
 	void Awake() { globalInstance = this; }
 	public static HUD Instance { get { return globalInstance; } }
@@ -18,23 +21,53 @@ public class HUD : MonoBehaviour
 	{
 		ringWaveManager = GetComponent<RingWaveManager>();
 		
-		GameObject obj = new GameObject();
-		obj.AddComponent<IndicatorSketch>();
-		obj.transform.parent = this.transform;
-		indicatorSketch = obj;
-		Helper.SetActive(indicatorSketch, false);
+		indicatorSketchObj = new GameObject();
+		indicatorSketchObj.AddComponent<IndicatorSketch>();
+		indicatorSketchObj.transform.parent = this.transform;
+		Helper.SetActive(indicatorSketchObj, false);		
+		indicatorSketch = indicatorSketchObj.GetComponent<IndicatorSketch>();
+		
+		GameObject tco = GameObject.Find("TouchController");
+		if(tco != null)
+		{
+			touchControllerRef = tco.GetComponent<TouchController>();
+		}
+		if(touchControllerRef == null)
+		{
+			Debug.LogError(name + ": Couldn't locate TouchController !");
+		}
 	}
 	
 	void Update ()
 	{
-		if(Input.GetKeyDown(KeyCode.W))
+		if(touchControllerRef != null)
 		{
-			ringWaveManager.SpawnSeries(0,0,2);
+			// If the gamer didn't touched anything for the first time or missed something
+			if(!touchControllerRef.EverPressed 
+				&& Time.time - touchControllerRef.EndTime > 10f
+				&& Time.time - assistTouchTime > 7f)
+			{
+				// Indicate that he can !
+				ringWaveManager.SpawnSeries(0,-30, 2); // Two circle waves
+				indicatorSketch.Spawn(
+					new Vector3(0,-30,0), 
+					new Vector3(90,30,0), -12); // A curve from left to up-right
+				assistTouchTime = Time.time;
+			}
 		}
-		if(Input.GetKeyDown(KeyCode.I))
+		
+		if(!Settings.onTablet)
 		{
-			indicatorSketch.GetComponent<IndicatorSketch>().Spawn(
-				new Vector3(0,-30,0), new Vector3(90,30,0), -12);
+			if(Input.GetKeyDown(KeyCode.W))
+			{
+				ringWaveManager.SpawnSeries(0,0,2);
+			}
+			if(Input.GetKeyDown(KeyCode.I))
+			{
+				indicatorSketch.Spawn(
+					new Vector3(0,-30,0), 
+					new Vector3(90,30,0), -12);
+			}
 		}
 	}
 
