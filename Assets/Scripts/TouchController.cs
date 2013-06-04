@@ -26,6 +26,7 @@ public class TouchController : MonoBehaviour
 	private Vector3 lastFramePos;
 	
 	private bool pressing; // Indicates that the player touches the screen
+	private bool everPressed;
 	
 	//private bool pointed; // Indicates that OnPoint() has been called for the current touch
 	
@@ -52,6 +53,8 @@ public class TouchController : MonoBehaviour
 		// If we are touching the screen
 		if(pressing)
 		{
+			everPressed = true;
+			
 			// Get touch position
 			Vector2 touchPos = new Vector2();
 			if(Settings.onTablet) {
@@ -249,6 +252,21 @@ public class TouchController : MonoBehaviour
 	public bool IsPressing()
 	{
 		return pressing;
+	}
+	
+	public float EndTime
+	{
+		get { return endTime; }
+	}
+	
+	public float BeginTime
+	{
+		get { return beginTime; }
+	}
+	
+	public bool EverPressed
+	{
+		get { return everPressed; }
 	}
 	
 }
