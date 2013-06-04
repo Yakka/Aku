@@ -17,6 +17,7 @@ public class FlyingStar : MonoBehaviour
 			Debug.LogError(name + ": I need a final target !");
 		if(objectToEnable == null)
 			objectToEnable = finalTarget.gameObject;
+		SoundLevel2.Instance.birthFlyingStar(this.gameObject);
 	}
 	
 	void Update ()
@@ -41,6 +42,7 @@ public class FlyingStar : MonoBehaviour
 				if(objectToEnable != null)
 				{
 					Helper.SetActive(objectToEnable, true);
+					SoundLevel2.Instance.registerStar(objectToEnable);
 //					HaloBehaviour halo = objectToEnable.GetComponent<HaloBehaviour>();
 //					if(halo != null)
 //						halo.Blink();

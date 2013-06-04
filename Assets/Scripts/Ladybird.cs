@@ -105,15 +105,13 @@ public class Ladybird : MonoBehaviour
 			{
 				animation.Play ("takeOff");
 				Disturb();
-				if(!Settings.trailerMode)
-					CommonSounds.Instance.LadybirdMoving();
 			}
 			else if(triggered)
 			{
 				nextSearch = Time.time + MAX_WAITING;
 				Disturb();
 			}
-			else if(Time.time > nextSearch && !Settings.trailerMode && index != 16) //Dirty
+			else if(Time.time > nextSearch && !Settings.trailerMode && index != 13) //Dirty
 			{
 				state = STATE_SEARCHING;
 				animation.Play ("takeOff");
@@ -138,7 +136,7 @@ public class Ladybird : MonoBehaviour
 			else
 			{
 				// MICHELE : SON DE COCCINELLE QUI APPELLE LE JOUEUR
-				Debug.Log("Appel de la scarinelle");
+				//Debug.Log("Appel de la scarinelle");
 				CommonSounds.Instance.LadybirdCall();
 				state = STATE_MOVING;
 			}
@@ -252,7 +250,7 @@ public class Ladybird : MonoBehaviour
 			case "LadyBirdTriggerBlueStar":
 			case "LadyBirdTriggerRedStar":
 			case "LadyBirdTriggerYellowStar":
-				//string nextName = "";
+				string nextName = "";
 				bool wrongPosition = true;
 				foreach(SwappableStar star in stars)
 				{
@@ -263,19 +261,19 @@ public class Ladybird : MonoBehaviour
 						{
 							// TOFIX DIRTY CODE
 						case 0:
-							//nextName = "LadybirdTriggerFaceWoman2";
-							index = 14; // DIRTY
+							nextName = "LadybirdTriggerFaceWoman2";
+							//index = 14; // DIRTY
 							break;
 						case 1:
-							//nextName = "LadyBirdTriggerFaceOldman2";
-							index = 15; // DIRTY
+							nextName = "LadyBirdTriggerFaceOldman2";
+							//index = 15; // DIRTY
 							break;
 						case 2:
-							//nextName = "LadyBirdTriggerFaceBaby2";
-							index = 13; // DIRTY
+							nextName = "LadyBirdTriggerFaceBaby2";
+							//index = 13; // DIRTY
 							break;
 						}
-						/*for(int i = 0; i < targets.Length; i++)
+						for(int i = 0; i < targets.Length; i++)
 						{
 							if(targets[i].name.Equals(nextName))
 							{
@@ -284,7 +282,7 @@ public class Ladybird : MonoBehaviour
 								state = STATE_MOVING;
 								break;
 							}
-						}*/
+						}
 						break;
 					}
 				}
@@ -340,7 +338,7 @@ public class Ladybird : MonoBehaviour
 			}
 			
 			// TOFIX DIRTY CODE
-			if(index == 16)
+			if(index == 13)
 				renderer.enabled = false;
 			animation.Play("takeOff");
 			state = STATE_MOVING;
