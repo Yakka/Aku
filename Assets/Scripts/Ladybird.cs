@@ -111,7 +111,7 @@ public class Ladybird : MonoBehaviour
 				nextSearch = Time.time + MAX_WAITING;
 				Disturb();
 			}
-			else if(Time.time > nextSearch && !Settings.trailerMode)
+			else if(Time.time > nextSearch && !Settings.trailerMode && index != 16) //Dirty
 			{
 				state = STATE_SEARCHING;
 				animation.Play ("takeOff");
