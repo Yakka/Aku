@@ -139,6 +139,8 @@ public class Ladybird : MonoBehaviour
 			else
 			{
 				// MICHELE : SON DE COCCINELLE QUI APPELLE LE JOUEUR
+				Debug.Log("Appel de la scarinelle");
+				CommonSounds.Instance.LadybirdCall();
 				state = STATE_MOVING;
 			}
 			break;
