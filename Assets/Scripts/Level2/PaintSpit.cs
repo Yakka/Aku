@@ -38,7 +38,7 @@ public class PaintSpit : MonoBehaviour
 		if(pb.ColorLevel < 0.001f || Level.Get.IsWater(pos.x, pos.y))
 		{
 			//Debug.Log("PaintSpit ended : " + ppb.ColorLevel + ", " + Level.Get.IsWater(pos.x, pos.y));
-			gameObject.active = false;
+			Helper.SetActive(gameObject, false);
 		}
 	}
 	
@@ -50,19 +50,22 @@ public class PaintSpit : MonoBehaviour
 			pb = GetComponent<PainterBehavior>();
 		}
 		
-		pb.SetColor(channel, true);
-		pb.ColorLevel = 1;
-		//ppb.distanceAutonomy = DISTANCE_AUTONOMY;
 		vel = newVel;
 		pos = newPos;
 		transform.position = pos;
+		
+		// Note : recharge after setting position because otherwise the 
+		// distance autonomy may be dramatically affected on next frame
+		// (See pb.ColorLevel implementation).
+		pb.SetColor(channel, true);
+		pb.ColorLevel = 1; 
 	}
 	
 	void OnTriggerEnter(Collider other)
 	{
 		if(other.name == "PetrolBall")
 		{
-			gameObject.active = false;
+			Helper.SetActive(gameObject, false);
 		}
 	}
 	
