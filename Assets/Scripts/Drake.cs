@@ -481,8 +481,8 @@ public class Drake : MonoBehaviour
 			{
 				DoPaintSplash();
 				splashTriggerTime = Time.time;
-				/*if(!Settings.trailerMode)
-					CommonSounds.Instance.playSplash();*/ //michele
+				if(!Settings.trailerMode)
+					CommonSounds.Instance.playSplash(); //michele
 			}
 		}
 		else
@@ -636,9 +636,10 @@ public class Drake : MonoBehaviour
 	
 	void OnTriggerEnter (Collider other)
 	{
-		if (other.GetComponent<Cloud>() != null) 
+		Cloud cloud = other.GetComponent<Cloud>();
+		if (cloud != null) 
 		{
-			OnCloudEnter ();
+			OnCloudEnter (cloud);
 		}
 		if(other.name == "PetrolBall")
 		{
@@ -674,13 +675,13 @@ public class Drake : MonoBehaviour
 		}
 	}
 	
-	void OnCloudEnter()
+	void OnCloudEnter(Cloud cloud)
 	{
 		//Debug.Log ("Cloud enter");
 		switch(Level.Get.levelID)
 		{
 		case 2:
-			SoundLevel2.Instance.CloudEnter();
+			SoundLevel2.Instance.CloudEnter(cloud);
 			break;
 		default:
 			break;

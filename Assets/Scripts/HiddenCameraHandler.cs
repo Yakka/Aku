@@ -12,7 +12,7 @@ public class HiddenCameraHandler : MonoBehaviour
 {
 	public RenderTexture renderTarget;
 	
-	void Awake()
+	void Start()
 	{
 		if(camera == null)
 		{
@@ -22,7 +22,8 @@ public class HiddenCameraHandler : MonoBehaviour
 		// Do not use this because it copies everything, not only what we need
 		//camera.CopyFrom(Camera.mainCamera);
 		
-		renderTarget = new RenderTexture((int)camera.pixelWidth, (int)camera.pixelHeight, 16);
+		//renderTarget = new RenderTexture((int)camera.pixelWidth, (int)camera.pixelHeight, 16);
+		renderTarget = new RenderTexture(Screen.width, Screen.height, 16);
 		
 		int mask = LayerMask.NameToLayer("HiddenPainting");
 		//Debug.Log("HiddenPainting layer: " + mask);
@@ -41,6 +42,17 @@ public class HiddenCameraHandler : MonoBehaviour
 		// This camera is sticked to the main camera
 		transform.position = Camera.mainCamera.transform.position;
 		camera.orthographicSize = Camera.mainCamera.orthographicSize;
+	}
+	
+	void OnGUI()
+	{
+		if(Settings.debugMode)
+		{
+			GUI.Label(new Rect(16, 120, 256, 32), 
+				"Hidden world renderTexture size : " + renderTarget.width + ", " + renderTarget.height,
+				Settings.debugGuiStyle);			
+			
+		}
 	}
 
 //	void OnPostRender()

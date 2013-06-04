@@ -30,7 +30,7 @@ public class HaloBehaviour : MonoBehaviour
 	
 	public void SetON(bool v)
 	{
-		Debug.Log("Commute " + on + " -> " + v);
+		//Debug.Log("Commute " + on + " -> " + v);
 		if(on ^ v)
 		{
 			commuteTime = Time.time;
