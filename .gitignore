@@ -22,9 +22,5 @@ Assets/Plugins
 .DS_Store
 Assets/AK
 Assets/StreamingAssets
-Assets/Scripts/Sound/CommonSounds.cs
-Assets/Scripts/Sound/SoundLevel0.cs
-Assets/Scripts/Sound/SoundLevel1.cs
-Assets/Scripts/Sound/SoundLevel2.cs
-Assets/Scripts/Sound/Mute.cs
+Assets/Scripts/Sound
 PostprocessBuildPlayer_Unsupported build target!.log
