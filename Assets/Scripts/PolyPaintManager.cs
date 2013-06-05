@@ -13,13 +13,16 @@ public class PolyPaintManager : MonoBehaviour
 	public GameObject[] projectionPrefab;
 	public GameObject[] dripPrefab;
 	public GameObject[] splashPrefab;
+	public Material monoPolyPaintMaterial;
+	public Material triPolyPaintMaterial;
 	public Material monoPixelPaintMaterial;
 	public Material triPixelPaintMaterial; // Reveal material used in level 2
 	public AnimationCurve decreaseCurve; // Paint intensity from its charge
-	private List<PolyPaint> animatedPaints = new List<PolyPaint>();
+	private List<PolyPaintQuad> animatedPaints = new List<PolyPaintQuad>();
 	public Color[] indexedColors; // All paint colors used in the level
 	
 	private float z;
+	public float offZ = 0;
 	
 	void Awake()
 	{
@@ -56,6 +59,12 @@ public class PolyPaintManager : MonoBehaviour
 		}
 	}
 	
+	public float GetNextZ()
+	{
+		offZ += 0.000001f;
+		return offZ;
+	}
+
 	private static void SwitchPrefabsMaterial(GameObject[] prefabs, Material mat)
 	{
 		for(int i = 0; i < prefabs.Length; ++i)
@@ -92,6 +101,17 @@ public class PolyPaintManager : MonoBehaviour
 		}
 	}
 	
+	public Material PolyPaintMaterial
+	{
+		get
+		{
+			if(Level.Get.levelID == 2)
+				return triPolyPaintMaterial;
+			else
+				return monoPolyPaintMaterial;
+		}
+	}
+
 	public Color ColorFromIndex(int index)
 	{
 		if(Level.Get.levelID == 2)
@@ -120,7 +140,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	public void SpawnCloudProjection(Color color, float x, float y, float angleDeg)
 	{
-		Vector3 pos = new Vector3(x, y, z);
+		Vector3 pos = new Vector3(x, y, z-GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(projectionPrefab),
 			pos, Quaternion.Euler(0,0,angleDeg)) as GameObject;
@@ -136,7 +156,7 @@ public class PolyPaintManager : MonoBehaviour
 		pos.y -= r*Mathf.Sin(angleDeg * Mathf.Deg2Rad);
 		obj.transform.position = pos;
 		
-		PolyPaint pp = new PolyPaint(obj, color, 0.25f);
+		PolyPaintQuad pp = new PolyPaintQuad(obj, color, 0.25f);
 		animatedPaints.Add(pp);
 		
 		// Cloud projection don't check revelations (maybe it should?)
@@ -149,7 +169,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	public void SpawnDrip(Color color, float x, float y)
 	{
-		Vector3 pos = new Vector3(x, y, z);
+		Vector3 pos = new Vector3(x, y, z-GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(dripPrefab),
 			pos, Quaternion.Euler(0,0,Random.Range(-180, 180))) as GameObject;
@@ -188,7 +208,7 @@ public class PolyPaintManager : MonoBehaviour
 			color = ColorFromIndex(colorIndex);
 		}
 		
-		Vector3 pos = new Vector3(x, y, z);
+		Vector3 pos = new Vector3(x, y, z-GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(splashPrefab),
 			pos, Quaternion.Euler(0,0,Random.Range(-180, 180))) as GameObject;
@@ -201,7 +221,7 @@ public class PolyPaintManager : MonoBehaviour
 		obj.name = "PolyPaint_splash";
 		obj.active = true; // Needed when prefabs are inactive modified clones instead
 		
-		PolyPaint pp = new PolyPaint(obj, color, 0.25f);
+		PolyPaintQuad pp = new PolyPaintQuad(obj, color, 0.25f);
 		animatedPaints.Add(pp);
 		
 		// Check revealed parts on hidden paintings
@@ -224,7 +244,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	void Update()
 	{
-		foreach(PolyPaint pp in animatedPaints)
+		foreach(PolyPaintQuad pp in animatedPaints)
 		{
 			pp.Update();
 		}
@@ -239,6 +259,10 @@ public class PolyPaintManager : MonoBehaviour
 		if(splashPrefab.Length == 0 || splashPrefab[0] == null)
 			Debug.LogError(name + ": splash prefab(s) are not defined !");
 
+		if(monoPolyPaintMaterial == null)
+			Debug.LogError(name + ": polyPaintMaterial is not defined !");
+		if(triPolyPaintMaterial == null)
+			Debug.LogError(name + ": triPolyPaintMaterial is not defined !");
 		if(monoPixelPaintMaterial == null)
 			Debug.LogError(name + ": pixelPaintMaterial is not defined !");
 		if(triPixelPaintMaterial == null)

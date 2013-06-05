@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// This controls the lifetime of a ponctual painting using polygons.
 /// </summary>
-public class PolyPaint 
+public class PolyPaintQuad 
 {
 	private const float INITIAL_SPREAD = 0.8f;
 	
@@ -26,7 +26,7 @@ public class PolyPaint
 	private float startTime;
 	private float finalScale;
 	
-	public PolyPaint(GameObject obj, Color color, float spreadTime)
+	public PolyPaintQuad(GameObject obj, Color color, float spreadTime)
 	{		
 		gameObject = obj;
 		startTime = Time.time;

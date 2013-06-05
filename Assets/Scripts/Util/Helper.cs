@@ -36,6 +36,22 @@ public class Helper
 		return 0;
 	}
 	
+	public static float AngleRad(float x, float y)
+	{
+		float d = Mathf.Sqrt(x*x + y*y);
+		return Mathf.Atan2(y/d, x/d);
+	}
+	
+	public static float DeltaAngleRad(float current, float target)
+	{
+		float num = Mathf.Repeat (target - current, 2f*Mathf.PI);
+		if (num > Mathf.PI)
+		{
+			num -= 2f*Mathf.PI;
+		}
+		return num;
+	}
+	
 	public static float Sq(float x)
 	{
 		return x*x;

@@ -3,6 +3,7 @@ using System.Collections;
 
 /// <summary>
 /// Paints pixels on textures attached on tiles.
+/// OUTDATED : only here as legacy paint system.
 /// </summary>
 public class PixelPainter
 {
@@ -13,13 +14,10 @@ public class PixelPainter
 	public const float NORMAL_PAINT_FADE_SPEED = 3.0f; // in [0,1] color units / second
 	public const float NORMAL_BRUSH_SIZE = 0.7f;
 
-	// TODO Brush
-	public HiddenPainting hiddenPaintingRef;
+	public HiddenPainting hiddenPaintingRef; // TODO remove this because useless now
 	public Color color;
 	public bool moonPaint;
 	private float brushSize = NORMAL_BRUSH_SIZE;
-	//private float prevX;
-	//private float prevY;
 
 	public void SetBrush(float size)
 	{
@@ -30,9 +28,7 @@ public class PixelPainter
 	{
 		if(color.a < 0.01f)
 			return;
-		
-		// TODO paint a line between last and new position, instead of a simple dot
-		
+				
 		float bs = brushSize;
 		if(moonPaint)
 			bs = MOON_BRUSH_SIZE;
