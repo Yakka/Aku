@@ -5,6 +5,8 @@ using System.Collections;
 public class PolyPaintStrip : MonoBehaviour
 {
 	const int MAX_POINTS = 256;
+	const int MAX_INSTANCES = 2048;
+	private static int instanceCount;
 	
 	public Material material;
 	
@@ -34,6 +36,8 @@ public class PolyPaintStrip : MonoBehaviour
 			GetComponent<MeshRenderer>().material = material;
 		
 		Level.Get.Attach(gameObject);
+		
+		++instanceCount;
 		
 //		points = new Vector3[MAX_POINTS];
 //		for(int i = 0; i < points.Length; ++i)
@@ -141,20 +145,31 @@ public class PolyPaintStrip : MonoBehaviour
 	
 	void Update()
 	{
+		if(instanceCount > MAX_INSTANCES)
+		{
+			--instanceCount;
+			Fade();
+		}
+		
 		if(fadeIndex >= 0 && fadeIndex < colors.Length)
 		{
-			int d = 0, i = 0;
-			for(int a = 0; a < 255; a += 32)
+			// If there is at least 2 triangles, apply fading.
+			if(mesh.vertices.Length >= 4)
 			{
-				i = fadeIndex + d;
-				if(i < colors.Length)
+				int d = 0, i = 0;
+				for(int a = 0; a < 255; a += 32)
 				{
-					colors[i].a = (byte)a;
+					i = fadeIndex + d;
+					if(i < colors.Length)
+					{
+						colors[i].a = (byte)a;
+					}
+					++d;
 				}
-				++d;
+				
+				mesh.colors32 = colors;
 			}
 			
-			mesh.colors32 = colors;
 			++fadeIndex;
 			
 			if(fadeIndex == colors.Length)
@@ -164,6 +179,7 @@ public class PolyPaintStrip : MonoBehaviour
 					next.GetComponent<PolyPaintStrip>().Fade();
 				}
 				//Helper.SetActive(gameObject, false);
+				Level.Get.Detach(this.gameObject);
 				Destroy(this.gameObject);
 			}
 		}
