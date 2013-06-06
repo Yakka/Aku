@@ -24,13 +24,14 @@ public class MoverLevelWrapper : MonoBehaviour
 		
 		Vector3 camPos = Camera.mainCamera.transform.position;
 		Vector3 pos = transform.position;
+		Vector3 prevPos = pos;
 		
 		float lw = Level.Get.Width;
 		float lh = Level.Get.Height;
 		
 		float dx = camPos.x - pos.x;
 		float dy = camPos.y - pos.y;
-		
+				
 		if(dx >= 0.5f*lw)
 		{
 			pos.x += lw * (int)(Mathf.Abs(dx) / lw + 0.5f);
@@ -49,6 +50,8 @@ public class MoverLevelWrapper : MonoBehaviour
 		}
 		
 		transform.position = pos;
+		if(Helper.SqrDistance(pos.x, pos.y, prevPos.x, prevPos.y) > 4f)
+			BroadcastMessage("PostLevelWrap", SendMessageOptions.DontRequireReceiver);
 	}
 
 }

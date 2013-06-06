@@ -103,6 +103,18 @@ public class PainterBehavior : MonoBehaviour
 		positionLastFrame = transform.position;
 	}
 	
+	public void FinishStrip()
+	{
+		if(polyPainter != null)
+			polyPainter.Finish();
+	}
+	
+	void PostLevelWrap()
+	{
+		Debug.Log("PostLevelWrap");
+		FinishStrip();
+	}
+	
 	void OnTriggerEnter(Collider other)
 	{
 		HiddenPainting hiddenPainting = null;

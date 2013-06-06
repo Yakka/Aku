@@ -53,6 +53,15 @@ public class Tile : MonoBehaviour
 		}
 	}
 	
+	public void PostLevelWrap()
+	{
+		foreach(GameObject obj in objects)
+		{
+			obj.BroadcastMessage("PostLevelWrap", 
+				SendMessageOptions.DontRequireReceiver);
+		}
+	}
+	
 	void Update ()
 	{
 		if(paintTexture != null)

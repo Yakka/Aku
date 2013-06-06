@@ -228,7 +228,9 @@ public class Level : MonoBehaviour
 			
 			for(int ty = 0; ty < heightTiles; ty++)
 			{
-				GetTile(tx + tileWrapX, ty + tileWrapY).Move(tileOffX, 0);
+				Tile tile = GetTile(tx + tileWrapX, ty + tileWrapY);
+				tile.Move(tileOffX, 0);
+				tile.PostLevelWrap();
 			}
 			tileWrapX += tdx;
 		}
@@ -241,7 +243,9 @@ public class Level : MonoBehaviour
 			
 			for(int tx = 0; tx < widthTiles; tx++)
 			{
-				GetTile(tx + tileWrapX, ty + tileWrapY).Move(0, tileOffY);
+				Tile tile = GetTile(tx + tileWrapX, ty + tileWrapY);
+				tile.Move(0, tileOffY);
+				tile.PostLevelWrap();
 			}
 			tileWrapY += tdy;
 		}
