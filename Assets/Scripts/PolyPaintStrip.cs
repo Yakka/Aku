@@ -5,7 +5,6 @@ using System.Collections;
 public class PolyPaintStrip : MonoBehaviour
 {
 	const int MAX_POINTS = 256;
-	const int MAX_INSTANCES = 2048;
 	private static int instanceCount;
 	
 	public Material material;
@@ -145,12 +144,6 @@ public class PolyPaintStrip : MonoBehaviour
 	
 	void Update()
 	{
-		if(instanceCount > MAX_INSTANCES)
-		{
-			--instanceCount;
-			Fade();
-		}
-		
 		if(fadeIndex >= 0 && fadeIndex < colors.Length)
 		{
 			// If there is at least 2 triangles, apply fading.
@@ -181,6 +174,7 @@ public class PolyPaintStrip : MonoBehaviour
 				//Helper.SetActive(gameObject, false);
 				Level.Get.Detach(this.gameObject);
 				Destroy(this.gameObject);
+				--instanceCount;
 			}
 		}
 	}
@@ -200,6 +194,17 @@ public class PolyPaintStrip : MonoBehaviour
 			else
 				next = value;
 		}
+	}
+	
+	void PreLevelWrap()
+	{
+		Finish();
+	}
+	
+	void PostLevelWrap()
+	{
+		//Debug.Log(gameObject.name + ": PostLevelWrap");
+		Finish();
 	}
 
 }

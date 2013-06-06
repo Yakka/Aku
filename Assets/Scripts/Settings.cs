@@ -21,9 +21,6 @@ public class Settings : MonoBehaviour
 	public static bool releaseMode = false;
 	
 	public static GUIStyle debugGuiStyle;
-	public Texture2D fingerTexture;
-	public int fingerX = 0;
-	public int fingerY = 0;
 	
 	void Start () 
 	{
@@ -37,7 +34,6 @@ public class Settings : MonoBehaviour
 			// TODO do something about the timescale because first versions of iPad are sloowww
 		}
 	}
-	
 	
 	void OnGUI()
 	{
@@ -53,7 +49,5 @@ public class Settings : MonoBehaviour
 		//GUI.Label(new Rect (fingerX, fingerY, fingerSize, fingerSize), fingerTexture);
 		
 	}
-	
-	
 	
 }

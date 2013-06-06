@@ -4,6 +4,7 @@ using System.Collections;
 public class TmpDebug : MonoBehaviour 
 {
 	private static TmpDebug globalInstance;
+	//public int newStripsPerFrame;
 	
 	void Awake()
 	{
@@ -13,6 +14,11 @@ public class TmpDebug : MonoBehaviour
 	public static TmpDebug Instance
 	{
 		get { return globalInstance; }
+	}
+	
+	void Update()
+	{
+		//newStripsPerFrame = 0;
 	}
 
 }

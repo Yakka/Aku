@@ -31,7 +31,7 @@ public class MoverLevelWrapper : MonoBehaviour
 		
 		float dx = camPos.x - pos.x;
 		float dy = camPos.y - pos.y;
-				
+		
 		if(dx >= 0.5f*lw)
 		{
 			pos.x += lw * (int)(Mathf.Abs(dx) / lw + 0.5f);
@@ -49,11 +49,27 @@ public class MoverLevelWrapper : MonoBehaviour
 			pos.y -= lh * (int)(Mathf.Abs(dy) / lh + 0.5f);
 		}
 		
+		float sd = Helper.SqrDistance(pos.x, pos.y, prevPos.x, prevPos.y);
+		bool wrapped = sd > 100f;
+		
+//		if(wrapped)
+//		{
+//			Debug.Log(nnn + " " + prevPos + ", " + pos);
+//			++nnn;
+//		}
+		
+		if(wrapped)
+			BroadcastMessage("PreLevelWrap", SendMessageOptions.DontRequireReceiver);
+		
 		transform.position = pos;
-		if(Helper.SqrDistance(pos.x, pos.y, prevPos.x, prevPos.y) > 4f)
+		
+		if(wrapped)
 			BroadcastMessage("PostLevelWrap", SendMessageOptions.DontRequireReceiver);
 	}
+//	static int nnn;
 
 }
+
+
 
 
