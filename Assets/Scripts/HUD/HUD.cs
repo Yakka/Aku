@@ -88,13 +88,13 @@ public class HUD : MonoBehaviour
 		}
 	}
 	
-	void OnGUI() {
-		if(Time.time < timerHand)
-		{
-			
-			//GUI.Label(rectHand, hand);
-		}
-    }
+//	void OnGUI() {
+//		if(Time.time < timerHand)
+//		{
+//			
+//			//GUI.Label(rectHand, hand);
+//		}
+//    }
 
 }
 

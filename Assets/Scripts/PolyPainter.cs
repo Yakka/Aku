@@ -81,7 +81,7 @@ public class PolyPainter
 		if(prevStrip != null)
 			prevStrip.Next = currentStrip;
 	}
-	
+		
 	public void Finish()
 	{
 		if(currentStrip != null)
