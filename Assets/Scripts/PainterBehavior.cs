@@ -7,7 +7,7 @@ using System.Collections;
 public class PainterBehavior : MonoBehaviour 
 {
 	/// <summary>Optional material to link to the color of the paint</summary>
-	public Material materialRef;
+	public Material optionalMaterialRef;
 	
 	public float distanceAutonomy = 200;
 	public bool affectedByClouds = true; // Color recharge when touching a cloud or the moon
@@ -19,8 +19,11 @@ public class PainterBehavior : MonoBehaviour
 	
 	private HiddenPainting hiddenPaintingRef;
 	
-	private PixelPainter pixelPainter = new PixelPainter();
-	private PolyPainter polyPainter = null;
+	// Note : there is two linear paint systems, 
+	// directly with pixels or with polygons.
+	// Only one should be assigned, the other must be null.
+	private PixelPainter pixelPainter = null; //new PixelPainter();
+	private PolyPainter polyPainter = new PolyPainter();
 	
 	private Vector3 positionLastFrame;
 	
@@ -68,6 +71,13 @@ public class PainterBehavior : MonoBehaviour
 				pixelPainter.color.a *= colorLevelK;
 				pixelPainter.Update(pos.x, pos.y);
 			}
+			if(polyPainter != null)
+			{
+				Color pcolor = color;
+				pcolor.a *= colorLevelK;
+				polyPainter.Color = pcolor;
+				polyPainter.Update(new Vector2(pos.x, pos.y));
+			}
 			
 			// Check revealed zones
 			if(hiddenPaintingRef != null)
@@ -75,14 +85,19 @@ public class PainterBehavior : MonoBehaviour
 				hiddenPaintingRef.CheckReveal(pos.x, pos.y, colorIndex);
 			}
 		}
+		else
+		{
+			if(polyPainter != null)
+				polyPainter.Finish();
+		}
 		
-		if(materialRef != null)
+		if(optionalMaterialRef != null)
 		{
 			Color matColor = color;
 			matColor.r *= colorLevelK;
 			matColor.g *= colorLevelK;
 			matColor.b *= colorLevelK;
-			materialRef.color = matColor;
+			optionalMaterialRef.color = matColor;
 		}
 		
 		positionLastFrame = transform.position;
@@ -195,10 +210,15 @@ public class PainterBehavior : MonoBehaviour
 			pixelPainter.moonPaint = isMoonPaint;
 			pixelPainter.color = color;
 		}
+		if(polyPainter != null)
+		{
+			polyPainter.MoonPaint = isMoonPaint;
+			polyPainter.Color = color;
+		}
 		//Debug.Log("Picked color " + color);
 		
-		if(materialRef != null)
-			materialRef.color = color;
+		if(optionalMaterialRef != null)
+			optionalMaterialRef.color = color;
 
 		if(charge)
 		{
