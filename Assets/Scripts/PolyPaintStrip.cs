@@ -40,15 +40,15 @@ public class PolyPaintStrip : MonoBehaviour
 //			points[i] = new Vector3();
 	}
 	
-	private static int strippingCount = 0;
+	//private static int strippingCount = 0;
 	public bool Plot(Vector3 pos, float angleRad, float thickness, Color color)
 	{
 		if(finished || pointIndex == MAX_POINTS)
 			return false;
 		if(points == null)
 		{
-			++strippingCount;
-			Debug.Log("+ " + strippingCount);
+			//++strippingCount;
+			//Debug.Log("+ " + strippingCount);
 			points = new Vector3[MAX_POINTS];
 			for(int i = 0; i < points.Length; ++i)
 				points[i] = new Vector3();
@@ -127,8 +127,8 @@ public class PolyPaintStrip : MonoBehaviour
 		{
 			//Debug.Log("Strip finished");
 			finished = true;
-			--strippingCount;
-			Debug.Log("- " + strippingCount);
+			//--strippingCount;
+			//Debug.Log("- " + strippingCount);
 			//Fade();
 		}
 	}

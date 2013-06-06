@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(PainterBehavior), typeof(MoverLevelWrapper))]
 public class PaintSpit : MonoBehaviour 
 {
 	const float GRAVITY = 0.3f; // In world units / s^2
@@ -13,10 +14,6 @@ public class PaintSpit : MonoBehaviour
 	void Start ()
 	{
 		pb = GetComponent<PainterBehavior>();
-		if(pb == null)
-		{
-			Debug.LogError(name + ": I need PainterBehavior.cs !");
-		}
 		pb.affectedByClouds = false;
 		
 		// Scale variations
