@@ -65,7 +65,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	public float GetNextZ()
 	{
-		offZ += 0.00001f;
+		offZ += 0.000001f;
 		//offZ += 0.01f;
 		return z-offZ;
 	}
