@@ -102,10 +102,10 @@ public class PolyPainter
 	private float GetPlotInterval()
 	{
 		float d = Helper.DeltaAngleRad(angleRadLastPlot, angleRad);
-		if(Mathf.Abs(d) > Mathf.PI/16f)
-			return 1f; // Closer points for more precision
+		if(Mathf.Abs(d) > Mathf.PI/8f/*16f*/)
+			return 2f;//1f; // Closer points for more precision
 		else
-			return 2f; // Spaced points
+			return 4f;//2f; // Spaced points
 	}
 	
 //	private void SetColor(Color color)

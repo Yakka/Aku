@@ -43,7 +43,7 @@ public class PixelPainter
 		float minY = y0 - bs;
 		float maxX = x0 + bs;
 		float maxY = y0 + bs;
-		int channel;
+		//int channel;
 		
 		Tile tile;
 		

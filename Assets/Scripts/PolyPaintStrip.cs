@@ -6,8 +6,7 @@ public class PolyPaintStrip : MonoBehaviour
 {
 	const int MAX_POINTS = 256;
 	private static int instanceCount;
-	
-	public Material material;
+	private static Material commonMaterial;
 	
 	private PolyPaintStrip next;
 	
@@ -29,12 +28,14 @@ public class PolyPaintStrip : MonoBehaviour
 		GetComponent<MeshFilter>().mesh = mesh;
 		mesh.name = "generated_paint_strip";
 		
-		if(PolyPaintManager.Instance != null)
-			material = PolyPaintManager.Instance.PolyPaintMaterial;
-		if(material != null)
-			GetComponent<MeshRenderer>().material = material;
+		//Material material = PolyPaintManager.Instance.PolyPaintMaterial;
+		if(commonMaterial == null)
+			commonMaterial = Helper.CreateMaterial("Custom/VertexColor");
+		GetComponent<MeshRenderer>().material = commonMaterial;
 		
 		Level.Get.Attach(gameObject);
+		
+		gameObject.layer = LayerMask.NameToLayer("PaintReveal");
 		
 		++instanceCount;
 		

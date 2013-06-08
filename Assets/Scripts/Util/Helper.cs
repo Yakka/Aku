@@ -121,6 +121,16 @@ public class Helper
 		return obj.active;
 		//return obj.activeSelf;
 	}
+	
+	public static Material CreateMaterial(string shaderName)
+	{
+		Shader shader = Shader.Find(shaderName);
+		if(shader == null)
+		{
+			Debug.LogError(shaderName + ": Shader not found !");
+		}
+		return new Material(shader);
+	}
 
 }
 

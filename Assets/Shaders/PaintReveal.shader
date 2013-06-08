@@ -9,7 +9,7 @@ Shader "Custom/PaintReveal" {
 	
 	SubShader 
 	{
-		Tags { "RenderType"="Opaque" "Queue"="Transparent"}
+		Tags { "RenderType"="Opaque" "Queue"="Transparent" }
 		LOD 200
 		
 		Pass

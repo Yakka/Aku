@@ -50,8 +50,7 @@ public class HiddenCameraHandler : MonoBehaviour
 		{
 			GUI.Label(new Rect(16, 120, 256, 32), 
 				"Hidden world renderTexture size : " + renderTarget.width + ", " + renderTarget.height,
-				Settings.debugGuiStyle);			
-			
+				Settings.debugGuiStyle);
 		}
 	}
 
