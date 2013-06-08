@@ -16,9 +16,10 @@ public class Hornet : MonoBehaviour
 	private int life; // How many times hornets must be hurt before die
 	private bool grabbingTarget = false; // True if hornets are grabbing their target
 	private bool targetIsInSea = false; // true when hornets fly out of sea
-	public bool isInCloud = false;
+	private bool isInCloud = false;
 	public Vector3 fallVelocity; // Only used when falling dead
 	private float initialScale;
+	private bool willRelease = false; // If true, hornet release target after a while
 	
 	// If they are grabbing a target, hornets must release it after this timestamp 
 	private float releaseTargetTime;
@@ -62,7 +63,16 @@ public class Hornet : MonoBehaviour
 			SoundLevel1.Instance.HornetOnHead();
 			Drake drake = target.GetComponent<Drake>();
 			if(drake != null)
+			{
 				drake.GrabbedByHornet();
+				willRelease = true;
+			}
+			Ladybird ladybird = target.GetComponent<Ladybird>();
+			if(ladybird != null)
+			{
+				ladybird.GrabbedByHornet();
+				willRelease = false;
+			}
 			grabbingTarget = true;
 			releaseTargetTime = Time.time + Random.Range(4f, 8f);
 		}
@@ -82,6 +92,7 @@ public class Hornet : MonoBehaviour
 				drake.UngrabbedByHornet();
 			grabbingTarget = false;
 			chaseStartTime = Time.time + Random.Range(0.5f, 1.5f);
+				
 		}
 	}
 
@@ -182,7 +193,7 @@ public class Hornet : MonoBehaviour
 				targetIsInSea = false;
 			
 			// Release target if chase has been disabled
-			if(grabbingTarget && Time.time >= releaseTargetTime)
+			if(grabbingTarget && Time.time >= releaseTargetTime && willRelease)
 			{
 				ReleaseTarget();
 			}
