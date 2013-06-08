@@ -153,7 +153,7 @@ public class PolyPaintStrip : MonoBehaviour
 				}
 				++d;
 			}
-			
+			//Debug.Log(mesh.colors32.Length + ", " + colors.Length);
 			mesh.colors32 = colors;
 			++fadeIndex;
 			

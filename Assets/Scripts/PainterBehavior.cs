@@ -111,7 +111,7 @@ public class PainterBehavior : MonoBehaviour
 	
 	void PostLevelWrap()
 	{
-		Debug.Log("PostLevelWrap");
+		//Debug.Log("PostLevelWrap");
 		FinishStrip();
 	}
 	
