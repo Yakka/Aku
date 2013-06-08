@@ -67,7 +67,7 @@ public class PolyPaintManager : MonoBehaviour
 	{
 		offZ += 0.00001f;
 		//offZ += 0.01f;
-		return offZ;
+		return z-offZ;
 	}
 
 	/*private static void SwitchPrefabsMaterial(GameObject[] prefabs, Material mat)
@@ -145,7 +145,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	public void SpawnCloudProjection(Color color, float x, float y, float angleDeg)
 	{
-		Vector3 pos = new Vector3(x, y, z-GetNextZ());
+		Vector3 pos = new Vector3(x, y, GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(projectionPrefab),
 			pos, Quaternion.Euler(0,0,angleDeg)) as GameObject;
@@ -174,7 +174,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	public void SpawnDrip(Color color, float x, float y)
 	{
-		Vector3 pos = new Vector3(x, y, z-GetNextZ());
+		Vector3 pos = new Vector3(x, y, GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(dripPrefab),
 			pos, Quaternion.Euler(0,0,Random.Range(-180, 180))) as GameObject;
@@ -213,7 +213,7 @@ public class PolyPaintManager : MonoBehaviour
 			color = ColorFromIndex(colorIndex);
 		}
 		
-		Vector3 pos = new Vector3(x, y, z-GetNextZ());
+		Vector3 pos = new Vector3(x, y, GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(splashPrefab),
 			pos, Quaternion.Euler(0,0,Random.Range(-180, 180))) as GameObject;

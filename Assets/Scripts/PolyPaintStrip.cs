@@ -17,7 +17,7 @@ public class PolyPaintStrip : MonoBehaviour
 	
 	private bool finished;
 	
-	private Vector3[] vertices = new Vector3[0];
+	public Vector3[] vertices = new Vector3[0];
 	private int[] triangles = new int[0]; // Triangle indices
 	private Vector2[] uv = new Vector2[0];
 	private Color32[] colors = new Color32[0];
@@ -60,7 +60,7 @@ public class PolyPaintStrip : MonoBehaviour
 		points[pointIndex] = pos;
 		
 		pos -= transform.position;
-		pos.z -= PolyPaintManager.Instance.GetNextZ();
+		pos.z = PolyPaintManager.Instance.GetNextZ();
 		
 		int vi = vertices.Length;
 		
