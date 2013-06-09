@@ -42,11 +42,11 @@ public class PetrolBall : MonoBehaviour
 		
 		// Some cheap funky animation :
 		// Roooootation
-		transform.Rotate(0, 0, 1000f*Time.deltaTime);
+		transform.Rotate(0, 0, 5f*Time.deltaTime);
 		// Cooooontraction
-		tempScale.x = normalScale * (0.95f + 0.1f*Mathf.PerlinNoise(5f*Time.time, 10));
+		tempScale.x = normalScale * (0.95f + 0.1f*Mathf.PerlinNoise(0.5f*Time.time, 10));
 		tempScale.y = tempScale.x;
-		transform.localScale = tempScale;
+		//transform.localScale = tempScale;
 	}
 	
 	void OnTriggerEnter(Collider other)

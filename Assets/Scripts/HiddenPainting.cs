@@ -17,6 +17,9 @@ public class HiddenPainting : MonoBehaviour
 	/// </summary>
 	public Color[] channelMapping; // RGB
 	
+	public CameraHandler camera;
+	public CameraWaypoint waypoint;
+	
 	private Vector3 pos; // Faster shortcut to transform.position
 	
 	#region "Pixel counting"
@@ -174,11 +177,11 @@ public class HiddenPainting : MonoBehaviour
 	
 	public void CheckReveal(float worldX, float worldY, int channel)
 	{
+		
 		if(countPixels)
 		{
 			int divX, divY;
 			WorldToDivCoords(worldX, worldY, out divX, out divY);
-			
 			// Are coordinates valid?
 			if(divX >= 0 && divY >= 0 && divX < revealMatrixW && divY < revealMatrixH)
 			{
@@ -198,7 +201,7 @@ public class HiddenPainting : MonoBehaviour
 		else
 			revealable = (code & 16) != 0; // R
 		int oldChannel = (code & 8)!=0 ? -1 : code & 7;
-		
+
 		// If the division can be revealed and has not been revealed in this channel
 		if(revealable && oldChannel != channel)
 		{

@@ -83,7 +83,6 @@ public class Ladybird : MonoBehaviour
 			if(distanceToTarget > 0.1f)
 			{
 				MoveTo (target);
-				
 			}
 			else
 			{
@@ -124,8 +123,6 @@ public class Ladybird : MonoBehaviour
 			}
 			else
 			{
-				// MICHELE : SON DE COCCINELLE QUI APPELLE LE JOUEUR
-				//Debug.Log("Appel de la scarinelle");
 				CommonSounds.Instance.LadybirdCall();
 				state = STATE_MOVING;
 			}
@@ -245,8 +242,8 @@ public class Ladybird : MonoBehaviour
 			case "LadyBirdTriggerBlueStar":
 			case "LadyBirdTriggerRedStar":
 			case "LadyBirdTriggerYellowStar":
-				string nextName = "";
 				bool wrongPosition = true;
+				string nextName = "";
 				foreach(SwappableStar star in stars)
 				{
 					if(star.IsAtGoodPosition() && wrongPosition)
@@ -264,14 +261,12 @@ public class Ladybird : MonoBehaviour
 							nextName = "LadyBirdTriggerFaceBaby2";
 							break;
 						}
-						move = true;
 						for(int i = 0; i < targets.Length; i++)
 						{
 							if(targets[i].name.Equals(nextName))
 							{
 								index = i;
-								animation.Play("takeOff");
-								state = STATE_MOVING;
+								move = true;
 								break;
 							}
 						}
@@ -306,7 +301,7 @@ public class Ladybird : MonoBehaviour
 					if(targets[i].name == "LadyBirdTriggerYellowStar")
 						indexStars[2] = i;
 				}
-				index = indexStars[Random.Range(0, 2)];
+				index = indexStars[Random.Range(0, indexStars.Length)];
 				move = true;
 				break;
 			default:
