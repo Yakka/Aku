@@ -39,10 +39,10 @@ public class Hornet : MonoBehaviour
 	{
 		return !Level.Get.IsWater(targetY, targetY) 
 			&& !Level.Get.IsSpace(targetX, targetY)
-			&& Helper.SqrDistance(
+			/*&& Helper.SqrDistance(
 					targetX, targetY, 
 					transform.position.x, 
-					transform.position.y) < VIEW_DISTANCE*VIEW_DISTANCE;
+					transform.position.y) < VIEW_DISTANCE*VIEW_DISTANCE*/;
 	}
 	
 	private bool CanChase()
@@ -176,7 +176,10 @@ public class Hornet : MonoBehaviour
 				float t = REACTIVITY * Time.deltaTime;
 				orientation.x = Mathf.Lerp(orientation.x, vectorToTarget.x, t);
 				orientation.y = Mathf.Lerp(orientation.y, vectorToTarget.y, t);	
-				
+				Debug.Log("target 2D :"+target2D);
+				Debug.Log("position 2D :"+position2D);
+				Debug.Log("vector to target :"+vectorToTarget);
+				Debug.Log("---");
 				transform.position += orientation * Time.deltaTime * SPEED_MAX;
 			}
 			
