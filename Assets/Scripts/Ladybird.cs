@@ -99,6 +99,7 @@ public class Ladybird : MonoBehaviour
 				nextSearch = Time.time + MAX_WAITING;
 				Disturb();
 			}
+
 			else if(Time.time > nextSearch)
 			{
 				state = STATE_SEARCHING;
@@ -122,7 +123,6 @@ public class Ladybird : MonoBehaviour
 			}
 			else
 			{
-				Debug.Log("Appel de la scarinelle");
 				CommonSounds.Instance.LadybirdCall();
 				state = STATE_MOVING;
 			}
@@ -261,7 +261,6 @@ public class Ladybird : MonoBehaviour
 							nextName = "LadyBirdTriggerFaceBaby2";
 							break;
 						}
-						
 						for(int i = 0; i < targets.Length; i++)
 						{
 							if(targets[i].name.Equals(nextName))
@@ -331,7 +330,7 @@ public class Ladybird : MonoBehaviour
 			}
 			
 			// TOFIX DIRTY CODE
-			if(index == 16)
+			if(index == 13)
 				renderer.enabled = false;
 			
 		}

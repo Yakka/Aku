@@ -58,7 +58,7 @@ public class PetrolBall : MonoBehaviour
 			{
 				lastHitTime[ps.Channel] = Time.time;
 				SoundLevel2.Instance.SizePetrol(ps.Channel);
-				Debug.Log("Hit ! " + ps.Channel);
+				//Debug.Log("Hit ! " + ps.Channel);
 			}
 			else
 				Debug.Log("ERRRRRRR");
