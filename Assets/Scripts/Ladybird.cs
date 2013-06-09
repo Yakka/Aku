@@ -83,7 +83,6 @@ public class Ladybird : MonoBehaviour
 			if(distanceToTarget > 0.1f)
 			{
 				MoveTo (target);
-				
 			}
 			else
 			{

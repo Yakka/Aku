@@ -4,7 +4,7 @@ using System.Collections;
 // TODO @Yakka rename this (an 'l' is missing)
 public class Traveling : MonoBehaviour {
 	
-	public CameraTrigger[] triggers;
+	public CameraWaypoint[] waypoints;
 	private int index = 0;
 	
 	private float currentSize;
@@ -17,9 +17,9 @@ public class Traveling : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		pauseTime = Time.time;
-		transform.position = triggers[index].transform.position;
-		currentSize = triggers[index].size;
-		currentSpeed = triggers[index].speed;
+		transform.position = waypoints[index].transform.position;
+		currentSize = waypoints[index].size;
+		currentSpeed = waypoints[index].speed;
 		direction = new Vector3(0,0,0);
 	}
 	
@@ -27,11 +27,11 @@ public class Traveling : MonoBehaviour {
 	void Update () {
 	
 		Vector3 targetPosition;
-		if(Vector3.Distance(transform.position, triggers[index].transform.position) < 15f && index < triggers.Length - 1)
+		if(Vector3.Distance(transform.position, waypoints[index].transform.position) < 15f && index < waypoints.Length - 1)
 		{
 			if(!paused)
 			{
-				pauseTime = Time.time + triggers[index].pause;
+				pauseTime = Time.time + waypoints[index].pause;
 				paused = true;
 			}
 			
@@ -49,10 +49,10 @@ public class Traveling : MonoBehaviour {
 		}
 		else
 		{
-			currentSpeed = Mathf.Lerp(currentSpeed, triggers[index].speed, 0.005f);
-			currentSize = Mathf.Lerp(currentSize, triggers[index].size, 0.001f);
+			currentSpeed = Mathf.Lerp(currentSpeed, waypoints[index].speed, 0.005f);
+			currentSize = Mathf.Lerp(currentSize, waypoints[index].size, 0.001f);
 		}
-		targetPosition = triggers[index].transform.position;
+		targetPosition = waypoints[index].transform.position;
 		//float x;
 		//float y;
 		//x = triggers[index].transform.position.x; 
