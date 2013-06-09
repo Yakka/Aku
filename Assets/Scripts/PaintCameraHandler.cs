@@ -4,7 +4,8 @@ using System.Collections;
 public class PaintCameraHandler : MonoBehaviour 
 {	
 	public RenderTexture renderTarget;
-	public int resolutionDivider = 2;
+	public float resolutionCoeff = 1;
+	//private Material revealMaterial;
 	
 	private static PaintCameraHandler globalInstance;
 	
@@ -16,20 +17,27 @@ public class PaintCameraHandler : MonoBehaviour
 		CheckStuff();
 		
 		renderTarget = new RenderTexture(
-			Screen.width/resolutionDivider, 
-			Screen.height/resolutionDivider, 16);
+			(int)((float)Screen.width*resolutionCoeff), 
+			(int)((float)Screen.height*resolutionCoeff), 16);
 		
 		int mask = LayerMask.NameToLayer("PaintReveal");
 		//Debug.Log("HiddenPainting layer: " + mask);
 		gameObject.layer = mask;
 		camera.cullingMask = 1 << mask;
-		camera.depth = Camera.mainCamera.depth - 1;
+		//camera.depth = Camera.mainCamera.depth - 1;
 		camera.targetTexture = renderTarget;
-		camera.backgroundColor = new Color(0,0,0,0);
+		camera.backgroundColor = new Color(0,0,0,1f);
+		//camera.SetReplacementShader(Helper.FindShader("TriPaintReveal"), "Opaque");
+		//revealMaterial = Helper.CreateMaterial("TriPaintReveal");
 		
 		// Global texture of the screen containing only hidden paintings
-		Shader.SetGlobalTexture("_RevealPaint", camera.targetTexture);
+		//Shader.SetGlobalTexture("_RevealPaint", camera.targetTexture);
 	}
+	
+//	void OnRenderImage(RenderTexture source, RenderTexture destination)
+//	{
+//		Graphics.Blit(source, renderTarget, revealMaterial);
+//	}
 	
 	void Update () 
 	{
@@ -44,10 +52,11 @@ public class PaintCameraHandler : MonoBehaviour
 		{
 			Debug.LogError("PaintCameraHandler NOT attached to a camera !");
 		}
-		if(resolutionDivider == 0)
+		if(resolutionCoeff < 0.2f || resolutionCoeff > 1f)
 		{
-			resolutionDivider = 1;
-			Debug.LogError(name + ": resolutionDivider invalid value (0), auto set to 1 !");
+			resolutionCoeff = 1;
+			Debug.LogError(name + ": resolutionCoeff invalid value ("
+				+ resolutionCoeff + "), auto set to 1 !");
 		}
 		if(renderTarget != null)
 		{

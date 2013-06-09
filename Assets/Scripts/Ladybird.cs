@@ -167,7 +167,7 @@ public class Ladybird : MonoBehaviour
 			direction2.Normalize();
 			direction3.Normalize();
 			
-			// FIXME hardcode poo
+			// TODO hardcode poo
 			float targetAngle = 
 				Mathf.Atan2(direction2.y, direction2.x) * Mathf.Rad2Deg 
 				+ Mathf.PerlinNoise(transform.position.x, transform.position.y) * 10f - 90f;

@@ -28,9 +28,11 @@ public class PolyPaintStrip : MonoBehaviour
 		GetComponent<MeshFilter>().mesh = mesh;
 		mesh.name = "generated_paint_strip";
 		
-		//Material material = PolyPaintManager.Instance.PolyPaintMaterial;
 		if(commonMaterial == null)
-			commonMaterial = Helper.CreateMaterial("Custom/VertexColor");
+		{
+			commonMaterial = PolyPaintManager.Instance.PolyPaintMaterial;
+			//commonMaterial = Helper.CreateMaterial("VertexColor");
+		}
 		GetComponent<MeshRenderer>().material = commonMaterial;
 		
 		Level.Get.Attach(gameObject);
