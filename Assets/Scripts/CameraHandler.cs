@@ -33,11 +33,20 @@ public class CameraHandler : MonoBehaviour
 	
 	private Level level;
 	
-	
+	public RenderTexture renderTarget;
+	public float resolutionCoeff = 1;
 
 	// Use this for initialization
 	void Start () 
 	{
+		if(resolutionCoeff < 0.99f)
+		{
+			renderTarget = new RenderTexture(
+				(int)((float)Screen.width*resolutionCoeff), 
+				(int)((float)Screen.height*resolutionCoeff), 16);
+			camera.targetTexture = renderTarget;
+		}
+
 		//startZ = this.transform.position.z;
 		
 		// Get level script

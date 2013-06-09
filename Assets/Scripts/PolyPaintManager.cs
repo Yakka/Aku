@@ -34,22 +34,19 @@ public class PolyPaintManager : MonoBehaviour
 	{
 		CheckStuff();
 		
-		// Was useful before because the reveal shader was applied on the prefabs.
-		// Now, revealation is done on a quad the size of the screen.
-		/*
 		if(Level.Get.levelID == 2)
 		{
 			// Switch materials of prefabs because the level 2
 			// uses a different paint reveal shader
 			string shaderName = "Custom/TriPaintReveal";
-			Shader shader = Shader.Find(shaderName);
+			Shader shader = Helper.FindShader(shaderName);
 			if(shader != null)
 			{
 				Material commonMat = new Material(shader);
 				// Red, gold yellow, blue (Level2-specific)
-				commonMat.SetColor("_Color1", new Color(1f, 0f, 0f));
-				commonMat.SetColor("_Color2", new Color(1f, 0.75f, 0f));
-				commonMat.SetColor("_Color3", new Color(0f, 0f, 1f));
+				commonMat.SetColor("_Color1", new Color(1.0f, 0.2f, 0.2f));
+				commonMat.SetColor("_Color2", new Color(1.0f, 0.75f, 0.2f));
+				commonMat.SetColor("_Color3", new Color(0.2f, 0.2f, 1.0f));
 				
 				SwitchPrefabsMaterial(dripPrefab, commonMat);
 				SwitchPrefabsMaterial(splashPrefab, commonMat);
@@ -60,7 +57,6 @@ public class PolyPaintManager : MonoBehaviour
 				Debug.LogError(name + ": " + shaderName + " shader not found !");
 			}
 		}
-		*/
 	}
 	
 	public float GetNextZ()
@@ -70,7 +66,7 @@ public class PolyPaintManager : MonoBehaviour
 		return z-offZ;
 	}
 
-	/*private static void SwitchPrefabsMaterial(GameObject[] prefabs, Material mat)
+	private static void SwitchPrefabsMaterial(GameObject[] prefabs, Material mat)
 	{
 		for(int i = 0; i < prefabs.Length; ++i)
 		{
@@ -88,7 +84,7 @@ public class PolyPaintManager : MonoBehaviour
 			newMat.SetTexture("_MainTex", texture);
 			r.material = newMat;
 		}
-	}*/
+	}
 	
 	public static PolyPaintManager Instance
 	{

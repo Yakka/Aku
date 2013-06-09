@@ -63,7 +63,7 @@ public class TouchController : MonoBehaviour
 			} else  {
 				touchPos = Input.mousePosition;
 			}
-			
+						
 			// Convert into scene scale
 			Vector3 currentPos = ScreenToScenePosition(touchPos);
 			
@@ -141,6 +141,11 @@ public class TouchController : MonoBehaviour
 		// (should be at same depth as character's head)
 		Plane plane = new Plane(-Vector3.forward, transform.position);
 	
+		float resCoeff = Camera.mainCamera.GetComponent<CameraHandler>().resolutionCoeff;
+		pos.x = pos.x * resCoeff;
+		pos.y = pos.y * resCoeff;// - (1f-resCoeff)*(float)Screen.height;
+//		Debug.Log(pos.x + ", " + pos.y);
+		
 		// Raycast to the plane
 		float hitDistance = 0f;
 		Ray touchRay = Camera.main.ScreenPointToRay(pos);

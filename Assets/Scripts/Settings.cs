@@ -22,6 +22,17 @@ public class Settings : MonoBehaviour
 	
 	public static GUIStyle debugGuiStyle;
 	
+	void Awake()
+	{
+		Resolution[] res = Screen.GetResolution;
+		Debug.Log("Supported resolutions :");
+		for(int i = 0; i < res.Length; ++i)
+		{
+			Debug.Log(res[i].width + "x" + res[i].height);
+		}
+		Screen.SetResolution(Screen.width/2, Screen.height/2, true);
+	}
+	
 	void Start () 
 	{
 		QualitySettings.antiAliasing = 4;

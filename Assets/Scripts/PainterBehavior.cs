@@ -220,12 +220,12 @@ public class PainterBehavior : MonoBehaviour
 	public void SetColor(Color mixColor, bool charge, bool isMoonPaint)
 	{
 		color = mixColor;
-		if(!isMoonPaint)
+		/*if(!isMoonPaint)
 		{
 			// Reduces brightness a bit, looks more "painty" (especially for yellow),
 			// and also Because green is a bright color for the human eye
 			color.g *= 0.75f;
-		}
+		}*/
 		
 		if(pixelPainter != null)
 		{
