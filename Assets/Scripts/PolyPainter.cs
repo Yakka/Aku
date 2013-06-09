@@ -30,13 +30,14 @@ public class PolyPainter
 		
 		if(color.a > 0.02f)
 		{
-			if(currentStrip == null)
+			if(currentStrip == null || currentStrip.Finished)
 			{
 				// Start a new strip
 				NewStrip(pos);
 			}
 			
 			float d = Vector3.Distance(pos, positionLastFrame);
+			
 			crossedDistanceSinceLastPlot += d;
 			if(crossedDistanceSinceLastPlot > GetPlotInterval())
 			{
@@ -68,10 +69,13 @@ public class PolyPainter
 	
 	private void NewStrip(Vector3 startPos)
 	{
+		//Profiler.BeginSample("aaa");
+		//++TmpDebug.Instance.newStripsPerFrame;
+		
 		PolyPaintStrip prevStrip = null;
 		if(currentStrip != null)
 			prevStrip = currentStrip;
-			
+		
 		GameObject stripObj = new GameObject();
 		stripObj.transform.position = startPos;
 		stripObj.name = "generated_paint_strip";
@@ -80,11 +84,13 @@ public class PolyPainter
 		
 		if(prevStrip != null)
 			prevStrip.Next = currentStrip;
+		
+		//Profiler.EndSample();
 	}
 		
 	public void Finish()
 	{
-		if(currentStrip != null)
+		if(currentStrip != null && !currentStrip.Finished)
 		{
 			//Debug.Log("End");
 			currentStrip.Finish();
@@ -96,10 +102,10 @@ public class PolyPainter
 	private float GetPlotInterval()
 	{
 		float d = Helper.DeltaAngleRad(angleRadLastPlot, angleRad);
-		if(Mathf.Abs(d) > Mathf.PI/16f)
-			return 1f; // Closer points for more precision
+		if(Mathf.Abs(d) > Mathf.PI/8f/*16f*/)
+			return 2f;//1f; // Closer points for more precision
 		else
-			return 2f; // Spaced points
+			return 4f;//2f; // Spaced points
 	}
 	
 //	private void SetColor(Color color)

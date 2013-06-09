@@ -9,7 +9,7 @@ Shader "Custom/PaintReveal" {
 	
 	SubShader 
 	{
-		Tags { "RenderType"="Opaque" "Queue"="Transparent"}
+		Tags { "RenderType"="Opaque" "Queue"="Transparent" }
 		LOD 200
 		
 		Pass
@@ -38,7 +38,7 @@ Shader "Custom/PaintReveal" {
 			VertexOutput vert(appdata_full v)
 			{
 				VertexOutput o;
-				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
+				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.texcoord;
 				o.screenPos = o.pos;
 				o.vcolor = v.color;// * _Color;

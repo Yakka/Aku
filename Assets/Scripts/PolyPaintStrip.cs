@@ -5,8 +5,8 @@ using System.Collections;
 public class PolyPaintStrip : MonoBehaviour
 {
 	const int MAX_POINTS = 256;
-	
-	public Material material;
+	private static int instanceCount;
+	private static Material commonMaterial;
 	
 	private PolyPaintStrip next;
 	
@@ -17,7 +17,7 @@ public class PolyPaintStrip : MonoBehaviour
 	
 	private bool finished;
 	
-	private Vector3[] vertices = new Vector3[0];
+	public Vector3[] vertices = new Vector3[0];
 	private int[] triangles = new int[0]; // Triangle indices
 	private Vector2[] uv = new Vector2[0];
 	private Color32[] colors = new Color32[0];
@@ -28,12 +28,18 @@ public class PolyPaintStrip : MonoBehaviour
 		GetComponent<MeshFilter>().mesh = mesh;
 		mesh.name = "generated_paint_strip";
 		
-		if(PolyPaintManager.Instance != null)
-			material = PolyPaintManager.Instance.PolyPaintMaterial;
-		if(material != null)
-			GetComponent<MeshRenderer>().material = material;
+		if(commonMaterial == null)
+		{
+			commonMaterial = PolyPaintManager.Instance.PolyPaintMaterial;
+			//commonMaterial = Helper.CreateMaterial("VertexColor");
+		}
+		GetComponent<MeshRenderer>().material = commonMaterial;
 		
 		Level.Get.Attach(gameObject);
+		
+		gameObject.layer = LayerMask.NameToLayer("PaintReveal");
+		
+		++instanceCount;
 		
 //		points = new Vector3[MAX_POINTS];
 //		for(int i = 0; i < points.Length; ++i)
@@ -56,7 +62,7 @@ public class PolyPaintStrip : MonoBehaviour
 		points[pointIndex] = pos;
 		
 		pos -= transform.position;
-		pos.z -= PolyPaintManager.Instance.GetNextZ();
+		pos.z = PolyPaintManager.Instance.GetNextZ();
 		
 		int vi = vertices.Length;
 		
@@ -143,18 +149,23 @@ public class PolyPaintStrip : MonoBehaviour
 	{
 		if(fadeIndex >= 0 && fadeIndex < colors.Length)
 		{
-			int d = 0, i = 0;
-			for(int a = 0; a < 255; a += 32)
+			// If there is at least 2 triangles, apply fading.
+			if(mesh.vertices.Length >= 4)
 			{
-				i = fadeIndex + d;
-				if(i < colors.Length)
+				int d = 0, i = 0;
+				for(int a = 0; a < 255; a += 32)
 				{
-					colors[i].a = (byte)a;
+					i = fadeIndex + d;
+					if(i < colors.Length)
+					{
+						colors[i].a = (byte)a;
+					}
+					++d;
 				}
-				++d;
+				
+				mesh.colors32 = colors;
 			}
-			//Debug.Log(mesh.colors32.Length + ", " + colors.Length);
-			mesh.colors32 = colors;
+			
 			++fadeIndex;
 			
 			if(fadeIndex == colors.Length)
@@ -164,7 +175,9 @@ public class PolyPaintStrip : MonoBehaviour
 					next.GetComponent<PolyPaintStrip>().Fade();
 				}
 				//Helper.SetActive(gameObject, false);
+				Level.Get.Detach(this.gameObject);
 				Destroy(this.gameObject);
+				--instanceCount;
 			}
 		}
 	}
@@ -184,6 +197,17 @@ public class PolyPaintStrip : MonoBehaviour
 			else
 				next = value;
 		}
+	}
+	
+	void PreLevelWrap()
+	{
+		Finish();
+	}
+	
+	void PostLevelWrap()
+	{
+		//Debug.Log(gameObject.name + ": PostLevelWrap");
+		Finish();
 	}
 
 }

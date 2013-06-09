@@ -35,6 +35,7 @@ public class PaintSpit : MonoBehaviour
 		if(pb.ColorLevel < 0.001f || Level.Get.IsWater(pos.x, pos.y))
 		{
 			pb.FinishStrip();
+			pb.ColorLevel = 0;
 			//Debug.Log("PaintSpit ended : " + ppb.ColorLevel + ", " + Level.Get.IsWater(pos.x, pos.y));
 			Helper.SetActive(gameObject, false);
 		}
@@ -65,6 +66,11 @@ public class PaintSpit : MonoBehaviour
 		{
 			Helper.SetActive(gameObject, false);
 		}
+	}
+	
+	void PostLevelWrap()
+	{
+		pos = transform.position;
 	}
 	
 	/// <summary>

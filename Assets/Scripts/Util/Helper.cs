@@ -121,6 +121,38 @@ public class Helper
 		return obj.active;
 		//return obj.activeSelf;
 	}
+	
+	/// <summary>
+	/// Searches and return the shader having the given name.
+	/// If not found, tries to locate it with its name without '/'.
+	/// If still not found, tries to locate it with "Custom/"+name.
+	/// Finally, returns an alpha blend shader as fallback.
+	/// </summary>
+	/// <returns>The shader.</returns>
+	/// <param name='shaderName'>Shader name.</param>
+	public static Shader FindShader(string shaderName)
+	{
+		Shader shader = Shader.Find(shaderName);
+		if(shader == null)
+		{
+			int i = shaderName.LastIndexOf('/')+1;
+			if(i < shaderName.Length)
+				shader = Shader.Find(shaderName.Substring(i));
+		}
+		if(shader == null)
+			shader = Shader.Find("Custom/" + shaderName);
+		if(shader == null)
+		{
+			Debug.LogError(shaderName + ": Shader not found !");
+			shader = Shader.Find("Mobile/Particles/Alpha Blended");
+		}
+		return shader;
+	}
+	
+	public static Material CreateMaterial(string shaderName)
+	{
+		return new Material(FindShader(shaderName));
+	}
 
 }
 

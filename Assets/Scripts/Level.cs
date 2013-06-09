@@ -152,7 +152,7 @@ public class Level : MonoBehaviour
 		WorldToTileCoords(x, y, out tx, out ty, false);
 		return GetTile(tx, ty);
 	}
-		
+	
 	// Get tile from its position in the grid (wrapped)
 	public Tile GetTile(int tx, int ty)
 	{
@@ -229,6 +229,7 @@ public class Level : MonoBehaviour
 			for(int ty = 0; ty < heightTiles; ty++)
 			{
 				Tile tile = GetTile(tx + tileWrapX, ty + tileWrapY);
+				tile.PreLevelWrap();
 				tile.Move(tileOffX, 0);
 				tile.PostLevelWrap();
 			}
@@ -244,6 +245,7 @@ public class Level : MonoBehaviour
 			for(int tx = 0; tx < widthTiles; tx++)
 			{
 				Tile tile = GetTile(tx + tileWrapX, ty + tileWrapY);
+				tile.PreLevelWrap();
 				tile.Move(0, tileOffY);
 				tile.PostLevelWrap();
 			}

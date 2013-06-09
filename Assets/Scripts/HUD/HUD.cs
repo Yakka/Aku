@@ -88,13 +88,22 @@ public class HUD : MonoBehaviour
 		}
 	}
 	
-//	void OnGUI() {
-//		if(Time.time < timerHand)
-//		{
-//			
-//			//GUI.Label(rectHand, hand);
-//		}
-//    }
+	void OnGUI()
+	{
+		Texture tex = Camera.mainCamera.GetComponent<CameraHandler>().renderTarget;
+		if(tex != null)
+		{
+			// FIXME Uses Y-inverted screen coordinates and so breaks the reveal shader,
+			// causing every hidden painting to be inverted Y-wise -_-"
+			int w = Screen.width;
+			int h = Screen.height;
+			if(w < 10 || h < 10)
+				Debug.LogError(name + ": BAD SCREEN " + w + ", " + h);
+			if(tex.width < 10 || tex.height < 10)
+				Debug.LogError(name + ": BAD TEX " + w + ", " + h);
+			GUI.DrawTexture(new Rect(0,0, w, h), tex);
+		}
+    }
 
 }
 

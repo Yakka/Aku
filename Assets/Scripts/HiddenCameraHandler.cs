@@ -23,13 +23,17 @@ public class HiddenCameraHandler : MonoBehaviour
 		//camera.CopyFrom(Camera.mainCamera);
 		
 		//renderTarget = new RenderTexture((int)camera.pixelWidth, (int)camera.pixelHeight, 16);
-		renderTarget = new RenderTexture(Screen.width, Screen.height, 16);
+		float rc = Camera.mainCamera.GetComponent<CameraHandler>().resolutionCoeff;
+		//rc = 1;
+		float w = rc * (float)Screen.width;
+		float h = rc * (float)Screen.height;
+		renderTarget = new RenderTexture((int)w, (int)h, 16);
 		
 		int mask = LayerMask.NameToLayer("HiddenPainting");
 		//Debug.Log("HiddenPainting layer: " + mask);
 		gameObject.layer = mask;
 		camera.cullingMask = 1 << mask;
-		camera.depth = Camera.mainCamera.depth - 1;
+		//camera.depth = Camera.mainCamera.depth - 2;
 		camera.targetTexture = renderTarget;
 		camera.backgroundColor = Color.black;
 		
@@ -50,8 +54,7 @@ public class HiddenCameraHandler : MonoBehaviour
 		{
 			GUI.Label(new Rect(16, 120, 256, 32), 
 				"Hidden world renderTexture size : " + renderTarget.width + ", " + renderTarget.height,
-				Settings.debugGuiStyle);			
-			
+				Settings.debugGuiStyle);
 		}
 	}
 

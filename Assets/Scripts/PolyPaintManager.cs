@@ -39,14 +39,14 @@ public class PolyPaintManager : MonoBehaviour
 			// Switch materials of prefabs because the level 2
 			// uses a different paint reveal shader
 			string shaderName = "Custom/TriPaintReveal";
-			Shader shader = Shader.Find(shaderName);
+			Shader shader = Helper.FindShader(shaderName);
 			if(shader != null)
 			{
 				Material commonMat = new Material(shader);
 				// Red, gold yellow, blue (Level2-specific)
-				commonMat.SetColor("_Color1", new Color(1f, 0f, 0f));
-				commonMat.SetColor("_Color2", new Color(1f, 0.75f, 0f));
-				commonMat.SetColor("_Color3", new Color(0f, 0f, 1f));
+				commonMat.SetColor("_Color1", new Color(1.0f, 0.2f, 0.2f));
+				commonMat.SetColor("_Color2", new Color(1.0f, 0.75f, 0.2f));
+				commonMat.SetColor("_Color3", new Color(0.2f, 0.2f, 1.0f));
 				
 				SwitchPrefabsMaterial(dripPrefab, commonMat);
 				SwitchPrefabsMaterial(splashPrefab, commonMat);
@@ -62,7 +62,8 @@ public class PolyPaintManager : MonoBehaviour
 	public float GetNextZ()
 	{
 		offZ += 0.000001f;
-		return offZ;
+		//offZ += 0.01f;
+		return z-offZ;
 	}
 
 	private static void SwitchPrefabsMaterial(GameObject[] prefabs, Material mat)
@@ -140,7 +141,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	public void SpawnCloudProjection(Color color, float x, float y, float angleDeg)
 	{
-		Vector3 pos = new Vector3(x, y, z-GetNextZ());
+		Vector3 pos = new Vector3(x, y, GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(projectionPrefab),
 			pos, Quaternion.Euler(0,0,angleDeg)) as GameObject;
@@ -169,7 +170,7 @@ public class PolyPaintManager : MonoBehaviour
 	
 	public void SpawnDrip(Color color, float x, float y)
 	{
-		Vector3 pos = new Vector3(x, y, z-GetNextZ());
+		Vector3 pos = new Vector3(x, y, GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(dripPrefab),
 			pos, Quaternion.Euler(0,0,Random.Range(-180, 180))) as GameObject;
@@ -208,7 +209,7 @@ public class PolyPaintManager : MonoBehaviour
 			color = ColorFromIndex(colorIndex);
 		}
 		
-		Vector3 pos = new Vector3(x, y, z-GetNextZ());
+		Vector3 pos = new Vector3(x, y, GetNextZ());
 		GameObject obj = Instantiate(
 			Helper.Random(splashPrefab),
 			pos, Quaternion.Euler(0,0,Random.Range(-180, 180))) as GameObject;

@@ -11,7 +11,7 @@ Shader "Custom/TriPaintReveal" {
 	{
 		Tags { "RenderType"="Opaque" "Queue"="Transparent"}
 		LOD 200
-		
+		//ZTest Always
 		Pass
 		{
 			Blend SrcAlpha OneMinusSrcAlpha
