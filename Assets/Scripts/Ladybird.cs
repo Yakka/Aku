@@ -11,6 +11,11 @@ public class Ladybird : MonoBehaviour
 	public Transform drake;
 	public Transform prison;
 	
+	private HaloBehaviour halo;
+	private float haloTimer;
+	private const float HALO_TIME = 1f;
+	private bool isHaloing = false;
+	
 	//Exception code for the faces-level
 	public SwappableStar[] stars;
 	
@@ -48,11 +53,19 @@ public class Ladybird : MonoBehaviour
 				renderer.enabled = false;
 			}
 		}
+		int nbChild = transform.GetChildCount();
+		for(int i = 0; i < nbChild; i++)
+		{
+			Transform child = transform.GetChild(i);
+			if(child != null)
+			{
+				halo = child.GetComponent<HaloBehaviour>();
+				if(halo != null)
+					break;
+			}
+		}
 		
 		originalRotation = transform.rotation;
-		//index = 15;
-		//DEBUG
-		//index = 10;
 	}
 	
 	// Update is called once per frame
@@ -60,6 +73,12 @@ public class Ladybird : MonoBehaviour
 	{
 		if(targets == null || initialPositions == null)
 			return;
+		
+		if(halo != null && Time.time >= haloTimer && isHaloing)
+		{
+			isHaloing = false;
+			halo.SetON(false);
+		}
 		
 		switch(state)
 		{
@@ -123,6 +142,12 @@ public class Ladybird : MonoBehaviour
 			else
 			{
 				CommonSounds.Instance.LadybirdCall();
+				if(halo != null)
+				{
+					halo.SetON(true);
+					haloTimer = Time.time + HALO_TIME;	
+					isHaloing = true;
+				}
 				state = STATE_MOVING;
 			}
 			break;
@@ -165,7 +190,6 @@ public class Ladybird : MonoBehaviour
 			direction2.Normalize();
 			direction3.Normalize();
 			
-			// TODO hardcode poo
 			float targetAngle = 
 				Mathf.Atan2(direction2.y, direction2.x) * Mathf.Rad2Deg 
 				+ Mathf.PerlinNoise(transform.position.x, transform.position.y) * 10f - 90f;

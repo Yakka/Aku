@@ -6,7 +6,7 @@ public class PetrolBall : MonoBehaviour
 	const float HIT_TIME_DELAY = 5f;
 	
 	private float[] lastHitTime; // Last time a PaintSpit hit the PetrolBall for each different color
-	private float normalScale;
+	//private float normalScale;
 	public GameObject[] meshes;
 	
 	// Use this for initialization
@@ -16,7 +16,7 @@ public class PetrolBall : MonoBehaviour
 		for(uint i = 0; i < lastHitTime.Length; ++i)
 			lastHitTime[i] = -9999; // Init to a time far far away
 		
-		normalScale = transform.localScale.x;
+		//normalScale = transform.localScale.x;
 	}
 	
 	// Update is called once per frame
