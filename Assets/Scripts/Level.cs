@@ -122,12 +122,12 @@ public class Level : MonoBehaviour
 		}		
 	}
 	
-	public void Detach(GameObject obj)
+	public bool Detach(GameObject obj)
 	{
 		Tile tileScript = GetTileFromWorldCoords(
 			obj.transform.position.x,
 			obj.transform.position.y);
-		tileScript.Detach(obj);
+		return tileScript.Detach(obj);
 	}
 	
 	public void Attach(GameObject obj)
@@ -164,7 +164,7 @@ public class Level : MonoBehaviour
 		
 		// Note: in C#, modulo preserves the sign, which we don't want here.
 		// However, applying an Abs() would reverse numeric order,
-		// so I just shifts values to have them above zero.
+		// so I just shift values to have them above zero.
 		if(txw < 0)
 			txw += widthTiles;
 		if(tyw < 0)
@@ -291,13 +291,61 @@ public class Level : MonoBehaviour
 			heightTiles * Tile.SIZE
 		);
 	}
-		
+	
 	public bool Finished
 	{
 		get { return finished; }
 		set { finished = value; }
 	}
 	
+	/// <summary>
+	/// Requests tiles under the given object to take a render.
+	/// This causes objects on the "Impress" layer to persist on them as a texture.
+	/// The provided game object must have a mesh, because its bounds
+	/// will be used to determine which tiles to call.
+	/// Otherwise, this method will do nothing.
+	/// </summary>
+	/// <param name='obj'>Game object.</param>
+	public void RequestPaintImpress(GameObject obj)
+	{
+		MeshFilter mf = obj.GetComponent<MeshFilter>();
+		if(mf == null) {
+			Debug.LogError(name + ": RequestPaintImpress: no MeshFilter !");
+			return;
+		}
+		Mesh mesh = mf.mesh;
+		if(mesh == null) {
+			Debug.LogError(name + ": RequestPaintImpress: no Mesh !");
+			return;
+		}
+		
+		Bounds meshLocalBounds = mesh.bounds;
+		
+		Vector3 pos = obj.transform.position;
+		Vector3 wmin = meshLocalBounds.min + pos;
+		Vector3 wmax = meshLocalBounds.max + pos;
+		
+		int minX, minY, maxX, maxY;
+		Level.Get.WorldToTileCoords(wmin.x, wmin.y, out minX, out minY, false);
+		Level.Get.WorldToTileCoords(wmax.x, wmax.y, out maxX, out maxY, false);
+		
+//		Debug.Log(obj.name + ": RequestImpress "
+//			+ minX + ", " + minY + ", "
+//			+ maxX + ", " + maxY);
+		
+		Tile tile = null;
+		// For each tile intersecting mesh's bounds
+		for(int y = minY; y <= maxY; ++y)
+		{
+			for(int x = minX; x <= maxX; ++x)
+			{
+				tile = Level.Get.GetTile(x, y);
+				tile.RequestPaintImpress();
+			}
+		}
+	
+	}
+
 }
 
 

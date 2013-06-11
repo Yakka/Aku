@@ -14,7 +14,6 @@ public class HaloBehaviour : MonoBehaviour
 		initialScale = transform.localScale.x;
 		commuteTime = Time.time;
 		//on = false;
-		
 		if(HaloManager.Instance == null)
 		{
 			Debug.LogError(name + ": I need HaloManager ! "

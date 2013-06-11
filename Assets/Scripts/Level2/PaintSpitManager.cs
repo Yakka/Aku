@@ -88,7 +88,7 @@ public class PaintSpitManager : MonoBehaviour
 			int n = 0;
 			for(uint i = 0; i < paintSpitPool.Length; ++i)
 			{
-				if(paintSpitPool[i].active)
+				if(Helper.IsActive(paintSpitPool[i]))
 					++n;
 			}
 			int pc = (int)((float)n / (float)paintSpitPool.Length);

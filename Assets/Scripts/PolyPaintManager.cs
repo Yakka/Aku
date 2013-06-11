@@ -9,6 +9,7 @@ using System.Collections.Generic;
 public class PolyPaintManager : MonoBehaviour 
 {
 	private static PolyPaintManager globalInstance;
+	public static Material commonAlphaMaterial;
 	
 	public GameObject[] projectionPrefab;
 	public GameObject[] dripPrefab;
@@ -57,6 +58,8 @@ public class PolyPaintManager : MonoBehaviour
 				Debug.LogError(name + ": " + shaderName + " shader not found !");
 			}
 		}
+		
+		commonAlphaMaterial = Helper.CreateMaterial("Mobile/Particles/Alpha Blended");
 	}
 	
 	public float GetNextZ()
@@ -73,7 +76,7 @@ public class PolyPaintManager : MonoBehaviour
 			// I make a copy from each prefab because otherwise they will be
 			// modified into the project, causing other scenes to break
 			GameObject obj = Instantiate(prefabs[i]) as GameObject;
-			obj.active = false;
+			Helper.SetActive(obj, false);
 			prefabs[i] = obj;
 			
 			Renderer r = prefabs[i].renderer;
@@ -149,7 +152,7 @@ public class PolyPaintManager : MonoBehaviour
 		Level.Get.Attach(obj); // For wrapping
 		
 		obj.name = "PolyPaint_projection";
-		obj.active = true; // Needed when prefabs are inactive modified clones instead
+		Helper.SetActive(obj, true); // Needed when prefabs are inactive modified clones instead
 		
 		// Fix position
 		float r = 8f;
@@ -181,7 +184,7 @@ public class PolyPaintManager : MonoBehaviour
 		obj.transform.localScale = new Vector3(s,s,1);
 		
 		obj.name = "PolyPaint_drip";
-		obj.active = true; // Needed when prefabs are inactive modified clones instead
+		Helper.SetActive(obj, true); // Needed when prefabs are inactive modified clones instead
 		
 		// This one is static		
 		// Send color by mesh vertices			
@@ -220,7 +223,7 @@ public class PolyPaintManager : MonoBehaviour
 		obj.transform.localScale = new Vector3(scaling, scaling, 1);
 		
 		obj.name = "PolyPaint_splash";
-		obj.active = true; // Needed when prefabs are inactive modified clones instead
+		Helper.SetActive(obj, true); // Needed when prefabs are inactive modified clones instead
 		
 		PolyPaintQuad pp = new PolyPaintQuad(obj, color, 0.25f);
 		animatedPaints.Add(pp);

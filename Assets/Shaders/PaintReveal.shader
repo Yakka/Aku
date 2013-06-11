@@ -5,6 +5,8 @@ Shader "Custom/PaintReveal" {
 		//_Color ("Tint color (_Color)", Color) = (1.0, 1.0, 1.0, 1.0)
 		//_Spread ("Spread effect (_Spread, 0=max, 1=min)", float) = 1.0
 		//_Coeff ("Spread coeff (_Coeff, 1=disabled, usually 4)", float) = 4.0
+		_HiddenScale ("HiddenScale", Vector) = (1.0, 1.0, 0.0, 0.0)
+		_HiddenOffset ("HiddenScale", Vector) = (0.0, 0.0, 0.0, 0.0)
 	}
 	
 	SubShader 
@@ -26,6 +28,8 @@ Shader "Custom/PaintReveal" {
 			//half4 _Color;
 			//half _Spread;
 			//half _Coeff;
+			half2 _HiddenScale;
+			half2 _HiddenOffset;
 			
 			struct VertexOutput
 			{
@@ -40,7 +44,7 @@ Shader "Custom/PaintReveal" {
 				VertexOutput o;
 				o.pos = mul(UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.texcoord;
-				o.screenPos = o.pos;
+				o.screenPos = float4((o.pos.xy*_HiddenScale)+_HiddenOffset, o.pos.zw);//o.pos;
 				o.vcolor = v.color;// * _Color;
 				return o;
 			}

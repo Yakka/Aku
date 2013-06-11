@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class PolyPainter 
 {
-	private const float WRAP_CUT_RADIUS = 100f;
+	private const float WRAP_CUT_RADIUS = 50;
 	
 	private Color color;
 	private bool moonPaint;
@@ -81,13 +81,14 @@ public class PolyPainter
 		stripObj.name = "generated_paint_strip";
 		currentStrip = stripObj.AddComponent<PolyPaintStrip>();
 		stripBeginPos = startPos;
+		currentStrip.CanImpress = !moonPaint;
 		
 		if(prevStrip != null)
 			prevStrip.Next = currentStrip;
 		
 		//Profiler.EndSample();
 	}
-		
+	
 	public void Finish()
 	{
 		if(currentStrip != null && !currentStrip.Finished)

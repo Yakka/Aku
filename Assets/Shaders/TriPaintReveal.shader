@@ -2,9 +2,11 @@
 Shader "Custom/TriPaintReveal" {
 	Properties {
 		_MainTex ("Base (RGBA)", 2D) = "white" {}
-		_Color1 ("Color1", Color) = (1.0, 0.0, 0.0) 
-		_Color2 ("Color2", Color) = (0.0, 1.0, 0.0) 
-		_Color3 ("Color3", Color) = (0.0, 0.0, 1.0) 
+		_Color1 ("Color1", Color) = (1.0, 0.37, 0.37) 
+		_Color2 ("Color2", Color) = (1.0, 0.91, 0.21) 
+		_Color3 ("Color3", Color) = (0.37, 0.37, 1.0) 
+		_HiddenScale ("HiddenScale", Vector) = (1.0, 1.0, 0.0, 0.0)
+		_HiddenOffset ("HiddenScale", Vector) = (0.0, 0.0, 0.0, 0.0)
 	}
 	
 	SubShader 
@@ -26,6 +28,8 @@ Shader "Custom/TriPaintReveal" {
 			half4 _Color1;
 			half4 _Color2;
 			half4 _Color3;
+			half2 _HiddenScale;
+			half2 _HiddenOffset;
 			
 			struct VertexOutput
 			{
@@ -40,7 +44,7 @@ Shader "Custom/TriPaintReveal" {
 				VertexOutput o;
 				o.pos = mul (UNITY_MATRIX_MVP, v.vertex);
 				o.uv = v.texcoord;
-				o.screenPos = o.pos;
+				o.screenPos = float4((o.pos.xy*_HiddenScale)+_HiddenOffset, o.pos.zw);
 				o.vcolor = v.color;
 				return o;
 			}

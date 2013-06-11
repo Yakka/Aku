@@ -27,7 +27,7 @@ public class CameraHandler : MonoBehaviour
 	
 	public GameObject levelObj;
 
-	private Drake drakeRef; // Only used when we really have to access drake's properties
+	//private Drake drakeRef; // Only used when we really have to access drake's properties
 	private int tilePosX;
 	private int tilePosY;
 	private int lastFrameTilePosX;
@@ -59,7 +59,7 @@ public class CameraHandler : MonoBehaviour
 		// Get level script
 		level = levelObj.GetComponent("Level") as Level;
 		
-		drakeRef = target.GetComponent<Drake>();
+		//drakeRef = target.GetComponent<Drake>();
 		
 		// Look at the target
 		transform.position = new Vector3(target.position.x, target.position.y, transform.position.z);

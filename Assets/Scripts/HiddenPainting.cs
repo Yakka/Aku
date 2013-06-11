@@ -17,9 +17,12 @@ public class HiddenPainting : MonoBehaviour
 	/// </summary>
 	public Color[] channelMapping; // RGB
 	
+	// TODO @Yakka this creates a warning, 
+	// you should access it through Camera.mainCamera instead
 	public CameraHandler camera;
-	public CameraWaypoint waypoint;
 	
+	public CameraWaypoint waypoint;
+		
 	private Vector3 pos; // Faster shortcut to transform.position
 	
 	#region "Pixel counting"
@@ -76,7 +79,7 @@ public class HiddenPainting : MonoBehaviour
 	{
 		return (code & (16 << channel)) != 0;
 	}
-		
+	
 	private void BuildRevealMatrix()
 	{
 		Debug.Log("Building reveal matrix for " + gameObject.name);
