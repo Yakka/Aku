@@ -17,9 +17,12 @@ public class HiddenPainting : MonoBehaviour
 	/// </summary>
 	public Color[] channelMapping; // RGB
 	
+	// TODO @Yakka this creates a warning, 
+	// you should access it through Camera.mainCamera instead
 	public CameraHandler camera;
-	public CameraWaypoint waypoint;
 	
+	public CameraWaypoint waypoint;
+		
 	private Vector3 pos; // Faster shortcut to transform.position
 	
 	#region "Pixel counting"

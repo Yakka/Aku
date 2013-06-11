@@ -118,8 +118,8 @@ public class Helper
 	
 	public static bool IsActive(GameObject obj)
 	{
-		return obj.active;
-		//return obj.activeSelf;
+		return obj.active; // unity 3.5.6
+		//return obj.activeSelf; // Unity 4+
 	}
 	
 	/// <summary>
