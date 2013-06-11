@@ -9,7 +9,6 @@ public class Ladybird : MonoBehaviour
 	public LadybirdTrigger[] targets;
 	public LadybirdTrigger[] initialPositions;
 	public Transform drake;
-	public GameObject objectToEnable;
 	public Transform prison;
 	
 	//Exception code for the faces-level
@@ -223,11 +222,6 @@ public class Ladybird : MonoBehaviour
 			case "LadyBirdTriggerFaceBaby2":
 			case "LadybirdTriggerFaceWoman2":
 			case "LadyBirdTriggerFaceOldman2":
-				if(!targets[index].IsHiddenPaintingTrigger())
-				{
-					if(objectToEnable != null)
-						Helper.SetActive(objectToEnable, true);
-				}
 				annoyed = true;
 				break;
 			//

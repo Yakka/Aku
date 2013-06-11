@@ -7,6 +7,7 @@ public class PetrolBall : MonoBehaviour
 	
 	private float[] lastHitTime; // Last time a PaintSpit hit the PetrolBall for each different color
 	private float normalScale;
+	public GameObject[] meshes;
 	
 	// Use this for initialization
 	void Start () 
@@ -42,11 +43,20 @@ public class PetrolBall : MonoBehaviour
 		
 		// Some cheap funky animation :
 		// Roooootation
-		transform.Rotate(0, 0, 5f*Time.deltaTime);
+		//transform.Rotate(0, 0, 5f*Time.deltaTime);
+		for(int m = 0; m < meshes.Length; m++)
+		{
+			float k;
+			if(m == 0)
+				k = -10f;
+			else
+				k = m;
+			meshes[m].transform.Rotate(0, 0, 4f*k*Time.deltaTime, Space.World);
+		}
 		// Cooooontraction
-		tempScale.x = normalScale * (0.95f + 0.1f*Mathf.PerlinNoise(0.5f*Time.time, 10));
+		/*tempScale.x = normalScale * (0.95f + 0.1f*Mathf.PerlinNoise(0.5f*Time.time, 10));
 		tempScale.y = tempScale.x;
-		//transform.localScale = tempScale;
+		transform.localScale = tempScale;*/
 	}
 	
 	void OnTriggerEnter(Collider other)

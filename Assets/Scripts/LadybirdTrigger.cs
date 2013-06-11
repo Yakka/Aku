@@ -6,9 +6,16 @@ public class LadybirdTrigger : MonoBehaviour {
 	public HiddenPainting hiddenPainting = null;
 	public float threshold = 0;
 	public int checkedChannel = 0;
-	
+	public GameObject objectToEnable;
 	private bool isActivated = false;
 
+	void Update()
+	{
+		if(objectToEnable != null && !IsHiddenPaintingTrigger())
+		{
+			Helper.SetActive(objectToEnable, true);
+		}
+	}
 	
 	void OnTriggerEnter(Collider other)
 	{
