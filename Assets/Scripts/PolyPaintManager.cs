@@ -9,7 +9,6 @@ using System.Collections.Generic;
 public class PolyPaintManager : MonoBehaviour 
 {
 	private static PolyPaintManager globalInstance;
-	public static Material commonAlphaMaterial;
 	
 	public GameObject[] projectionPrefab;
 	public GameObject[] dripPrefab;
@@ -58,8 +57,6 @@ public class PolyPaintManager : MonoBehaviour
 				Debug.LogError(name + ": " + shaderName + " shader not found !");
 			}
 		}
-		
-		commonAlphaMaterial = Helper.CreateMaterial("Mobile/Particles/Alpha Blended");
 	}
 	
 	public float GetNextZ()

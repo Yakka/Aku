@@ -297,7 +297,7 @@ public class Level : MonoBehaviour
 		get { return finished; }
 		set { finished = value; }
 	}
-	
+		
 	/// <summary>
 	/// Requests tiles under the given object to take a render.
 	/// This causes objects on the "Impress" layer to persist on them as a texture.
@@ -343,7 +343,7 @@ public class Level : MonoBehaviour
 				tile.RequestPaintImpress();
 			}
 		}
-	
+			
 	}
 
 }
