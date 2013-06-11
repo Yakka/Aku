@@ -75,7 +75,9 @@ public class ImpressCamera : MonoBehaviour
 		// Create render targets
 		hiddenRenderTarget = CreateRenderTarget();
 		hcam.targetTexture = hiddenRenderTarget;
+		
 		renderTarget = CreateRenderTarget();
+		cam.targetTexture = renderTarget;
 
 		// Get reveal material
 		if(revealMaterial == null)
@@ -104,11 +106,11 @@ public class ImpressCamera : MonoBehaviour
 	{
 		//Debug.Log(name + ": shot " + tileRef);
 		
-		// FIXME Why the material seems not to apply?
-		Graphics.Blit(source, renderTarget, revealMaterial);
+		Graphics.Blit(source, destination, revealMaterial);
+		
+		takeRequested = false;
 		
 		tileRef.PostPaintImpress();
-		takeRequested = false;
 		//Helper.SetActive(gameObject, false);
 	}
 	

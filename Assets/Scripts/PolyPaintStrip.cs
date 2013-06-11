@@ -1,12 +1,15 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class PolyPaintStrip : MonoBehaviour
 {
 	const int MAX_POINTS = 256;
+	const int IMPRESS_QUEUE_MAX_LENGTH = 16;
 	private static int instanceCount;
 	private static Material commonRevealMaterial;
+	private static List<PolyPaintStrip> impressQueue = new List<PolyPaintStrip>();
 	
 	private PolyPaintStrip next;
 	
@@ -16,7 +19,7 @@ public class PolyPaintStrip : MonoBehaviour
 	private int fadeIndex = -1;
 	private bool requestedImpress = false;
 	private bool canImpress = true;
-	
+	private bool hasBeenQueued = false;
 	private bool finished;
 	
 	public Vector3[] vertices = new Vector3[0];
@@ -148,12 +151,15 @@ public class PolyPaintStrip : MonoBehaviour
 	
 	public void Fade()
 	{
+		if(requestedImpress && !hasBeenQueued)
+			Debug.Log("CACAAAA");
 		if(fadeIndex == -1)
 			fadeIndex = 0;
 	}
 	
 	void Update()
 	{
+		// If fading is active
 		if(fadeIndex >= 0 && fadeIndex < colors.Length)
 		{
 			// If there is at least 2 triangles, apply fading.
@@ -175,13 +181,16 @@ public class PolyPaintStrip : MonoBehaviour
 			
 			++fadeIndex;
 			
+			// If fading reached the end of the strip
 			if(fadeIndex == colors.Length)
 			{
 				if(next != null)
 				{
-					next.GetComponent<PolyPaintStrip>().Fade();
+					// Start fading the next strip
+					PolyPaintStrip next_script = next.GetComponent<PolyPaintStrip>();
+					if(!next_script.CanImpress)
+						next_script.Fade(); // Only not impressible nexts are automatically faded
 				}
-				//Helper.SetActive(gameObject, false);
 				Destroy();
 			}
 		}
@@ -190,15 +199,26 @@ public class PolyPaintStrip : MonoBehaviour
 			// TODO introduce an interval in which several strips attend for being printed together,
 			// because drake scales finish their strips one by one on each frame,
 			// causing too much useless renderings (they could be done in one).
-			if(!requestedImpress)
+			if(!hasBeenQueued && !requestedImpress)
 			{
-				RequestImpress();
-				Fade();
+				impressQueue.Add(this);
+				hasBeenQueued = true;
+					
+				if(impressQueue.Count >= IMPRESS_QUEUE_MAX_LENGTH)
+				{
+					foreach(PolyPaintStrip pps in impressQueue)
+					{
+						pps.RequestImpress();
+						pps.Fade();
+					}
+					impressQueue.Clear();
+					//Debug.Log("Dequeued " + impressQueue.Count);
+				}
 			}
 		}
 	}
 	
-	void RequestImpress()
+	private void RequestImpress()
 	{
 		gameObject.layer = LayerMask.NameToLayer("Impress");
 		Level.Get.RequestPaintImpress(gameObject);
@@ -208,7 +228,7 @@ public class PolyPaintStrip : MonoBehaviour
 		requestedImpress = true;
 	}
 	
-	void Destroy()
+	private void Destroy()
 	{
 		Level.Get.Detach(this.gameObject);
 		Destroy(this.gameObject);
