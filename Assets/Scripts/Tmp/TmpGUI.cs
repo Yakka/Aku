@@ -20,7 +20,7 @@ public class TmpGUI : MonoBehaviour
 	{
 		if(Level.Get.Finished)
 		{
-			GUI.Label(tempRect, "Fin du niveau", style);
+			GUI.Label(tempRect, "End of level\nSupport us on facebook.com/akuthegame", style);
 		}
 	}
 
