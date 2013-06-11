@@ -477,7 +477,9 @@ public class Drake : MonoBehaviour
 		
 		if(Mathf.Abs(AngularSpeed) >= SPLASH_TRIGGER_ANGSPEED_DEG)
 		{
-			if(Time.time - splashTriggerTime >= SPLASH_TRIGGER_DELAY_S && !HasMoonPaint)
+			if(Time.time - splashTriggerTime >= SPLASH_TRIGGER_DELAY_S
+				&& !HasMoonPaint
+				&& !Level.Get.IsWater(transform.position.x, transform.position.y))
 			{
 				DoPaintSplash();
 				splashTriggerTime = Time.time;

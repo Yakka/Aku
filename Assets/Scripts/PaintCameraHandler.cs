@@ -4,6 +4,7 @@ using System.Collections;
 public class PaintCameraHandler : MonoBehaviour 
 {	
 	public RenderTexture renderTarget;
+
 	public float resolutionCoeff = 1;
 	//private Material revealMaterial;
 	
@@ -24,6 +25,7 @@ public class PaintCameraHandler : MonoBehaviour
 		//Debug.Log("HiddenPainting layer: " + mask);
 		gameObject.layer = mask;
 		camera.cullingMask = 1 << mask;
+
 		//camera.depth = Camera.mainCamera.depth - 1;
 		camera.targetTexture = renderTarget;
 		camera.backgroundColor = new Color(0,0,0,1f);

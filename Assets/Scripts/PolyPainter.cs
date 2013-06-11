@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class PolyPainter 
 {
-	private const float WRAP_CUT_RADIUS = 100f;
+	private const float WRAP_CUT_RADIUS = 50;
 	
 	private Color color;
 	private bool moonPaint;

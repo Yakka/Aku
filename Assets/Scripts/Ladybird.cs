@@ -9,8 +9,12 @@ public class Ladybird : MonoBehaviour
 	public LadybirdTrigger[] targets;
 	public LadybirdTrigger[] initialPositions;
 	public Transform drake;
-	public GameObject objectToEnable;
 	public Transform prison;
+	
+	private HaloBehaviour halo;
+	private float haloTimer;
+	private const float HALO_TIME = 1f;
+	private bool isHaloing = false;
 	
 	//Exception code for the faces-level
 	public SwappableStar[] stars;
@@ -49,11 +53,19 @@ public class Ladybird : MonoBehaviour
 				renderer.enabled = false;
 			}
 		}
+		int nbChild = transform.GetChildCount();
+		for(int i = 0; i < nbChild; i++)
+		{
+			Transform child = transform.GetChild(i);
+			if(child != null)
+			{
+				halo = child.GetComponent<HaloBehaviour>();
+				if(halo != null)
+					break;
+			}
+		}
 		
 		originalRotation = transform.rotation;
-		//index = 15;
-		//DEBUG
-		//index = 10;
 	}
 	
 	// Update is called once per frame
@@ -61,6 +73,12 @@ public class Ladybird : MonoBehaviour
 	{
 		if(targets == null || initialPositions == null)
 			return;
+		
+		if(halo != null && Time.time >= haloTimer && isHaloing)
+		{
+			isHaloing = false;
+			halo.SetON(false);
+		}
 		
 		switch(state)
 		{
@@ -83,7 +101,6 @@ public class Ladybird : MonoBehaviour
 			if(distanceToTarget > 0.1f)
 			{
 				MoveTo (target);
-				
 			}
 			else
 			{
@@ -100,6 +117,7 @@ public class Ladybird : MonoBehaviour
 				nextSearch = Time.time + MAX_WAITING;
 				Disturb();
 			}
+
 			else if(Time.time > nextSearch)
 			{
 				state = STATE_SEARCHING;
@@ -123,9 +141,13 @@ public class Ladybird : MonoBehaviour
 			}
 			else
 			{
-				// MICHELE : SON DE COCCINELLE QUI APPELLE LE JOUEUR
-				Debug.Log("Appel de la scarinelle");
 				CommonSounds.Instance.LadybirdCall();
+				if(halo != null)
+				{
+					halo.SetON(true);
+					haloTimer = Time.time + HALO_TIME;	
+					isHaloing = true;
+				}
 				state = STATE_MOVING;
 			}
 			break;
@@ -168,7 +190,6 @@ public class Ladybird : MonoBehaviour
 			direction2.Normalize();
 			direction3.Normalize();
 			
-			// TODO hardcode poo
 			float targetAngle = 
 				Mathf.Atan2(direction2.y, direction2.x) * Mathf.Rad2Deg 
 				+ Mathf.PerlinNoise(transform.position.x, transform.position.y) * 10f - 90f;
@@ -225,11 +246,6 @@ public class Ladybird : MonoBehaviour
 			case "LadyBirdTriggerFaceBaby2":
 			case "LadybirdTriggerFaceWoman2":
 			case "LadyBirdTriggerFaceOldman2":
-				if(!targets[index].IsHiddenPaintingTrigger())
-				{
-					if(objectToEnable != null)
-						Helper.SetActive(objectToEnable, true);
-				}
 				annoyed = true;
 				break;
 			//
@@ -244,8 +260,8 @@ public class Ladybird : MonoBehaviour
 			case "LadyBirdTriggerBlueStar":
 			case "LadyBirdTriggerRedStar":
 			case "LadyBirdTriggerYellowStar":
-				//string nextName = "";
 				bool wrongPosition = true;
+				string nextName = "";
 				foreach(SwappableStar star in stars)
 				{
 					if(star.IsAtGoodPosition() && wrongPosition)
@@ -253,31 +269,25 @@ public class Ladybird : MonoBehaviour
 						wrongPosition = false;
 						switch(star.positionID)
 						{
-							// TOFIX DIRTY CODE
 						case 0:
-							//nextName = "LadybirdTriggerFaceWoman2";
-							index = 11; // DIRTY
+							nextName = "LadybirdTriggerFaceWoman2";
 							break;
 						case 1:
-							//nextName = "LadyBirdTriggerFaceOldman2";
-							index = 12; // DIRTY
+							nextName = "LadyBirdTriggerFaceOldman2";
 							break;
 						case 2:
-							//nextName = "LadyBirdTriggerFaceBaby2";
-							index = 10; // DIRTY
+							nextName = "LadyBirdTriggerFaceBaby2";
 							break;
 						}
-						move = true;
-						/*for(int i = 0; i < targets.Length; i++)
+						for(int i = 0; i < targets.Length; i++)
 						{
 							if(targets[i].name.Equals(nextName))
 							{
 								index = i;
-								animation.Play("takeOff");
-								state = STATE_MOVING;
+								move = true;
 								break;
 							}
-						}*/
+						}
 						break;
 					}
 				}
@@ -309,7 +319,7 @@ public class Ladybird : MonoBehaviour
 					if(targets[i].name == "LadyBirdTriggerYellowStar")
 						indexStars[2] = i;
 				}
-				index = indexStars[Random.Range(0, 2)];
+				index = indexStars[Random.Range(0, indexStars.Length)];
 				move = true;
 				break;
 			default:
@@ -338,7 +348,7 @@ public class Ladybird : MonoBehaviour
 			}
 			
 			// TOFIX DIRTY CODE
-			if(index == 16)
+			if(index == 13)
 				renderer.enabled = false;
 			
 		}
