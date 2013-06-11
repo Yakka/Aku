@@ -26,6 +26,7 @@ public class PixelPainter
 	
 	public void Update (float x0, float y0)
 	{
+	/*
 		if(color.a < 0.01f)
 			return;
 				
@@ -68,20 +69,19 @@ public class PixelPainter
 					if(hiddenPaintingRef != null)
 					{
 						tile.SetPaintPixelNoFade(pcolor, texX, texY);
-						/* // Fading is no longer useful here, use shader instead
-						channel = hiddenPaintingRef.GetMatchingChannelFromWorldCoords(x, y, pcolor);
-						if(channel != -1)
-						{
-							// Hidden painting (fading pixels)
-							tile.SetPaintPixel(pcolor, texX, texY, 0, NORMAL_PAINT_FADE_SPEED);
-						}
-						else
-						{
-							// Standard painting
-							tile.SetPaintPixelNoFade(pcolor, texX, texY);
-						}
-						hiddenPaintingRef.CheckPixel(texX, texY, (sbyte)channel);
-						*/
+						// Fading is no longer useful here, use shader instead
+//						channel = hiddenPaintingRef.GetMatchingChannelFromWorldCoords(x, y, pcolor);
+//						if(channel != -1)
+//						{
+//							// Hidden painting (fading pixels)
+//							tile.SetPaintPixel(pcolor, texX, texY, 0, NORMAL_PAINT_FADE_SPEED);
+//						}
+//						else
+//						{
+//							// Standard painting
+//							tile.SetPaintPixelNoFade(pcolor, texX, texY);
+//						}
+//						hiddenPaintingRef.CheckPixel(texX, texY, (sbyte)channel);
 					}
 					else if(moonPaint)
 					{
@@ -104,6 +104,7 @@ public class PixelPainter
 		
 		//prevX = x0;
 		//prevY = y0;
+	*/
 	}
 
 }

@@ -131,7 +131,7 @@ public class Hornet : MonoBehaviour
 			if(Level.Get.IsWater(pos.x, pos.y))
 			{
 				// Disappear once in water
-				gameObject.active = false;
+				Helper.SetActive(gameObject, false);
 			}
 		}
 		else

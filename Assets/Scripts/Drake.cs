@@ -194,7 +194,7 @@ public class Drake : MonoBehaviour
 		
 		// Disable first scale because it overlaps on the head
 		// TODO dirty code, try to do this more cleanly
-		scales[0].gameObject.active = false;
+		Helper.SetActive(scales[0].gameObject, false);
 				
 		#endregion
 		#region "Create tail"
@@ -242,11 +242,11 @@ public class Drake : MonoBehaviour
 			DrakeScale s = scales[i];
 			if(s.boneRef.index < currentBoneCount && i != 0)
 			{
-				if(!scales[i].gameObject.active)
+				if(!Helper.IsActive(scales[i].gameObject))
 				{
-					scales[i].gameObject.active = true;
+					Helper.SetActive(scales[i].gameObject, true);
 					if(scales[i].glowRef != null)
-						scales[i].glowRef.active = true;
+						Helper.SetActive(scales[i].glowRef, true);
 					s.Shine();
 					// Note : they will be updated in their Start() method
 					//s.UpdateColorDistanceAutonomy();
@@ -257,9 +257,9 @@ public class Drake : MonoBehaviour
 			}
 			else
 			{
-				scales[i].gameObject.active = false;
+				Helper.SetActive(scales[i].gameObject, false);
 				if(scales[i].glowRef != null)
-					scales[i].glowRef.active = false;
+					Helper.SetActive(scales[i].glowRef, false);
 			}
 		}
 		

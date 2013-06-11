@@ -6,7 +6,7 @@ public class PolyPaintStrip : MonoBehaviour
 {
 	const int MAX_POINTS = 256;
 	private static int instanceCount;
-	private static Material commonMaterial;
+	private static Material commonRevealMaterial;
 	
 	private PolyPaintStrip next;
 	
@@ -14,6 +14,8 @@ public class PolyPaintStrip : MonoBehaviour
 	private Vector3[] points;
 	private int pointIndex;
 	private int fadeIndex = -1;
+	private bool requestedImpress = false;
+	private bool canImpress = true;
 	
 	private bool finished;
 	
@@ -28,12 +30,11 @@ public class PolyPaintStrip : MonoBehaviour
 		GetComponent<MeshFilter>().mesh = mesh;
 		mesh.name = "generated_paint_strip";
 		
-		if(commonMaterial == null)
-		{
-			commonMaterial = PolyPaintManager.Instance.PolyPaintMaterial;
-			//commonMaterial = Helper.CreateMaterial("VertexColor");
-		}
-		GetComponent<MeshRenderer>().material = commonMaterial;
+//		if(commonRevealMaterial == null)
+//		{
+//			commonMaterial = Helper.CreateMaterial("VertexColor");
+//		}
+		gameObject.renderer.material = PolyPaintManager.Instance.PolyPaintMaterial;
 		
 		Level.Get.Attach(gameObject);
 		
@@ -44,6 +45,12 @@ public class PolyPaintStrip : MonoBehaviour
 //		points = new Vector3[MAX_POINTS];
 //		for(int i = 0; i < points.Length; ++i)
 //			points[i] = new Vector3();
+	}
+	
+	public bool CanImpress
+	{
+		get { return canImpress; }
+		set { canImpress = value; }
 	}
 	
 	//private static int strippingCount = 0;
@@ -175,11 +182,37 @@ public class PolyPaintStrip : MonoBehaviour
 					next.GetComponent<PolyPaintStrip>().Fade();
 				}
 				//Helper.SetActive(gameObject, false);
-				Level.Get.Detach(this.gameObject);
-				Destroy(this.gameObject);
-				--instanceCount;
+				Destroy();
 			}
 		}
+		else if(Finished && CanImpress)
+		{
+			// TODO introduce an interval in which several strips attend for being printed together,
+			// because drake scales finish their strips one by one on each frame,
+			// causing too much useless renderings (they could be done in one).
+			if(!requestedImpress)
+			{
+				RequestImpress();
+				Fade();
+			}
+		}
+	}
+	
+	void RequestImpress()
+	{
+		gameObject.layer = LayerMask.NameToLayer("Impress");
+		Level.Get.RequestPaintImpress(gameObject);
+		Material mat = gameObject.renderer.material;
+		mat.shader = Helper.FindShader("Mobile/Particles/Alpha Blended");
+		//gameObject.renderer.material = PolyPaintManager.commonAlphaMaterial;
+		requestedImpress = true;
+	}
+	
+	void Destroy()
+	{
+		Level.Get.Detach(this.gameObject);
+		Destroy(this.gameObject);
+		--instanceCount;
 	}
 	
 	public Bounds Bounds

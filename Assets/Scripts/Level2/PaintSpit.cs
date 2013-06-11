@@ -49,6 +49,8 @@ public class PaintSpit : MonoBehaviour
 			pb = GetComponent<PainterBehavior>();
 		}
 		
+		pb.FinishStrip();
+		
 		vel = newVel;
 		pos = newPos;
 		transform.position = pos;
@@ -58,6 +60,7 @@ public class PaintSpit : MonoBehaviour
 		// (See pb.ColorLevel implementation).
 		pb.SetColor(channel, true);
 		pb.ColorLevel = 1; 
+		
 	}
 	
 	void OnTriggerEnter(Collider other)

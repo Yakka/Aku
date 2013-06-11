@@ -81,13 +81,14 @@ public class PolyPainter
 		stripObj.name = "generated_paint_strip";
 		currentStrip = stripObj.AddComponent<PolyPaintStrip>();
 		stripBeginPos = startPos;
+		currentStrip.CanImpress = !moonPaint;
 		
 		if(prevStrip != null)
 			prevStrip.Next = currentStrip;
 		
 		//Profiler.EndSample();
 	}
-		
+	
 	public void Finish()
 	{
 		if(currentStrip != null && !currentStrip.Finished)

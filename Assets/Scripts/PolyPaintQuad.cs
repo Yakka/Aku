@@ -26,6 +26,8 @@ public class PolyPaintQuad
 	private float startTime;
 	private float finalScale;
 	
+	private bool requestedImpress;
+	
 	public PolyPaintQuad(GameObject obj, Color color, float spreadTime)
 	{		
 		gameObject = obj;
@@ -60,6 +62,9 @@ public class PolyPaintQuad
 	
 	public void Update ()
 	{
+		if(gameObject == null)
+			return;
+		
 		float span = Time.time - startTime;
 		if(span < spreadTime)
 		{
@@ -78,9 +83,51 @@ public class PolyPaintQuad
 				gameObject.renderer.material.SetFloat("_Spread", spread);
 			}
 		}
+		else if(!requestedImpress)
+		{
+			RequestImpress();
+		}
+		else
+		{
+			Level.Get.Detach(gameObject);
+			// TODO Fix that, seems like Detach has no effect and MissingReferences occur
+			//GameObject.Destroy(gameObject); 
+			Helper.SetActive(gameObject, false); 
+			gameObject = null;
+		}
 	}
 	
+	private void RequestImpress()
+	{
+		// Change layer
+		gameObject.layer = LayerMask.NameToLayer("Impress");
+		
+		// Change material
+		Material mat = Helper.CreateMaterial("Mobile/Particles/Alpha Blended");
+		Renderer r = gameObject.renderer;
+		mat.mainTexture = r.material.mainTexture;
+		r.material = mat;
+		
+		// TODO optimize splash impress
+		Vector3 pos = gameObject.transform.position;
+		int x, y;
+		Level.Get.WorldToTileCoords(pos.x, pos.y, out x, out y, false);
+		Level.Get.GetTile( x-1,	y-1 ).RequestPaintImpress();
+		Level.Get.GetTile( x,	y-1 ).RequestPaintImpress();
+		Level.Get.GetTile( x+1,	y-1 ).RequestPaintImpress();
+		Level.Get.GetTile( x-1,	y   ).RequestPaintImpress();
+		Level.Get.GetTile( x,	y   ).RequestPaintImpress();
+		Level.Get.GetTile( x+1,	y   ).RequestPaintImpress();
+		Level.Get.GetTile( x-1,	y+1 ).RequestPaintImpress();
+		Level.Get.GetTile( x,	y+1 ).RequestPaintImpress();
+		Level.Get.GetTile( x+1,	y+1 ).RequestPaintImpress();
+		requestedImpress = true;
+	}
+
 }
+
+
+
 
 
 

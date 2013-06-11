@@ -127,6 +127,8 @@ public class Helper
 	/// If not found, tries to locate it with its name without '/'.
 	/// If still not found, tries to locate it with "Custom/"+name.
 	/// Finally, returns an alpha blend shader as fallback.
+	/// I created this method because on mobile devices, finding custom shaders
+	/// fail when the full name is provided...
 	/// </summary>
 	/// <returns>The shader.</returns>
 	/// <param name='shaderName'>Shader name.</param>

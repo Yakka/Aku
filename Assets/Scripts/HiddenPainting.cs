@@ -73,7 +73,7 @@ public class HiddenPainting : MonoBehaviour
 	{
 		return (code & (16 << channel)) != 0;
 	}
-		
+	
 	private void BuildRevealMatrix()
 	{
 		Debug.Log("Building reveal matrix for " + gameObject.name);

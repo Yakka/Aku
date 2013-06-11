@@ -133,10 +133,11 @@ public class PainterBehavior : MonoBehaviour
 		if((hiddenPainting = other.GetComponent<HiddenPainting>()) != null)
 		{
 			// Enter in a hidden painting zone
-			if(pixelPainter != null)
+			if(pixelPainter != null || polyPainter != null)
 			{
 				hiddenPaintingRef = hiddenPainting;
-				pixelPainter.hiddenPaintingRef = hiddenPainting;
+				if(pixelPainter != null)
+					pixelPainter.hiddenPaintingRef = hiddenPainting;
 			}
 		}
 		else if(affectedByClouds)

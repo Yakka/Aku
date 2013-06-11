@@ -59,7 +59,6 @@ public class PaintSpitter : MonoBehaviour
 					transform.position, configs[spitChannel], spitChannel);
 				/*if(neverSpitted)
 				{
-					// TODO GO MICHELE GO!!!
 					neverSpitted = false;
 				}*/
 			}
