@@ -176,10 +176,10 @@ public class Hornet : MonoBehaviour
 				float t = REACTIVITY * Time.deltaTime;
 				orientation.x = Mathf.Lerp(orientation.x, vectorToTarget.x, t);
 				orientation.y = Mathf.Lerp(orientation.y, vectorToTarget.y, t);	
-				Debug.Log("target 2D :"+target2D);
-				Debug.Log("position 2D :"+position2D);
-				Debug.Log("vector to target :"+vectorToTarget);
-				Debug.Log("---");
+				//Debug.Log("target 2D :"+target2D);
+				//Debug.Log("position 2D :"+position2D);
+				//Debug.Log("vector to target :"+vectorToTarget);
+				//Debug.Log("---");
 				transform.position += orientation * Time.deltaTime * SPEED_MAX;
 			}
 			
