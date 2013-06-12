@@ -249,7 +249,7 @@ public class Hornet : MonoBehaviour
 			}
 			Hurt();
 			crossedClouds.Add(cloud);
-			SoundLevel1.Instance.SizeHornet(life);
+			CommonSounds.Instance.SizeHornet(life);
 		}
 	}
 	
