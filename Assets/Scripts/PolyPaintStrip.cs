@@ -21,6 +21,7 @@ public class PolyPaintStrip : MonoBehaviour
 	private bool canImpress = true;
 	private bool hasBeenQueued = false;
 	private bool finished;
+	//private Material initialMaterial;
 	
 	public Vector3[] vertices = new Vector3[0];
 	private int[] triangles = new int[0]; // Triangle indices
@@ -42,6 +43,7 @@ public class PolyPaintStrip : MonoBehaviour
 		Level.Get.Attach(gameObject);
 		
 		gameObject.layer = LayerMask.NameToLayer("PaintReveal");
+		//initialMaterial = renderer.material;
 		
 		++instanceCount;
 		
@@ -100,6 +102,7 @@ public class PolyPaintStrip : MonoBehaviour
 		colors[vi] = color;
 		colors[vi+1] = color;
 		
+		// If there is at least one quad (2 triangles from 4 vertices)
 		if(vertices.Length >= 4)
 		{			
 			int ti = triangles.Length;
@@ -152,7 +155,7 @@ public class PolyPaintStrip : MonoBehaviour
 	public void Fade()
 	{
 		if(requestedImpress && !hasBeenQueued)
-			Debug.Log("CACAAAA");
+			Debug.LogError(name + ": Fading at this state may break stuff !");
 		if(fadeIndex == -1)
 			fadeIndex = 0;
 	}
@@ -175,7 +178,7 @@ public class PolyPaintStrip : MonoBehaviour
 					}
 					++d;
 				}
-				
+
 				mesh.colors32 = colors;
 			}
 			
@@ -188,8 +191,12 @@ public class PolyPaintStrip : MonoBehaviour
 				{
 					// Start fading the next strip
 					PolyPaintStrip next_script = next.GetComponent<PolyPaintStrip>();
+					
+					// Only not impressible nexts are automatically faded
+					// (only moon paint can't persist. Other kinds of paint are fading
+					// only during impression process, which works a different way)
 					if(!next_script.CanImpress)
-						next_script.Fade(); // Only not impressible nexts are automatically faded
+						next_script.Fade(); 
 				}
 				Destroy();
 			}
@@ -203,7 +210,7 @@ public class PolyPaintStrip : MonoBehaviour
 			{
 				impressQueue.Add(this);
 				hasBeenQueued = true;
-					
+				
 				if(impressQueue.Count >= IMPRESS_QUEUE_MAX_LENGTH)
 				{
 					foreach(PolyPaintStrip pps in impressQueue)
@@ -227,6 +234,14 @@ public class PolyPaintStrip : MonoBehaviour
 		//gameObject.renderer.material = PolyPaintManager.commonAlphaMaterial;
 		requestedImpress = true;
 	}
+	
+	// This is future code, not useable at the moment, 
+	// but should fix the colouring bug when persisting
+//	public void PostImpress()
+//	{
+//		gameObject.layer = LayerMask.NameToLayer("PaintReveal");
+//		gameObject.renderer = initialMaterial;
+//	}
 	
 	private void Destroy()
 	{

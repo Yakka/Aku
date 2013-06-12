@@ -304,8 +304,10 @@ public class Level : MonoBehaviour
 	/// The provided game object must have a mesh, because its bounds
 	/// will be used to determine which tiles to call.
 	/// Otherwise, this method will do nothing.
+	/// Note : persistance is not done immediately, it will take effect once
+	/// ImpressCamera get called by the render system of Unity.
 	/// </summary>
-	/// <param name='obj'>Game object.</param>
+	/// <param name='obj'>Game object that wants to persist.</param>
 	public void RequestPaintImpress(GameObject obj)
 	{
 		MeshFilter mf = obj.GetComponent<MeshFilter>();

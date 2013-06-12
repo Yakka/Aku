@@ -29,6 +29,7 @@ public class ImpressCamera : MonoBehaviour
 	private bool takeRequested;
 	private Tile tileRef;
 	private Material revealMaterial;
+	private bool isFirstRender = false;
 	
 	public void Setup(Tile tile)
 	{
@@ -96,15 +97,22 @@ public class ImpressCamera : MonoBehaviour
 	
 	private RenderTexture CreateRenderTarget()
 	{
-		return new RenderTexture(
+		RenderTexture rt = new RenderTexture(
 			(int)((float)RENDER_WIDTH * RESOLUTION_COEFF), 
-			(int)((float)RENDER_HEIGHT * RESOLUTION_COEFF), 16);
+			(int)((float)RENDER_HEIGHT * RESOLUTION_COEFF), 24);
+		return rt;
 		//camera.targetTexture = renderTarget;
 	}
 	
 	void OnRenderImage(RenderTexture source, RenderTexture destination)
 	{
 		//Debug.Log(name + ": shot " + tileRef);
+		
+		if(isFirstRender)
+		{
+			GL.Clear(false, true, Color.clear);
+			isFirstRender = false;
+		}
 		
 		Graphics.Blit(source, destination, revealMaterial);
 		
