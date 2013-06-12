@@ -113,7 +113,7 @@ public class ImpressCamera : MonoBehaviour
 			GL.Clear(false, true, Color.clear);
 			isFirstRender = false;
 		}
-		
+		GL.Clear(false, true, Color.clear);
 		Graphics.Blit(source, destination, revealMaterial);
 		
 		takeRequested = false;
