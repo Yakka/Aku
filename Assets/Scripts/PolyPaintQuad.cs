@@ -20,7 +20,7 @@ public class PolyPaintQuad
 	/// in order to allow batching and increase performance.
 	/// However, it will disable shader-based animations.
 	/// </summary>
-	public bool dontBreakBatching = true;
+	public bool useBatching = true;
 
 	private GameObject gameObject;
 	private float startTime;
@@ -35,7 +35,7 @@ public class PolyPaintQuad
 		finalScale = obj.transform.localScale.x;
 		this.spreadTime = spreadTime;
 		
-		if(dontBreakBatching)
+		if(useBatching)
 		{
 			if(spreadTime > 0.001f)
 			{
@@ -69,7 +69,7 @@ public class PolyPaintQuad
 		if(span < spreadTime)
 		{
 			spread = Helper.Sq(1f - span / spreadTime);
-			if(dontBreakBatching)
+			if(useBatching)
 			{
 				// Use the scale to simulate spreading
 				gameObject.transform.localScale = 

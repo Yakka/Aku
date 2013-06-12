@@ -1,3 +1,4 @@
+// This shader always outputs clear alpha without blending.
 Shader "Custom/Clearer" {
 	Properties {}
 	SubShader {
@@ -16,6 +17,8 @@ Shader "Custom/Clearer" {
 			#pragma vertex vert
 			#pragma fragment frag
 		
+			// TODO vert is not useful here, delete it
+			
 			struct data {
 				float4 vertex: POSITION;
 			};

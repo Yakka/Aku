@@ -44,9 +44,9 @@ public class PolyPaintManager : MonoBehaviour
 			{
 				Material commonMat = new Material(shader);
 				// Red, gold yellow, blue (Level2-specific)
-				commonMat.SetColor("_Color1", new Color(1.0f, 0.2f, 0.2f));
-				commonMat.SetColor("_Color2", new Color(1.0f, 0.75f, 0.2f));
-				commonMat.SetColor("_Color3", new Color(0.2f, 0.2f, 1.0f));
+				commonMat.SetColor("_Color1", new Color(1.0f, 0.37f, 0.37f));
+				commonMat.SetColor("_Color2", new Color(1.0f, 0.91f, 0.21f));
+				commonMat.SetColor("_Color3", new Color(0.37f, 0.37f, 1.0f));
 				
 				SwitchPrefabsMaterial(dripPrefab, commonMat);
 				SwitchPrefabsMaterial(splashPrefab, commonMat);
