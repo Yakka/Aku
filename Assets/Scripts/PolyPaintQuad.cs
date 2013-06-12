@@ -112,15 +112,15 @@ public class PolyPaintQuad
 		Vector3 pos = gameObject.transform.position;
 		int x, y;
 		Level.Get.WorldToTileCoords(pos.x, pos.y, out x, out y, false);
-		Level.Get.GetTile( x-1,	y-1 ).RequestPaintImpress();
-		Level.Get.GetTile( x,	y-1 ).RequestPaintImpress();
-		Level.Get.GetTile( x+1,	y-1 ).RequestPaintImpress();
-		Level.Get.GetTile( x-1,	y   ).RequestPaintImpress();
-		Level.Get.GetTile( x,	y   ).RequestPaintImpress();
-		Level.Get.GetTile( x+1,	y   ).RequestPaintImpress();
-		Level.Get.GetTile( x-1,	y+1 ).RequestPaintImpress();
-		Level.Get.GetTile( x,	y+1 ).RequestPaintImpress();
-		Level.Get.GetTile( x+1,	y+1 ).RequestPaintImpress();
+		Level.Get.GetTile( x-1,	y-1 ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x,	y-1 ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x+1,	y-1 ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x-1,	y   ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x,	y   ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x+1,	y   ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x-1,	y+1 ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x,	y+1 ).RequestPaintImpress(gameObject);
+		Level.Get.GetTile( x+1,	y+1 ).RequestPaintImpress(gameObject);
 		requestedImpress = true;
 	}
 
