@@ -27,7 +27,7 @@ public class PolyPaintQuad
 	private float finalScale;
 	
 	private bool requestedImpress;
-	
+		
 	public PolyPaintQuad(GameObject obj, Color color, float spreadTime)
 	{		
 		gameObject = obj;
@@ -37,16 +37,16 @@ public class PolyPaintQuad
 		
 		if(useBatching)
 		{
+			// If spreading is used
 			if(spreadTime > 0.001f)
 			{
-				//Debug.Log("aaaaaaa");
+				// Scale the object so it will grow from tiny to its real size
 				gameObject.transform.localScale = new Vector3(0.1f, 0.1f, 1f);
 			}
 			
-			// Send color by mesh vertices			
+			// Send color by mesh vertices
 			MeshFilter mf = gameObject.GetComponent<MeshFilter>();
 			Color32[] colors = new Color32[4];//mf.mesh.colors32;
-			//Debug.Log(colors.Length);
 			for(int i = 0; i < colors.Length; ++i)
 			{
 				colors[i] = color;
@@ -65,7 +65,8 @@ public class PolyPaintQuad
 		if(gameObject == null)
 			return;
 		
-		float span = Time.time - startTime;
+		float span = Time.time - startTime; // Time since the quad was created
+		// If the quad is animating
 		if(span < spreadTime)
 		{
 			spread = Helper.Sq(1f - span / spreadTime);
@@ -83,16 +84,16 @@ public class PolyPaintQuad
 				gameObject.renderer.material.SetFloat("_Spread", spread);
 			}
 		}
-		else if(!requestedImpress)
+		else if(!requestedImpress) // Not/Finished animating, but not rendered to the sky
 		{
 			RequestImpress();
 		}
-		else
+		else // Rendered to sky texture, the quad can be destroyed now
 		{
 			Level.Get.Detach(gameObject);
 			// TODO Fix that, seems like Detach has no effect and MissingReferences occur
 			//GameObject.Destroy(gameObject); 
-			Helper.SetActive(gameObject, false); 
+			Helper.SetActive(gameObject, false); // So I deactivate it at the moment
 			gameObject = null;
 		}
 	}
@@ -121,7 +122,13 @@ public class PolyPaintQuad
 		Level.Get.GetTile( x-1,	y+1 ).RequestPaintImpress(gameObject);
 		Level.Get.GetTile( x,	y+1 ).RequestPaintImpress(gameObject);
 		Level.Get.GetTile( x+1,	y+1 ).RequestPaintImpress(gameObject);
+		
 		requestedImpress = true;
+	}
+	
+	public bool IsFinished
+	{
+		get { return gameObject == null; }
 	}
 
 }

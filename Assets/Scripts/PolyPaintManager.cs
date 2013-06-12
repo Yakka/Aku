@@ -18,9 +18,10 @@ public class PolyPaintManager : MonoBehaviour
 	public Material monoPixelPaintMaterial;
 	public Material triPixelPaintMaterial; // Reveal material used in level 2
 	public AnimationCurve decreaseCurve; // Paint intensity from its charge
-	private List<PolyPaintQuad> animatedPaints = new List<PolyPaintQuad>();
 	public Color[] indexedColors; // All paint colors used in the level
 	
+	private List<PolyPaintQuad> paintQuads = new List<PolyPaintQuad>();
+
 	private float z;
 	public float offZ = 0;
 	
@@ -158,7 +159,7 @@ public class PolyPaintManager : MonoBehaviour
 		obj.transform.position = pos;
 		
 		PolyPaintQuad pp = new PolyPaintQuad(obj, color, 0.25f);
-		animatedPaints.Add(pp);
+		paintQuads.Add(pp);
 		
 		// Cloud projection don't check revelations (maybe it should?)
 	}
@@ -183,7 +184,12 @@ public class PolyPaintManager : MonoBehaviour
 		obj.name = "PolyPaint_drip";
 		Helper.SetActive(obj, true); // Needed when prefabs are inactive modified clones instead
 		
-		// This one is static		
+		// Create new quad even if this one is not animated (spread = -1),
+		// because it will now persist as for splashes
+		PolyPaintQuad quad = new PolyPaintQuad(obj, color, -1);
+		paintQuads.Add(quad);
+		
+		/* --- This is done in PolyPaintQuad
 		// Send color by mesh vertices			
 		MeshFilter mf = obj.GetComponent<MeshFilter>();
 		//Color32[] colors = mf.mesh.colors32;
@@ -193,6 +199,7 @@ public class PolyPaintManager : MonoBehaviour
 			colors[i] = color;
 		}
 		mf.mesh.colors32 = colors;
+		*/
 		
 		// Drips don't check revelations (trails are more relevant)
 	}
@@ -222,8 +229,8 @@ public class PolyPaintManager : MonoBehaviour
 		obj.name = "PolyPaint_splash";
 		Helper.SetActive(obj, true); // Needed when prefabs are inactive modified clones instead
 		
-		PolyPaintQuad pp = new PolyPaintQuad(obj, color, 0.25f);
-		animatedPaints.Add(pp);
+		PolyPaintQuad quad = new PolyPaintQuad(obj, color, 0.25f);
+		paintQuads.Add(quad);
 		
 		// Check revealed parts on hidden paintings
 		// Note : scaling is reduced a bit because the splash doesn't spread much paint on its edges
@@ -245,9 +252,13 @@ public class PolyPaintManager : MonoBehaviour
 	
 	void Update()
 	{
-		foreach(PolyPaintQuad pp in animatedPaints)
+		if(paintQuads.Count != 0)
 		{
-			pp.Update();
+			foreach(PolyPaintQuad quad in paintQuads)
+			{
+				quad.Update();
+			}
+			paintQuads.RemoveAll(quad => quad.IsFinished);
 		}
 	}
 	
