@@ -23,20 +23,27 @@ public class ImpressCamera : MonoBehaviour
 	private const int RENDER_HEIGHT = Tile.PAINT_TEXTURE_HEIGHT;
 	private const float RESOLUTION_COEFF = 1; // Must be 1 at the moment !
 	
+	private static Material clearMaterial;
+
 	private GameObject hiddenCamObj;
 	private RenderTexture hiddenRenderTarget;
 	private RenderTexture renderTarget;
 	private bool takeRequested;
 	private Tile tileRef;
 	private Material revealMaterial;
-	private bool isFirstRender = false;
-	
+	private bool isFirstRender = true;
+			
 	public void Setup(Tile tile)
 	{
 		if(tileRef != null)
 		{
 			Debug.LogError(name + ": Setup called two times, aborting !");
 			return;
+		}
+		
+		if(clearMaterial == null)
+		{
+			clearMaterial = Helper.CreateMaterial("Clearer");
 		}
 		
 		tileRef = tile;
@@ -110,7 +117,12 @@ public class ImpressCamera : MonoBehaviour
 		
 		if(isFirstRender)
 		{
-			GL.Clear(false, true, Color.clear);
+			// I do this because Unity seems to have an issue about RenderTextures :
+			// They display garbage pixels, as if the texture was not properly initialized.
+			// So this clears the destination on the first rendering.
+			
+			//GL.Clear(true, true, Color.clear);
+			Graphics.Blit(source, destination, clearMaterial);
 			isFirstRender = false;
 		}
 		GL.Clear(false, true, Color.clear);
