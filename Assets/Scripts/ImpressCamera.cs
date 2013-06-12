@@ -121,8 +121,8 @@ public class ImpressCamera : MonoBehaviour
 			// They display garbage pixels, as if the texture was not properly initialized.
 			// So this clears the destination on the first rendering.
 			
-			//GL.Clear(true, true, Color.clear);
 			Graphics.Blit(source, destination, clearMaterial);
+			GL.Clear(true, true, Color.clear);
 			isFirstRender = false;
 		}
 		
