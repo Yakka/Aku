@@ -152,7 +152,7 @@ public class ImpressCamera : MonoBehaviour
 			hiddenCamObj.transform.position = pos;
 			
 			revealMaterial.SetTexture("_HiddenPaint", hiddenRenderTarget);
-			revealMaterial.SetVector("_HiddenScale", new Vector4(1,-1,1,1));
+			revealMaterial.SetVector("_HiddenScale", new Vector4(1,1,1,1));
 		}
 	}
 	

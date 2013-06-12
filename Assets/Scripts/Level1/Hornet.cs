@@ -60,7 +60,8 @@ public class Hornet : MonoBehaviour
 	{
 		if(!grabbingTarget)
 		{
-			SoundLevel1.Instance.HornetOnHead();
+			if (Level.Get.levelID == 1)
+				SoundLevel1.Instance.HornetOnHead();
 			Drake drake = target.GetComponent<Drake>();
 			if(drake != null)
 			{
