@@ -16,12 +16,11 @@ public class PolyPaintStrip : MonoBehaviour
 	private Mesh mesh;
 	private Vector3[] points;
 	private int pointIndex;
-	private int fadeIndex = -1;
+	private int fadeIndex = -1; // -1 means "not fading", >= 0 means "fading at fadingIndex"
+	private bool canImpress = true; // Can be persisted to a texture? (may be constant)
 	private bool requestedImpress = false;
-	private bool canImpress = true;
-	private bool hasBeenQueued = false;
-	private bool finished;
-	//private Material initialMaterial;
+	private bool hasBeenQueued = false; // Queued for to-texture-persistance?
+	private bool finished; // Does the strip has a finished geometry?
 	
 	public Vector3[] vertices = new Vector3[0];
 	private int[] triangles = new int[0]; // Triangle indices
@@ -43,7 +42,6 @@ public class PolyPaintStrip : MonoBehaviour
 		Level.Get.Attach(gameObject);
 		
 		gameObject.layer = LayerMask.NameToLayer("PaintReveal");
-		//initialMaterial = renderer.material;
 		
 		++instanceCount;
 		
@@ -160,6 +158,11 @@ public class PolyPaintStrip : MonoBehaviour
 			fadeIndex = 0;
 	}
 	
+	public bool IsFading
+	{
+		get { return fadeIndex >= 0; }
+	}
+	
 	void Update()
 	{
 		// If fading is active
@@ -190,8 +193,8 @@ public class PolyPaintStrip : MonoBehaviour
 				if(next != null)
 				{
 					// Start fading the next strip
-					PolyPaintStrip next_script = next.GetComponent<PolyPaintStrip>();
 					
+					PolyPaintStrip next_script = next.GetComponent<PolyPaintStrip>();
 					// Only not impressible nexts are automatically faded
 					// (only moon paint can't persist. Other kinds of paint are fading
 					// only during impression process, which works a different way)
@@ -203,24 +206,33 @@ public class PolyPaintStrip : MonoBehaviour
 		}
 		else if(Finished && CanImpress)
 		{
-			// TODO introduce an interval in which several strips attend for being printed together,
-			// because drake scales finish their strips one by one on each frame,
-			// causing too much useless renderings (they could be done in one).
-			if(!hasBeenQueued && !requestedImpress)
+			if(requestedImpress)
 			{
-				impressQueue.Add(this);
-				hasBeenQueued = true;
-				
-				if(impressQueue.Count >= IMPRESS_QUEUE_MAX_LENGTH)
+				if(!IsFading)
 				{
-					foreach(PolyPaintStrip pps in impressQueue)
-					{
-						pps.RequestImpress();
-						pps.Fade();
-					}
-					impressQueue.Clear();
-					//Debug.Log("Dequeued " + impressQueue.Count);
+					PostImpress();
+					Fade();
 				}
+			}
+			else
+			{
+				if(!hasBeenQueued)
+				{
+					impressQueue.Add(this);
+					hasBeenQueued = true;
+					
+					if(impressQueue.Count >= IMPRESS_QUEUE_MAX_LENGTH)
+					{
+						// Dequeue all in a single persist request
+						foreach(PolyPaintStrip strip in impressQueue)
+						{
+							strip.RequestImpress();
+							//strip.Fade();
+						}
+						impressQueue.Clear();
+					}
+				}
+				// else, waiting for next dequeueing...
 			}
 		}
 	}
@@ -228,20 +240,17 @@ public class PolyPaintStrip : MonoBehaviour
 	private void RequestImpress()
 	{
 		gameObject.layer = LayerMask.NameToLayer("Impress");
-		Level.Get.RequestPaintImpress(gameObject);
+		Level.Get.impressManager.Request(gameObject);
 		Material mat = gameObject.renderer.material;
 		mat.shader = Helper.FindShader("Mobile/Particles/Alpha Blended");
-		//gameObject.renderer.material = PolyPaintManager.commonAlphaMaterial;
 		requestedImpress = true;
 	}
 	
-	// This is future code, not useable at the moment, 
-	// but should fix the colouring bug when persisting
-//	public void PostImpress()
-//	{
-//		gameObject.layer = LayerMask.NameToLayer("PaintReveal");
-//		gameObject.renderer = initialMaterial;
-//	}
+	public void PostImpress()
+	{
+		gameObject.layer = LayerMask.NameToLayer("PaintReveal");
+		gameObject.renderer.material = PolyPaintManager.Instance.PolyPaintMaterial;
+	}
 	
 	private void Destroy()
 	{

@@ -153,7 +153,7 @@ public class Tile : MonoBehaviour
 			+ ", painted=" + IsPainted + ")";
 	}
 	
-	public void RequestPaintImpress()
+	public void RequestPaintImpress(GameObject obj)
 	{
 		if(paintLayer == null)
 			return;
@@ -181,11 +181,15 @@ public class Tile : MonoBehaviour
 			paintLayer.renderer.material = mat;
 		}
 		
+		//Level.Get.impressManager.PreImpress(obj, new Vector2i(gridPosX, gridPosY));
 		camScript.RequestTake();
 	}
 	
 	public void PostPaintImpress()
 	{
+		//Level.Get.impressManager.PostImpress(new Vector2i(gridPosX, gridPosY));
+		
+		// Ensure the paintlayer is active in order to display it
 		Helper.SetActive(paintLayer.gameObject, true);
 	}
 	
