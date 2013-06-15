@@ -234,7 +234,7 @@ public class PolyPaintManager : MonoBehaviour
 		
 		// Check revealed parts on hidden paintings
 		// Note : scaling is reduced a bit because the splash doesn't spread much paint on its edges
-		CheckHiddenPaintings(pos, 0.8f*scaling, colorIndex);
+		CheckHiddenPaintings(pos, 0.6f*scaling, colorIndex);
 	}
 	
 	private void CheckHiddenPaintings(Vector3 pos, float radius, int colorIndex)

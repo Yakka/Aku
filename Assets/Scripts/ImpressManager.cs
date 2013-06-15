@@ -32,7 +32,7 @@ public class ImpressManager
 		Level level = Level.Get;
 		
 		Bounds meshLocalBounds = mesh.bounds;
-		
+
 		Vector3 pos = obj.transform.position;
 		Vector3 wmin = meshLocalBounds.min + pos;
 		Vector3 wmax = meshLocalBounds.max + pos;
@@ -41,11 +41,13 @@ public class ImpressManager
 		level.WorldToTileCoords(wmin.x, wmin.y, out minX, out minY, false);
 		level.WorldToTileCoords(wmax.x, wmax.y, out maxX, out maxY, false);
 		
-//		Debug.Log(obj.name + ": RequestImpress "
-//			+ minX + ", " + minY + ", "
-//			+ maxX + ", " + maxY);
-		
+		Request(obj, minX, minY, maxX, maxY);
+	}
+	
+	public void Request(GameObject obj, int minX, int minY, int maxX, int maxY)
+	{
 		Tile tile = null;
+		Level level = Level.Get;
 		// For each tile intersecting mesh's bounds
 		for(int y = minY; y <= maxY; ++y)
 		{
@@ -55,7 +57,13 @@ public class ImpressManager
 				tile.RequestPaintImpress(obj);
 			}
 		}
+//		Debug.Log(obj.name + ": RequestImpress "
+//			+ minX + ", " + minY + ", "
+//			+ maxX + ", " + maxY);
 	}
+	
+	// The commented methods below were an attempt to implement a PostImpress callback,
+	// but the same approximate thing is currently coded in paint elements.
 	
 	/*
 	public void PreImpress(GameObject obj, Vector2i pos)
