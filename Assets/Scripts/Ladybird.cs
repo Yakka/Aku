@@ -32,10 +32,10 @@ public class Ladybird : MonoBehaviour
 	
 	private const float ANGULAR_LERP_COEF = 0.1f; // Must be between 0 and 1 
 	private int index = 0; // Between nextIndex and nextIndex-1 
-	public const float SPEED = 30f; // Bug speed is constant. Because it's a bug.
+	private const float SPEED = 30f; // Bug speed is constant. Because it's a bug.
 	private bool triggered = false;
 	
-	protected Quaternion originalRotation;
+	private Quaternion originalRotation;
 
 	// Use this for initialization
 	void Start ()
@@ -163,7 +163,13 @@ public class Ladybird : MonoBehaviour
 			}
 			break;
 		case STATE_GRABBED:
-			MoveTo(prison.position);
+			float distanceToPrison = Vector2.Distance(prison.position, transform.position);
+			
+			// If I'm not on my current target
+			if(distanceToPrison > 0.1f)
+				MoveTo(prison.position);
+			else
+				Helper.SetActive(gameObject, false);
 			break;
 		}
 		

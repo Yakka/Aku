@@ -3,10 +3,11 @@ using System.Collections;
 
 public class Hornet : MonoBehaviour 
 {	
-	public Transform target;
-	public float SPEED_MAX = 50f;
-	public float REACTIVITY = 1f; // The lower it is, the slower hornets will change their orientation.
-	public float VIEW_DISTANCE = 200;
+	public Transform[] targets;
+	private int index = 0;
+	private float SPEED_MAX = 50f;
+	private float REACTIVITY = 1f; // The lower it is, the slower hornets will change their orientation.
+	private float VIEW_DISTANCE = 200;
 	private const int LIFE_MAX = 3;
 	private const float FALL_GRAVITY = 100f;
 	
@@ -17,7 +18,7 @@ public class Hornet : MonoBehaviour
 	private bool grabbingTarget = false; // True if hornets are grabbing their target
 	private bool targetIsInSea = false; // true when hornets fly out of sea
 	private bool isInCloud = false;
-	public Vector3 fallVelocity; // Only used when falling dead
+	private Vector3 fallVelocity; // Only used when falling dead
 	private float initialScale;
 	private bool willRelease = false; // If true, hornet release target after a while
 	
@@ -62,13 +63,13 @@ public class Hornet : MonoBehaviour
 		{
 			if (Level.Get.levelID == 1)
 				SoundLevel1.Instance.HornetOnHead();
-			Drake drake = target.GetComponent<Drake>();
+			Drake drake = targets[index].GetComponent<Drake>();
 			if(drake != null)
 			{
 				drake.GrabbedByHornet();
 				willRelease = true;
 			}
-			Ladybird ladybird = target.GetComponent<Ladybird>();
+			Ladybird ladybird = targets[index].GetComponent<Ladybird>();
 			if(ladybird != null)
 			{
 				ladybird.GrabbedByHornet();
@@ -88,7 +89,7 @@ public class Hornet : MonoBehaviour
 		if(grabbingTarget)
 		{
 			SoundLevel1.Instance.DrakeFree();
-			Drake drake = target.GetComponent<Drake>();
+			Drake drake = targets[index].GetComponent<Drake>();
 			if(drake != null)
 				drake.UngrabbedByHornet();
 			grabbingTarget = false;
@@ -146,15 +147,22 @@ public class Hornet : MonoBehaviour
 				}
 			}
 			
+			// This code allow the hornet to target the drake after catching the ladybird
+			if(!Helper.IsActive(targets[index].gameObject))
+			{
+				Helper.SetActive(gameObject, false);
+				return;
+			}
+			
 			if(grabbingTarget)
 			{
-				transform.position = target.position;
+				transform.position = targets[index].position;
 			}
 			else // Find orientation
 			{
 				// 2D Conversion
 				Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
-				Vector2 target2D = new Vector2(target.position.x, target.position.y);
+				Vector2 target2D = new Vector2(targets[index].position.x, targets[index].position.y);
 	
 				// Find orientation vector to the target
 				Vector2 vectorToTarget = new Vector2(0,0); // No movement by default
@@ -210,7 +218,7 @@ public class Hornet : MonoBehaviour
 		
 		if (cloud != null)
 			OnCloudEnter (cloud);
-		else if(other.transform == target) 
+		else if(other.transform == targets[index]) 
 		{
 			if(life > 0)
 				GrabTarget();

@@ -5,6 +5,7 @@ public class PetrolBall : MonoBehaviour
 {
 	const float HIT_TIME_DELAY = 5f;
 	
+	
 	private float[] lastHitTime; // Last time a PaintSpit hit the PetrolBall for each different color
 	//private float normalScale;
 	public GameObject[] meshes;
@@ -34,7 +35,6 @@ public class PetrolBall : MonoBehaviour
 		{
 			// Each of the hits have occurred in the last HIT_TIME_DELAY seconds.
 			// The PetrolBall must die.
-			Debug.Log("The PetrolBall died :D");
 			SoundLevel2.Instance.SizePetrol(3);
 			Helper.SetActive(gameObject, false);
 			// TODO PetrolBall : fancier explode animation
