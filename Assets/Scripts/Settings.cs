@@ -30,7 +30,7 @@ public class Settings : MonoBehaviour
 		{
 			Debug.Log(res[i].width + "x" + res[i].height);
 		}
-		Screen.SetResolution(Screen.width/2, Screen.height/2, true);
+		//Screen.SetResolution(Screen.width, Screen.height, true);
 	}
 	
 	void Start () 

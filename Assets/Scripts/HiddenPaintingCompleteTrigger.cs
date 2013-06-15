@@ -45,7 +45,7 @@ public class HiddenPaintingCompleteTrigger : MonoBehaviour
 			switch(Level.Get.levelID)
 			{
 			case 1:
-				SoundLevel1.Instance.HornetBirth();
+				CommonSounds.Instance.HornetBirth();
 				break;
 			case 2:
 				break;

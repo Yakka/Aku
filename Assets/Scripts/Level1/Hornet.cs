@@ -60,7 +60,8 @@ public class Hornet : MonoBehaviour
 	{
 		if(!grabbingTarget)
 		{
-			SoundLevel1.Instance.HornetOnHead();
+			if (Level.Get.levelID == 1)
+				SoundLevel1.Instance.HornetOnHead();
 			Drake drake = target.GetComponent<Drake>();
 			if(drake != null)
 			{
@@ -176,10 +177,10 @@ public class Hornet : MonoBehaviour
 				float t = REACTIVITY * Time.deltaTime;
 				orientation.x = Mathf.Lerp(orientation.x, vectorToTarget.x, t);
 				orientation.y = Mathf.Lerp(orientation.y, vectorToTarget.y, t);	
-				Debug.Log("target 2D :"+target2D);
-				Debug.Log("position 2D :"+position2D);
-				Debug.Log("vector to target :"+vectorToTarget);
-				Debug.Log("---");
+				//Debug.Log("target 2D :"+target2D);
+				//Debug.Log("position 2D :"+position2D);
+				//Debug.Log("vector to target :"+vectorToTarget);
+				//Debug.Log("---");
 				transform.position += orientation * Time.deltaTime * SPEED_MAX;
 			}
 			
@@ -249,7 +250,7 @@ public class Hornet : MonoBehaviour
 			}
 			Hurt();
 			crossedClouds.Add(cloud);
-			SoundLevel1.Instance.SizeHornet(life);
+			CommonSounds.Instance.SizeHornet(life);
 		}
 	}
 	

@@ -16,10 +16,7 @@ public class HiddenPainting : MonoBehaviour
 	/// Describes which actual color match the 3 channels in the texture
 	/// </summary>
 	public Color[] channelMapping; // RGB
-	
-	// TODO @Yakka this creates a warning, 
-	// you should access it through Camera.mainCamera instead
-	public CameraHandler camera;
+
 	
 	public CameraWaypoint waypoint;
 		
