@@ -36,7 +36,7 @@ public class FlyingStar : MonoBehaviour
 			float sqrd = Helper.SqrDistance(targetPos.x, targetPos.y, pos.x, pos.y);
 			
 			// Am I close enough to my target?
-			if(sqrd < 2f*2f)
+			if(sqrd < 4f*4f)
 			{
 				// I finished my job, activate another object if specified
 				if(objectToEnable != null)

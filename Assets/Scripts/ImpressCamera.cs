@@ -32,7 +32,7 @@ public class ImpressCamera : MonoBehaviour
 	private Tile tileRef;
 	private Material revealMaterial;
 	private bool isFirstRender = true;
-			
+
 	public void Setup(Tile tile)
 	{
 		if(tileRef != null)
@@ -83,6 +83,9 @@ public class ImpressCamera : MonoBehaviour
 		// Create render targets
 		hiddenRenderTarget = CreateRenderTarget();
 		hcam.targetTexture = hiddenRenderTarget;
+		
+		/*if(Level.Get.levelID == 2)
+			paintTarget = CreateRenderTarget();*/
 		
 		renderTarget = CreateRenderTarget();
 		cam.targetTexture = renderTarget;

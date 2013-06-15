@@ -2,9 +2,9 @@
 Shader "Custom/TriPaintReveal" {
 	Properties {
 		_MainTex ("Base (RGBA)", 2D) = "white" {}
-		_Color1 ("Color1", Color) = (1.0, 0.37, 0.37) 
-		_Color2 ("Color2", Color) = (1.0, 0.91, 0.21) 
-		_Color3 ("Color3", Color) = (0.37, 0.37, 1.0) 
+		_Color1 ("Color1", Color) = (1.0, 0.37, 0.37, 1.0) 
+		_Color2 ("Color2", Color) = (1.0, 0.91, 0.21, 1.0) 
+		_Color3 ("Color3", Color) = (0.37, 0.37, 1.0, 1.0) 
 		_HiddenScale ("HiddenScale", Vector) = (1.0, 1.0, 0.0, 0.0)
 		_HiddenOffset ("HiddenScale", Vector) = (0.0, 0.0, 0.0, 0.0)
 	}
@@ -63,14 +63,18 @@ Shader "Custom/TriPaintReveal" {
 				
 				// Get difference between hidden and visible world colors
 				// Note : src may exclusively be composed of R xor G xor B.
-				half4 tmp = src - mask;
+				half4 tmp = half4(src.rgb - mask.rgb, src.a);
+				tmp = clamp(tmp, 0.0, 1.0);
 				//half4 tmp = mask - src;
 				
 				// Map final color
-				half4 o = _Color1*src.r + _Color2*src.g + _Color3*src.b;
+				//half4 o = _Color1*src.r + _Color2*src.g + _Color3*src.b;
+				half4 o = half4(_Color1.rgb*tmp.r + _Color2.rgb*tmp.g + _Color3.rgb*tmp.b, src.a);
 				
 				// Hide stuff
-				o.a = src.a * max(tmp.r, max(tmp.g, tmp.b));
+				
+				//o.a = src.a * max(tmp.r, max(tmp.g, tmp.b));
+	
 				//o.a = 0.5*src.a*(1.0 + max(tmp.r, max(tmp.g, tmp.b)));
 				
 				return o;
