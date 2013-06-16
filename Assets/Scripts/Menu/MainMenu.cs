@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour {
 	public string creditsScene;
 	public string menuScene;
 	public string loadingScene;
+	public GameObject[] exitConfirmation;
 	// Use this for initialization
 	void Start () 
 	{
@@ -25,8 +26,16 @@ public class MainMenu : MonoBehaviour {
 			{
 				switch(buttons[i].name)
 				{
+				case "No":
+					for(int j = 0; j < exitConfirmation.Length; j++)
+						Helper.SetActive(exitConfirmation[j], false);
+					break;
+				case "Yes":
+					Application.Quit();
+					break;
 				case "Exit Button":
-						Application.Quit();
+					for(int j = 0; j < exitConfirmation.Length; j++)
+						Helper.SetActive(exitConfirmation[j], true);
 					break;
 				
 				case "Credits Button":

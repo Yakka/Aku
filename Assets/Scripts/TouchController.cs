@@ -30,6 +30,7 @@ public class TouchController : MonoBehaviour
 	
 	private float timer;
 	private bool timing = false;
+	private bool hasTouched = false;
 	
 	//private bool pointed; // Indicates that OnPoint() has been called for the current touch
 	
@@ -144,12 +145,23 @@ public class TouchController : MonoBehaviour
 			{
 				timing = true;
 				timer = Time.time + 2.5f;
+				
 			}
 			bool wasPressed = pressing;
-			if(Settings.onTablet) {
-				pressing = Input.touchCount != 0; // Touch input
-			} else {
-				pressing = Input.GetMouseButton(0); // Mouse input (desktop tests)
+			if(timer < Time.time)
+			{
+				
+				if(Settings.onTablet) {
+					pressing = Input.touchCount != 0; // Touch input
+				} else {
+					pressing = Input.GetMouseButton(0); // Mouse input (desktop tests)
+				}
+			}
+			if(pressing && !hasTouched)
+			{
+				timer = Time.time + 4f;
+				ScreenFade.Instance.Fade(3.9f, false);
+				hasTouched = true;
 			}
 			if(pressing && timer < Time.time)
 			{
