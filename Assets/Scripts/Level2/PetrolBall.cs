@@ -9,7 +9,7 @@ public class PetrolBall : MonoBehaviour
 	private float[] lastHitTime; // Last time a PaintSpit hit the PetrolBall for each different color
 	//private float normalScale;
 	public GameObject[] meshes;
-	
+	public CameraHandler cam;
 	// Use this for initialization
 	void Start () 
 	{
@@ -39,6 +39,7 @@ public class PetrolBall : MonoBehaviour
 			Helper.SetActive(gameObject, false);
 			// TODO PetrolBall : fancier explode animation
 			Level.Get.Finished = true;
+			cam.goToWaypoint("CameraWaypointPetrol");
 		}
 		
 		// Some cheap funky animation :
