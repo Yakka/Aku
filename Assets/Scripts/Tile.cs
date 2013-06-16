@@ -14,12 +14,14 @@ public class Tile : MonoBehaviour
 	// This is the scale of each tile in world units (not pixels !)
 	public const int SIZE = 64; 
 	
+	private const int BG_TEXTURE_SIZE = 256;
+	
 	public const int PAINT_TEXTURE_WIDTH = 128;
 	public const int PAINT_TEXTURE_HEIGHT = 128;
 	
-	private static Color whiteAlpha = new Color(1f, 1f, 1f, 0f);
+	//private static Color whiteAlpha = new Color(1f, 1f, 1f, 0f);
 	// pre-computed buffer for constructing the paintTexture
-	private static Color[] alphaPaintBuffer; 
+	//private static Color[] alphaPaintBuffer; 
 	
 	// Config
 	public bool water;
@@ -35,9 +37,8 @@ public class Tile : MonoBehaviour
 	private Texture paintTexture; // Texture used for pixellized paintings
 	private Transform paintLayer;
 	//private bool pixelsWereModified = false;
-	
 	private GameObject impressCameraObj;
-	
+		
 	//private Hashtable fadingPixels = new Hashtable();
 	
 	void Start ()
@@ -50,14 +51,95 @@ public class Tile : MonoBehaviour
 			Helper.SetActive(paintLayer.gameObject, false);
 		
 		// Build pre-computed alpha paint
-		if(alphaPaintBuffer == null)
+		/*if(alphaPaintBuffer == null)
 		{
 			alphaPaintBuffer = new Color[PAINT_TEXTURE_WIDTH*PAINT_TEXTURE_HEIGHT];
 			for(uint i = 0; i < alphaPaintBuffer.Length; ++i)
 			{
 				alphaPaintBuffer[i] = whiteAlpha;
 			}
+		}*/
+		
+		//
+		// Setup BG texture
+		//
+		
+		// sky    sea-space1  space-sky1  ---
+		// sea    sea-space2  space-sky2  ---
+		// space  ---         space-sky3  ---
+		// ---    ---         space-sky4  ---
+		
+		Level level = Level.Get;
+		Vector2i uv = new Vector2i();
+		
+		if(gridPosY == 0 && water) {
+			uv.Set(1, 2);
+		} else if(gridPosY == 1 && water) {
+			uv.Set(1, 3);
+		} else if(gridPosY == 2 && water) {
+			uv.Set(0, 2); 
+		} else if(gridPosY == level.heightTiles-1) {
+			uv.Set(0, 1);
+		} else if(gridPosY == level.spaceLevel-1) {
+			uv.Set(2, 0);
+		} else if(gridPosY == level.spaceLevel) {
+			uv.Set(2, 1);
+		} else if(gridPosY == level.spaceLevel+1) {
+			uv.Set(2, 2);
+		} else if(gridPosY == level.spaceLevel+2) {
+			uv.Set(2, 3);
+		} else if(space) {
+			uv.Set(0, 1);
+		} else if(water) {
+			uv.Set(0, 2);
+		} else {
+			uv.Set(0, 3);
 		}
+				
+		SetBackgroundUV(uv.x, uv.y);
+	}
+	
+	private void SetBackgroundUV(int tx, int ty)
+	{
+		//Debug.Log(ty);
+		// Get BG object
+		Transform bg = transform.FindChild("bg");
+		if(bg == null)
+		{
+			Debug.LogError(name + ": doesn't have bg !");
+			return;
+		}
+		
+		Helper.SetActive(bg.gameObject, true);
+		
+		// Get and set atlas
+		Material atlasMat = Level.Get.bgAtlasMat;
+		Renderer bgr = bg.renderer;
+		bgr.material = atlasMat;
+		Texture atlas = atlasMat.mainTexture;
+		
+		// Get atlas properties
+		int atlasWidth = atlas.width;
+		int atlasHeight = atlas.height;
+		int atlasFramesX = atlasWidth / BG_TEXTURE_SIZE;
+		int atlasFramesY = atlasHeight / BG_TEXTURE_SIZE;		
+		float sw = 1f / (float)atlasFramesX;
+		float sh = 1f / (float)atlasFramesY;
+		
+		// Wrap coordinates
+		tx = tx % atlasFramesX;
+		ty = ty % atlasFramesY;
+		
+		float p = 0.001f; // UV padding to avoid white lines on quad borders
+		
+		// Compute and set UVs
+		Mesh mesh = bg.GetComponent<MeshFilter>().mesh;
+		Vector2[] uv = mesh.uv;
+		uv[0].Set( sw*(float)tx+p, 	 	sh*(float)ty+p     );
+		uv[1].Set( sw*(float)(tx+1)-p, 	sh*(float)ty+p     );
+		uv[2].Set( sw*(float)tx+p, 	 	sh*(float)(ty+1)-p );
+		uv[3].Set( sw*(float)(tx+1)-p, 	sh*(float)(ty+1)-p );
+		mesh.uv = uv;
 	}
 	
 	public void PreLevelWrap()

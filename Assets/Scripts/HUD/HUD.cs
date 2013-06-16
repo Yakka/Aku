@@ -28,6 +28,8 @@ public class HUD : MonoBehaviour
 
 	void Start ()
 	{
+		assistTouchTime = Time.timeSinceLevelLoad;
+		
 		ringWaveManager = GetComponent<RingWaveManager>();
 		
 		indicatorSketchObj = new GameObject();
@@ -51,22 +53,24 @@ public class HUD : MonoBehaviour
 	{
 		if(touchControllerRef != null)
 		{
+			float time = Time.timeSinceLevelLoad;
+			
 			// If the gamer didn't touched anything for the first time or missed something
 			if(!touchControllerRef.EverPressed 
-				&& Time.time - touchControllerRef.EndTime > 5f
-				&& Time.time - assistTouchTime > 5f)
+				&& time - touchControllerRef.EndTime > 5f
+				&& time - assistTouchTime > 5f)
 			{
 				// Indicate that he can !
 				ringWaveManager.SpawnSeries(0,-30, 2); // Two circle waves
 				indicatorSketch.Spawn(
 					new Vector3(0,-30,0), 
 					new Vector3(90,30,0), -12); // A curve from left to up-right
-				assistTouchTime = Time.time;
-				timerHand = Time.time + 2f;
+				assistTouchTime = time;
+				timerHand = time + 2f;
 				rectHand.x = handX;
 				rectHand.y = handY;
 			}
-			if(Time.time < timerHand)
+			if(time < timerHand)
 			{
 				rectHand.x = Mathf.Lerp(rectHand.x, targetX, 0.05f);
 				rectHand.y = Mathf.Lerp(rectHand.y, targetY, 0.05f);

@@ -15,6 +15,12 @@ public struct Vector2i
 	{
 		return x | (y << 16);
 	}
+	
+	public void Set(int x0, int y0)
+	{
+		x = x0;
+		y = y0;
+	}
 
 }
 

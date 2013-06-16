@@ -17,8 +17,9 @@ public class Level : MonoBehaviour
 {	
 	private static Level globalInstance;
 	
+	#region "Generation"
+	
 	// Generator config
-	// TODO maybe put generator into an editor script for convenient level design?
 	public int widthTiles = 16;
 	public int heightTiles = 16;
 	public int centerXTiles = 8;
@@ -26,13 +27,17 @@ public class Level : MonoBehaviour
 	public int seaLevel = 1; // 0 means no sea
 	public int spaceLevel = 12;
 	public int levelID = 0;
-	//public float timer;
 	
 	// Generic patterns
 	public GameObject skyTilePrefab;
 	public GameObject seaSurfaceTilePrefab;
 	public GameObject seaTilePrefab;
 	public GameObject spaceTilePrefab;
+	
+	// BG atlas
+	public Material bgAtlasMat;
+	
+	#endregion
 	
 	public ImpressManager impressManager = new ImpressManager();
 	
@@ -74,6 +79,11 @@ public class Level : MonoBehaviour
 		//
 		// Generate tiled background
 		//
+		
+		if(bgAtlasMat == null)
+		{
+			Debug.LogError(name + ": bgAtlasMat not set !");
+		}
 		
 		tiles = new GameObject[widthTiles, heightTiles];
 
