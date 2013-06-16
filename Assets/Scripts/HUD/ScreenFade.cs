@@ -32,7 +32,7 @@ public class ScreenFade : MonoBehaviour
 		//Helper.SetActive(gameObject, false);
 	}
 	
-	void Fade(float duration, bool fadeIn)
+	public void Fade(float duration, bool fadeIn)
 	{
 		beginTime = Time.time;
 		endTime = beginTime + duration;
@@ -64,7 +64,7 @@ public class ScreenFade : MonoBehaviour
 	
 	void OnGUI()
 	{
-		if(IsFading)
+		if(color.a > 0.01f)
 		{
 			GUI.color = color;
 			GUI.DrawTexture(rect, fillTexture);
