@@ -13,6 +13,7 @@ public class Travelling : MonoBehaviour {
 	Vector3 direction;
 	bool paused = false;
 	
+	
 	// Use this for initialization
 	void Start () {
 		pauseTime = Time.time;
@@ -26,11 +27,17 @@ public class Travelling : MonoBehaviour {
 	void Update () {
 	
 		Vector3 targetPosition;
-		if(Vector3.Distance(transform.position, waypoints[index].transform.position) < 15f && index < waypoints.Length - 1)
+		CameraWaypoint waypoint;
+		int length;
+		
+		waypoint = waypoints[index];
+		length = waypoints.Length;
+		
+		if(Vector3.Distance(transform.position, waypoint.transform.position) < 15f && index < length - 1)
 		{
 			if(!paused)
 			{
-				pauseTime = Time.time + waypoints[index].pause;
+				pauseTime = Time.time + waypoint.pause;
 				paused = true;
 			}
 			
@@ -39,7 +46,8 @@ public class Travelling : MonoBehaviour {
 		{
 			if(Time.time >= pauseTime)
 			{
-				index ++;
+				if(index < length - 1)
+					index ++;
 				paused = false;
 				
 			}
@@ -48,10 +56,10 @@ public class Travelling : MonoBehaviour {
 		}
 		else
 		{
-			currentSpeed = Mathf.Lerp(currentSpeed, waypoints[index].speed, 0.005f);
-			currentSize = Mathf.Lerp(currentSize, waypoints[index].size, 0.001f);
+			currentSpeed = Mathf.Lerp(currentSpeed, waypoint.speed, 0.005f);
+			currentSize = Mathf.Lerp(currentSize, waypoint.size, 0.001f);
 		}
-		targetPosition = waypoints[index].transform.position;
+		targetPosition = waypoint.transform.position;
 		//float x;
 		//float y;
 		//x = triggers[index].transform.position.x; 
@@ -69,4 +77,6 @@ public class Travelling : MonoBehaviour {
 		camera.orthographicSize = currentSize;
 		transform.position += direction * Time.deltaTime * currentSpeed;
 	}
+	
+
 }

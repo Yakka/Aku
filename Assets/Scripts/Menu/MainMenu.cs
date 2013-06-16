@@ -4,9 +4,10 @@ using System.Collections;
 public class MainMenu : MonoBehaviour {
 	
 	public MenuButton[] buttons;
-	
+	public Travelling travelling;
 	public string firstScene;
-	
+	public string creditsScene;
+	public string menuScene;
 	// Use this for initialization
 	void Start () 
 	{
@@ -26,12 +27,19 @@ public class MainMenu : MonoBehaviour {
 				case "Exit Button":
 						Application.Quit();
 					break;
+				
+				case "Credits Button":
+					Application.LoadLevel(creditsScene);
+					break;
+					
 				case "Play Button":
 					Application.LoadLevel(firstScene);
 					break;
-				case "Credits Button":
+				case "Back Button":
+					Application.LoadLevel(menuScene);
 					break;
 				}
+				buttons[i].setClicked(false);
 			}
 		}
 		
