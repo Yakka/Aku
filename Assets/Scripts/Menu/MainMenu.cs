@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour {
 	public string firstScene;
 	public string creditsScene;
 	public string menuScene;
+	public string loadingScene;
 	// Use this for initialization
 	void Start () 
 	{
@@ -33,10 +34,13 @@ public class MainMenu : MonoBehaviour {
 					break;
 					
 				case "Play Button":
-					Application.LoadLevel(firstScene);
+					Application.LoadLevel(loadingScene);
 					break;
 				case "Back Button":
 					Application.LoadLevel(menuScene);
+					break;
+				case "Next Button":
+					Application.LoadLevel(firstScene);
 					break;
 				}
 				buttons[i].setClicked(false);

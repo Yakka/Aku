@@ -89,6 +89,7 @@ public class CameraHandler : MonoBehaviour
 		float transition;
 		Vector3 targetPosition;
 		
+			
 		if(drakeFollowingMode)
 		{
 			targetPosition = target.transform.position;
@@ -209,7 +210,7 @@ public class CameraHandler : MonoBehaviour
 			transform.position += direction * Time.deltaTime * currentSpeed;
 			
 		}
-
+	
 		
 	}
 	
