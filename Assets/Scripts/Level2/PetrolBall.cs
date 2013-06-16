@@ -5,18 +5,20 @@ public class PetrolBall : MonoBehaviour
 {
 	const float HIT_TIME_DELAY = 5f;
 	
-	
 	private float[] lastHitTime; // Last time a PaintSpit hit the PetrolBall for each different color
 	//private float normalScale;
 	public GameObject[] meshes;
 	public CameraHandler cam;
+	private bool dying = false;
+	private Vector3 vector;
+	
 	// Use this for initialization
 	void Start () 
 	{
 		lastHitTime = new float[3];
 		for(uint i = 0; i < lastHitTime.Length; ++i)
 			lastHitTime[i] = -9999; // Init to a time far far away
-		
+		vector = new Vector3(10, 10, 10);
 		//normalScale = transform.localScale.x;
 	}
 	
@@ -36,11 +38,18 @@ public class PetrolBall : MonoBehaviour
 			// Each of the hits have occurred in the last HIT_TIME_DELAY seconds.
 			// The PetrolBall must die.
 			SoundLevel2.Instance.SizePetrol(3);
-			Helper.SetActive(gameObject, false);
+			dying = true;
 			// TODO PetrolBall : fancier explode animation
 			Level.Get.Finished = true;
 			cam.goToWaypoint("CameraWaypointPetrol");
 		}
+		
+		if(dying)
+		{
+			transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, 0.2f);
+		}
+		if(transform.localScale.x < vector.x)
+			Helper.SetActive(gameObject, false);
 		
 		// Some cheap funky animation :
 		// Roooootation
