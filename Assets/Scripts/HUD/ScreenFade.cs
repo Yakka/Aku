@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ScreenFade : MonoBehaviour 
 {
-	private static Texture2D blackTexture;
+	private static Texture2D fillTexture;
 	private static ScreenFade globalInstance;
 	
 	private Color color;
@@ -17,15 +17,16 @@ public class ScreenFade : MonoBehaviour
 	
 	void Start ()
 	{
-		if(blackTexture == null)
+		if(fillTexture == null)
 		{
-			Color black = new Color(0,0,0,1);
-			blackTexture = new Texture2D(1,1, TextureFormat.ARGB32, false, false);
-			blackTexture.SetPixel(0,0, black);
-			blackTexture.Apply();
+			Color fillColor = new Color(1f,1f,1f,1f);
+			fillTexture = new Texture2D(1,1, TextureFormat.ARGB32, false, false);
+			fillTexture.SetPixel(0,0, fillColor);
+			fillTexture.Apply();
 		}
 		
 		rect = new Rect(0, 0, Screen.width, Screen.height);
+		color = new Color(1f, 1f, 1f, 1f);
 		
 		Fade(2f, true);
 		//Helper.SetActive(gameObject, false);
@@ -66,7 +67,7 @@ public class ScreenFade : MonoBehaviour
 		if(IsFading)
 		{
 			GUI.color = color;
-			GUI.DrawTexture(rect, blackTexture);
+			GUI.DrawTexture(rect, fillTexture);
 		}
 	}
 

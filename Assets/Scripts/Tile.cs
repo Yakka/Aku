@@ -38,7 +38,7 @@ public class Tile : MonoBehaviour
 	private Transform paintLayer;
 	//private bool pixelsWereModified = false;
 	private GameObject impressCameraObj;
-		
+	
 	//private Hashtable fadingPixels = new Hashtable();
 	
 	void Start ()
@@ -95,7 +95,7 @@ public class Tile : MonoBehaviour
 		} else {
 			uv.Set(0, 3);
 		}
-				
+		
 		SetBackgroundUV(uv.x, uv.y);
 	}
 	
