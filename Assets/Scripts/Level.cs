@@ -34,6 +34,9 @@ public class Level : MonoBehaviour
 	public GameObject seaTilePrefab;
 	public GameObject spaceTilePrefab;
 	
+	// BG atlas
+	public Material bgAtlasMat;
+	
 	#endregion
 	
 	public ImpressManager impressManager = new ImpressManager();
@@ -76,6 +79,11 @@ public class Level : MonoBehaviour
 		//
 		// Generate tiled background
 		//
+		
+		if(bgAtlasMat == null)
+		{
+			Debug.LogError(name + ": bgAtlasMat not set !");
+		}
 		
 		tiles = new GameObject[widthTiles, heightTiles];
 

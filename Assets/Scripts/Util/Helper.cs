@@ -145,7 +145,7 @@ public class Helper
 			shader = Shader.Find("Custom/" + shaderName);
 		if(shader == null)
 		{
-			Debug.LogError(shaderName + ": Shader not found !");
+			Debug.LogError("Helper: " + shaderName + ": Shader not found !");
 			shader = Shader.Find("Mobile/Particles/Alpha Blended");
 		}
 		return shader;
