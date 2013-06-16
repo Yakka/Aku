@@ -28,6 +28,9 @@ public class TouchController : MonoBehaviour
 	private bool pressing; // Indicates that the player touches the screen
 	private bool everPressed;
 	
+	private float timer;
+	private bool timing = false;
+	
 	//private bool pointed; // Indicates that OnPoint() has been called for the current touch
 	
 	//===== Debug =====
@@ -134,6 +137,24 @@ public class TouchController : MonoBehaviour
 				lineRenderer.SetPosition(1, b);
 			}
 		#endregion
+		}
+		else // End of level
+		{
+			if(!timing)
+			{
+				timing = true;
+				timer = Time.time + 2.5f;
+			}
+			bool wasPressed = pressing;
+			if(Settings.onTablet) {
+				pressing = Input.touchCount != 0; // Touch input
+			} else {
+				pressing = Input.GetMouseButton(0); // Mouse input (desktop tests)
+			}
+			if(pressing && timer < Time.time)
+			{
+				Application.LoadLevel("Credits");
+			}
 		}
 	}
 	
