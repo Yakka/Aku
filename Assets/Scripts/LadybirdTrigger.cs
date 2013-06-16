@@ -8,12 +8,14 @@ public class LadybirdTrigger : MonoBehaviour {
 	public int checkedChannel = 0;
 	public GameObject objectToEnable;
 	private bool isActivated = false;
+	private bool hasActivated = false;
 
 	void Update()
 	{
-		if(objectToEnable != null && !IsHiddenPaintingTrigger())
+		if(objectToEnable != null && !IsHiddenPaintingTrigger() && !hasActivated)
 		{
 			Helper.SetActive(objectToEnable, true);
+			hasActivated = true;
 		}
 	}
 	

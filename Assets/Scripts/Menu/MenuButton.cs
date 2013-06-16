@@ -68,4 +68,9 @@ public class MenuButton : MonoBehaviour {
 		return clicked;
 	}
 	
+	public void setClicked(bool click)
+	{
+		clicked = click;
+	}
+	
 }

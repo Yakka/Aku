@@ -28,6 +28,9 @@ public class TouchController : MonoBehaviour
 	private bool pressing; // Indicates that the player touches the screen
 	private bool everPressed;
 	
+	private float timer;
+	private bool timing = false;
+	
 	//private bool pointed; // Indicates that OnPoint() has been called for the current touch
 	
 	//===== Debug =====
@@ -41,98 +44,118 @@ public class TouchController : MonoBehaviour
 	}
 	
 	void Update () 
-	{	
-		// Detect when we are touching the screen
-		bool wasPressed = pressing;
-		if(Settings.onTablet) {
-			pressing = Input.touchCount != 0; // Touch input
-		} else {
-			pressing = Input.GetMouseButton(0); // Mouse input (desktop tests)
-		}
-		
-		// If we are touching the screen
-		if(pressing)
+	{	if(!Level.Get.Finished)
 		{
-			everPressed = true;
-			
-			// Get touch position
-			Vector2 touchPos = new Vector2();
+			// Detect when we are touching the screen
+			bool wasPressed = pressing;
 			if(Settings.onTablet) {
-				Touch t = Input.GetTouch(0);
-				touchPos = t.position;
-			} else  {
-				touchPos = Input.mousePosition;
+				pressing = Input.touchCount != 0; // Touch input
+			} else {
+				pressing = Input.GetMouseButton(0); // Mouse input (desktop tests)
 			}
-						
-			// Convert into scene scale
-			Vector3 currentPos = ScreenToScenePosition(touchPos);
 			
-			if(!wasPressed) // Are we starting a new touch?
+			// If we are touching the screen
+			if(pressing)
 			{
-				// Memorize touch start
-				beginTime = Time.time;
-				beginPos = currentPos;
-				lastFramePos = beginPos;
-				OnTouchDown();
+				everPressed = true;
+				
+				// Get touch position
+				Vector2 touchPos = new Vector2();
+				if(Settings.onTablet) {
+					Touch t = Input.GetTouch(0);
+					touchPos = t.position;
+				} else  {
+					touchPos = Input.mousePosition;
+				}
+							
+				// Convert into scene scale
+				Vector3 currentPos = ScreenToScenePosition(touchPos);
+				
+				if(!wasPressed) // Are we starting a new touch?
+				{
+					// Memorize touch start
+					beginTime = Time.time;
+					beginPos = currentPos;
+					lastFramePos = beginPos;
+					OnTouchDown();
+				}
+				else
+					lastFramePos = endPos;
+				endPos = currentPos; // The end pos is always the last captured
+				endTime = Time.time;
+				
+				OnTouchMove();
+				
+				// If the touch moved with a relevant speed
+	//			if(Length >= minDragLength && GetInstantSpeed() >= minInstantSpeed)
+	//			{
+	//				OnLead(); // It's a drag
+	//			}
+	//			else if(Duration > minPointTime)
+	//			{
+	//				if(!pointed)
+	//				{
+	//					OnPoint(); // It's a pointing
+	//					pointed = true; // Avoid calling OnPoint() each frame after this one
+	//				}
+	//			}
 			}
-			else
-				lastFramePos = endPos;
-			endPos = currentPos; // The end pos is always the last captured
-			endTime = Time.time;
-			
-			OnTouchMove();
-			
-			// If the touch moved with a relevant speed
-//			if(Length >= minDragLength && GetInstantSpeed() >= minInstantSpeed)
-//			{
-//				OnLead(); // It's a drag
-//			}
-//			else if(Duration > minPointTime)
-//			{
-//				if(!pointed)
-//				{
-//					OnPoint(); // It's a pointing
-//					pointed = true; // Avoid calling OnPoint() each frame after this one
-//				}
-//			}
-		}
-		else if(wasPressed) // Did the move just finished?
-		{
-			OnTouchUp();
-			//Debug.Log("Touch finished (duration=" + Duration + ", length=" + Length);
-			//pointed = false;
-			// If it wasn't a drag and was brief
-//			if(Length < minDragLength && tapDuration.Contains(Duration))
-//			{
-//				OnTap(); // It's a tap
-//			}
-			//endTime = Time.time;
-		}
-	
-	#region "Debug"
-		// Draws the touch on the screen
-		if(Settings.debugMode && displayTrace)
-		{
-			if(lineRenderer == null)
+			else if(wasPressed) // Did the move just finished?
 			{
-				lineRenderer = gameObject.AddComponent<LineRenderer>();
-				lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended"));
-				lineRenderer.SetColors(Color.black, Color.cyan);
-				lineRenderer.SetWidth(0.2F, 0.2F);
-				lineRenderer.SetVertexCount(2);
+				OnTouchUp();
+				//Debug.Log("Touch finished (duration=" + Duration + ", length=" + Length);
+				//pointed = false;
+				// If it wasn't a drag and was brief
+	//			if(Length < minDragLength && tapDuration.Contains(Duration))
+	//			{
+	//				OnTap(); // It's a tap
+	//			}
+				//endTime = Time.time;
 			}
-			
-			Vector3 a = beginPos;
-			Vector3 b = endPos;
-			
-//			float angle = GetInstantAngleRad();
-//			Vector3 b = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
-//			b = a + b * (0.1f * GetInstantSpeed() + 5f);
-			
-			lineRenderer.SetPosition(0, a);
-			lineRenderer.SetPosition(1, b);
+		
+		#region "Debug"
+			// Draws the touch on the screen
+			if(Settings.debugMode && displayTrace)
+			{
+				if(lineRenderer == null)
+				{
+					lineRenderer = gameObject.AddComponent<LineRenderer>();
+					lineRenderer.material = new Material(Shader.Find("Particles/Alpha Blended"));
+					lineRenderer.SetColors(Color.black, Color.cyan);
+					lineRenderer.SetWidth(0.2F, 0.2F);
+					lineRenderer.SetVertexCount(2);
+				}
+				
+				Vector3 a = beginPos;
+				Vector3 b = endPos;
+				
+	//			float angle = GetInstantAngleRad();
+	//			Vector3 b = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0);
+	//			b = a + b * (0.1f * GetInstantSpeed() + 5f);
+				
+				lineRenderer.SetPosition(0, a);
+				lineRenderer.SetPosition(1, b);
+			}
+		#endregion
 		}
-	#endregion
+		else // End of level
+		{
+			if(!timing)
+			{
+				timing = true;
+				timer = Time.time + 2.5f;
+			}
+			bool wasPressed = pressing;
+			if(Settings.onTablet) {
+				pressing = Input.touchCount != 0; // Touch input
+			} else {
+				pressing = Input.GetMouseButton(0); // Mouse input (desktop tests)
+			}
+			if(pressing && timer < Time.time)
+			{
+				Application.LoadLevel("Credits");
+			}
+		}
 	}
 	
 	private Vector3 ScreenToScenePosition(Vector2 pos)

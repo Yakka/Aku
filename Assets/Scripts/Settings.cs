@@ -18,7 +18,7 @@ public class Settings : MonoBehaviour
 	/// </summary>
 	public static bool debugMode = false;
 	
-	public static bool releaseMode = false;
+	public static bool releaseMode = true;
 	
 	public static GUIStyle debugGuiStyle;
 	

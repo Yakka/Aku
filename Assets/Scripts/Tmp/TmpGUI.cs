@@ -12,15 +12,24 @@ public class TmpGUI : MonoBehaviour
 	
 	void Update ()
 	{
-	
 	}
 
-	private Rect tempRect = new Rect(200, 80, 400, 32);
+	private Rect tempRect = new Rect(300, 50, 400, 32);
+	private float timer;
+	private bool timing = false;
 	void OnGUI()
 	{
 		if(Level.Get.Finished)
 		{
-			GUI.Label(tempRect, "End of level\nSupport us on facebook.com/akuthegame", style);
+			if(!timing)
+			{
+				timing = true;
+				timer = 3f + Time.time;
+			}
+			if(timer < Time.time)
+			{
+				GUI.Label(tempRect, "Touchez pour revenir au menu", style);
+			}
 		}
 	}
 
