@@ -340,7 +340,7 @@ public class Ladybird : MonoBehaviour
 				
 				// MICHELE son de "coccinelle attend que tu fasses quelque chose"
 				CommonSounds.Instance.LadybirdShake();
-			}	
+			}
 			
 			if(index > targets.Length - 1)
 			{

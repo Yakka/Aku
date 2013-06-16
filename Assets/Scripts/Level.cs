@@ -17,8 +17,9 @@ public class Level : MonoBehaviour
 {	
 	private static Level globalInstance;
 	
+	#region "Generation"
+	
 	// Generator config
-	// TODO maybe put generator into an editor script for convenient level design?
 	public int widthTiles = 16;
 	public int heightTiles = 16;
 	public int centerXTiles = 8;
@@ -26,13 +27,14 @@ public class Level : MonoBehaviour
 	public int seaLevel = 1; // 0 means no sea
 	public int spaceLevel = 12;
 	public int levelID = 0;
-	//public float timer;
 	
 	// Generic patterns
 	public GameObject skyTilePrefab;
 	public GameObject seaSurfaceTilePrefab;
 	public GameObject seaTilePrefab;
 	public GameObject spaceTilePrefab;
+	
+	#endregion
 	
 	public ImpressManager impressManager = new ImpressManager();
 	
